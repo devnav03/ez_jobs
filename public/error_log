@@ -1,0 +1,26 @@
+[16-Dec-2020 11:24:59 Asia/Kolkata] PHP Fatal error:  Allowed memory size of 134217728 bytes exhausted (tried to allocate 98570240 bytes) in /home/et29wwii159p/public_html/frugr/vendor/laravel/framework/src/Illuminate/Http/JsonResponse.php on line 71
+[16-Dec-2020 11:26:07 Asia/Kolkata] PHP Fatal error:  Allowed memory size of 134217728 bytes exhausted (tried to allocate 98570240 bytes) in /home/et29wwii159p/public_html/frugr/vendor/laravel/framework/src/Illuminate/Http/JsonResponse.php on line 71
+[16-Dec-2020 11:47:52 Asia/Kolkata] PHP Fatal error:  Allowed memory size of 134217728 bytes exhausted (tried to allocate 98570240 bytes) in /home/et29wwii159p/public_html/frugr/vendor/laravel/framework/src/Illuminate/Http/JsonResponse.php on line 71
+[18-Dec-2020 18:13:12 Asia/Kolkata] PHP Fatal error:  Cannot use App\Models\DeliveryRating as DeliveryRating because the name is already in use in /home/et29wwii159p/public_html/frugr/app/Http/Controllers/API/V1/ProductController.php on line 34
+[18-Dec-2020 18:14:55 Asia/Kolkata] PHP Fatal error:  Cannot use App\Models\DeliveryRating as DeliveryRating because the name is already in use in /home/et29wwii159p/public_html/frugr/app/Http/Controllers/API/V1/ProductController.php on line 34
+[18-Dec-2020 18:16:08 Asia/Kolkata] PHP Fatal error:  Cannot use App\Models\DeliveryRating as DeliveryRating because the name is already in use in /home/et29wwii159p/public_html/frugr/app/Http/Controllers/API/V1/ProductController.php on line 34
+[04-Feb-2021 04:35:56 UTC] PHP Warning:  require(/home/et29wwii159p/public_html/frugr/public/../vendor/autoload.php): failed to open stream: No such file or directory in /home/et29wwii159p/public_html/frugr/public/index.php on line 24
+[04-Feb-2021 04:35:56 UTC] PHP Fatal error:  require(): Failed opening required '/home/et29wwii159p/public_html/frugr/public/../vendor/autoload.php' (include_path='.:/opt/alt/php73/usr/share/pear') in /home/et29wwii159p/public_html/frugr/public/index.php on line 24
+[04-Feb-2021 04:36:04 UTC] PHP Warning:  require(/home/et29wwii159p/public_html/frugr/public/../vendor/autoload.php): failed to open stream: No such file or directory in /home/et29wwii159p/public_html/frugr/public/index.php on line 24
+[04-Feb-2021 04:36:04 UTC] PHP Fatal error:  require(): Failed opening required '/home/et29wwii159p/public_html/frugr/public/../vendor/autoload.php' (include_path='.:/opt/alt/php73/usr/share/pear') in /home/et29wwii159p/public_html/frugr/public/index.php on line 24
+[04-Feb-2021 04:36:11 UTC] PHP Warning:  require(/home/et29wwii159p/public_html/frugr/public/../vendor/autoload.php): failed to open stream: No such file or directory in /home/et29wwii159p/public_html/frugr/public/index.php on line 24
+[04-Feb-2021 04:36:11 UTC] PHP Fatal error:  require(): Failed opening required '/home/et29wwii159p/public_html/frugr/public/../vendor/autoload.php' (include_path='.:/opt/alt/php73/usr/share/pear') in /home/et29wwii159p/public_html/frugr/public/index.php on line 24
+[04-Feb-2021 04:36:18 UTC] PHP Warning:  require(/home/et29wwii159p/public_html/frugr/public/../vendor/autoload.php): failed to open stream: No such file or directory in /home/et29wwii159p/public_html/frugr/public/index.php on line 24
+[04-Feb-2021 04:36:18 UTC] PHP Fatal error:  require(): Failed opening required '/home/et29wwii159p/public_html/frugr/public/../vendor/autoload.php' (include_path='.:/opt/alt/php73/usr/share/pear') in /home/et29wwii159p/public_html/frugr/public/index.php on line 24
+[30-Jun-2022 05:30:56 America/Chicago] PHP Fatal error:  Uncaught Error: Call to undefined function dd() in /home3/sspl2icu/public_html/chelsea/public/index.php:2
+Stack trace:
+#0 {main}
+  thrown in /home3/sspl2icu/public_html/chelsea/public/index.php on line 2
+[30-Jun-2022 05:31:00 America/Chicago] PHP Fatal error:  Uncaught Error: Call to undefined function dd() in /home3/sspl2icu/public_html/chelsea/public/index.php:2
+Stack trace:
+#0 {main}
+  thrown in /home3/sspl2icu/public_html/chelsea/public/index.php on line 2
+[01-Jul-2022 06:20:33 UTC] PHP Deprecated:  Required parameter $skip follows optional parameter $search in /home3/sspl2icu/public_html/chelsea/app/User.php on line 128
+[01-Jul-2022 06:20:33 UTC] PHP Deprecated:  Required parameter $perPage follows optional parameter $search in /home3/sspl2icu/public_html/chelsea/app/User.php on line 128
+[01-Jul-2022 06:22:26 UTC] PHP Deprecated:  Required parameter $skip follows optional parameter $search in /home3/sspl2icu/public_html/chelsea/app/Models/Company.php on line 34
+[01-Jul-2022 06:22:26 UTC] PHP Deprecated:  Required parameter $perPage follows optional parameter $search in /home3/sspl2icu/public_html/chelsea/app/Models/Company.php on line 34
