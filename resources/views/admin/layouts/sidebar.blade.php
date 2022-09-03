@@ -41,8 +41,10 @@
             <i class="fa fa-money"></i> <span class="nav-text">Transactions</span></a>
         </li>
 
-
-
+        <li class="has-subnav"> 
+            <a href="{!! route('testimonials.index') !!}">
+            <i class="fa fa-star"></i> <span class="nav-text">Testimonials</span></a>
+        </li>
         
         <!--  <li class="has-subnav">
             <a href="{!! route('login-logs.index') !!}"><i class="fa fa-user-lock" aria-hidden="true"></i><span class="nav-text">Login Attempts</span></a>

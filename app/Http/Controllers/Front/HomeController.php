@@ -14,6 +14,7 @@ use App\Models\Country;
 use App\Models\State;
 use App\Models\City;
 use App\Models\Category;
+use App\Models\Testimonial;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\User;
@@ -32,8 +33,7 @@ class HomeController extends Controller{
     public function index() {
 
         $countries = Country::all();
-
-         $user_id = Auth::id();
+        $user_id = Auth::id();
         $function_area =  JobSeekersDetail::where('seeker_id', $user_id)->select('sub_category')->first();
         if(!empty($function_area)){
 
@@ -74,9 +74,104 @@ class HomeController extends Controller{
         $new_job = Job::where('status', 1)->where('created_at', '>', now()->subDays(30)->endOfDay())->count();
         $companies_count = User::where('status', 1)->where('user_type', 2)->count();
         $candidate_count = User::where('status', 1)->where('user_type', 3)->count();
+        
+        if($user_id){
+            if((\Auth::user()->user_type) == 2){
+                $testimonials = Testimonial::where('status', 1)->where('category', 1)->select('comment', 'rating', 'name', 'designation', 'image')->get();
+            } else {
+                $testimonials = Testimonial::where('status', 1)->where('category', 2)->select('comment', 'rating', 'name', 'designation', 'image')->get();
+            }
+        } else {
+               $testimonials = Testimonial::where('status', 1)->where('category', 2)->select('comment', 'rating', 'name', 'designation', 'image')->get();
+        }
 
-        return view('frontend.home', compact('countries', 'jobs', 'companies', 'categories', 'vacancies', 'live_job', 'new_job', 'companies_count', 'candidate_count'));
+        return view('frontend.home', compact('countries', 'jobs', 'companies', 'categories', 'vacancies', 'live_job', 'new_job', 'companies_count', 'candidate_count', 'testimonials'));
     }
+
+
+    public function action(Request $request){
+       
+        $query = $request->get('query');
+        $jobs = \DB::table("jobs")
+            ->join('users', 'users.id', '=', 'jobs.employer_id')
+            ->select('jobs.title')
+            ->where('jobs.status', 1)
+            ->where('users.country', $request->country_id)
+            ->where('users.status', 1) 
+            ->where('jobs.title',  'like', '%'.$query.'%')  
+            ->where('jobs.created_at', '>', now()->subDays(30)->endOfDay())
+            ->groupBy('jobs.title')
+            ->inRandomOrder()->limit(10)->get();
+        $output = '';
+        foreach($jobs as $row){
+            $output .= '<li><a href="'.route('search-job', ['search' => ''.$row->title.'', 'country_id' => $request->country_id]).'">'.$row->title.'</a></li>';
+        }
+          $data = array(
+           'table_data'  => $output,
+          );
+          echo json_encode($data);
+
+    }
+
+    public function search_job($search = null, $country_id = null){
+        try {
+
+            $jobs = \DB::table("jobs")
+            ->join('users', 'users.id', '=', 'jobs.employer_id')
+            ->join('cities', 'cities.id', '=', 'jobs.city_id')
+            ->select('jobs.id', 'jobs.title', 'jobs.salary', 'jobs.job_type', 'jobs.created_at', 'users.profile_image', 'users.id as company_id', 'cities.name as city')
+            ->where('jobs.status', 1)
+            ->where('jobs.title', $search)
+            ->where('users.status', 1)  
+            ->where('users.country', $country_id)  
+            ->where('jobs.created_at', '>', now()->subDays(30)->endOfDay())->inRandomOrder()->paginate(15);
+
+            //dd($jobs);
+
+            $categories = Category::where('status', 1)->where('parent_id', NULL)->select('name', 'id')->get();
+            $countries = Country::all();
+            return view('frontend.pages.jobs', compact('countries', 'jobs', 'categories'));
+
+        } catch (Exception $exception) {
+            return back();
+        }
+    }
+    
+
+    public function job_filter(Request $request){
+        try {
+            $jobs = \DB::table("jobs")
+            ->join('users', 'users.id', '=', 'jobs.employer_id')
+            ->join('cities', 'cities.id', '=', 'jobs.city_id')
+            ->select('jobs.id', 'jobs.title', 'jobs.salary', 'jobs.job_type', 'jobs.created_at', 'users.profile_image', 'users.id as company_id', 'cities.name as city')
+            ->where('jobs.status', 1)
+            ->where('users.status', 1)  
+            ->where('jobs.created_at', '>', now()->subDays(30)->endOfDay());
+            if($request->city){
+                $jobs->where('jobs.city_id',$request->city);
+            }
+            if($request->keyword){
+                $jobs->where('jobs.title', 'like', '%'.$request->keyword.'%');
+            }
+            if($request->country){
+                $jobs->where('users.country', $request->country);
+            }
+            if($request->state){
+                $jobs->where('jobs.state_id', $request->state);
+            }
+            if($request->category){
+                $jobs->where('jobs.category_id', $request->category);
+            }
+            if($request->sub_category){
+                $jobs->where('jobs.sub_category', $request->sub_category);
+            }
+            $jobs = $jobs->get();
+            return view('frontend.pages.job_filter', compact('jobs'));
+        } catch (Exception $exception) {
+            return back();
+        }
+    }
+
   
     public function login() {
         $countries = Country::all();

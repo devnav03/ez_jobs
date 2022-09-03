@@ -227,6 +227,29 @@ Route::group(['middleware' => 'auth', 'after' => 'no-cache'], function () {
             // Transaction List
 
 
+            // Testimonials List route start
+            Route::resource('testimonials', 'App\Http\Controllers\TestimonialController', [
+                'names' => [
+                    'index'     => 'testimonials.index',
+                    'create'    => 'testimonials.create',
+                    'store'     => 'testimonials.store',
+                    'edit'      => 'testimonials.edit',
+                    'update'    => 'testimonials.update',
+                ],
+                'except' => ['show','destroy']
+            ]);
+
+            Route::any('testimonials/paginate/{page?}', ['as' => 'testimonials.paginate',
+                'uses' => 'App\Http\Controllers\TestimonialController@Paginate']);
+            Route::any('testimonials/action', ['as' => 'testimonials.action',
+                'uses' => 'App\Http\Controllers\TestimonialController@Action']);
+            Route::any('testimonials/toggle/{id?}', ['as' => 'testimonials.toggle',
+                'uses' => 'App\Http\Controllers\TestimonialController@Toggle']);
+            Route::any('testimonials/drop/{id?}', ['as' => 'testimonials.drop',
+                'uses' => 'testimonials@drop']);
+            // Testimonials List
+
+
 
 
    });
@@ -238,6 +261,10 @@ Route::any('login', [App\Http\Controllers\Front\HomeController::class, 'login'])
 Route::any('register', [App\Http\Controllers\Front\HomeController::class, 'register'])->name('register');
 Route::any('save-register', [App\Http\Controllers\Front\HomeController::class, 'save_register'])->name('save-register');
 Route::any('jobs', [App\Http\Controllers\Front\HomeController::class, 'jobs'])->name('jobs');
+Route::any('job-filter', [App\Http\Controllers\Front\HomeController::class, 'jobs'])->name('jobs');
+Route::any('job-filter', [App\Http\Controllers\Front\HomeController::class, 'job_filter'])->name('job-filter');
+
+
 Route::any('companies', [App\Http\Controllers\Front\HomeController::class, 'companies'])->name('companies');
 
 Route::any('/email-verify/{id}', [App\Http\Controllers\Front\HomeController::class, 'emailverify'])->name('emailverify');
@@ -246,7 +273,9 @@ Route::any('log-in', [App\Http\Controllers\Front\HomeController::class, 'postLog
 
 Route::get('getState', [App\Http\Controllers\CategoryController::class, 'getState'])->name('getState');
 Route::get('getCity', [App\Http\Controllers\CategoryController::class, 'getCity'])->name('getCity');
+Route::get('live_search', [App\Http\Controllers\Front\HomeController::class, 'action'])->name('live_search');
 
+Route::any('/search-job/{search}/{country_id}', [App\Http\Controllers\Front\HomeController::class, 'search_job'])->name('search-job');
 
 Route::group(['middleware' => 'user-auth', 'after' => 'no-cache'], function () {
 

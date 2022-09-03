@@ -245,6 +245,50 @@ function yesnoCheckEmployer(that) {
 }
 
 
+$(document).ready(function(){
+ fetch_customer_data();
+ function fetch_customer_data(query = '', country_id)
+{
+  $.ajax({
+   url:"{{ route('live_search') }}",
+   method:'GET',
+   data:{query:query, country_id:country_id},
+   dataType:'json',
+   success:function(data) {
+    $('#total_records1').html(data.table_data);
+   }
+  })
+ }
+
+ $(document).on('keyup', '.main-search', function(){
+  var query = $(this).val();
+  var country_id = $( "#cont_id" ).val();
+
+if(query){
+    fetch_customer_data(query, country_id);
+}
+
+ });
+});
+
+function JobFilter(val) {
+    var keyword = $("input[name=keyword]").val();
+    var country = $("select[name=country_name]").val();
+    var state = $("select[name=state]").val();
+    var city = $("select[name=city]").val();
+    var category = $("select[name=category]").val();
+    var sub_category = $("select[name=sub_category]").val();
+
+    $.ajax({
+        type: "GET",
+        url: "{{ route('job-filter') }}",
+        data: {'keyword' : keyword, 'country' : country, 'state' : state, 'city' : city, 'category' : category, 'sub_category' : sub_category},
+        success: function(data){
+            $("#jobs-list").html(data);
+        }
+    });
+} 
+
 function getSubcategory(val) {
   $.ajax({
     type: "GET",

@@ -18,7 +18,7 @@
 </div>
 
 <div class="sec_tool search-col fromGroup has-icon banner-select no-border">
-<select class="rt-selectactive w-100-p select2-hidden-accessible" onChange="getState(this.value);" name="country">
+<select class="rt-selectactive w-100-p select2-hidden-accessible" onChange="getState(this.value);" name="country_name">
 <option value="">All Country</option>
 @foreach($countries as $country)
         <option value="{{ $country->id }}"> {{ $country->country_name }}</option>
@@ -81,7 +81,7 @@
 </div>
 </div>
 <div class="flex-grow-0" style="width: 105px;">
-<button type="submit" class="btn btn-primary d-block d-md-inline-block ">Find Job</button>
+<button onclick="JobFilter()" class="btn btn-primary d-block d-md-inline-block ">Find Job</button>
 </div>
 </div>
 
@@ -101,7 +101,7 @@
    <div class="container">
       <div class="row">
          <div class="col-12">
-            <ul class="rt-list" style="padding: 0px;">
+            <ul class="rt-list" id="jobs-list" style="padding: 0px;">
             @foreach($jobs as $job)   
                <li class="d-block fade-in-bottom  rt-mb-24">
                   <div class="card iconxl-size jobcardStyle1 ">
@@ -178,7 +178,7 @@ $applied = check_job_applied($job->id);
    <div class="container">
       <div class="row">
          <div class="col-12">
-            <ul class="rt-list" style="padding: 0px;">
+            <ul class="rt-list" id="jobs-list" style="padding: 0px;">
             @foreach($jobs as $job)   
                <li class="d-block fade-in-bottom  rt-mb-24">
                   <div class="card iconxl-size jobcardStyle1 ">

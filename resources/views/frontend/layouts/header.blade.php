@@ -51,17 +51,18 @@
           <a href="{{ route('home') }}" class="logo"><img src="{!! asset('assets/frontend/images/logo.svg') !!}" class="img-fluid d-inline-block" alt="logo"></a>
         </div>
         <div class="col-md-6">
-        <form>
+        <form id="labnol">
         <div class="row">    
         <div class="col-md-3">    
-        <select name="country">
+        <select name="country" id="cont_id">
             @foreach($countries as $country)
             <option value="{{ $country->id }}"> {{ $country->country_name }}</option>
             @endforeach
         </select>
         </div>
         <div class="col-md-8">
-        <input type="text" name="search" placeholder="Job Title, Keyword">
+        <input type="text" name="search" class="main-search" autocomplete="off" placeholder="Job Title, Keyword">
+        <ul id="total_records1"></ul>
         </div>
         </div>
         </form>
