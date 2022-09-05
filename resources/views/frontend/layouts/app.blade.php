@@ -271,6 +271,64 @@ if(query){
  });
 });
 
+
+$(document).ready(function(){
+ fetch_customer_data();
+ function fetch_customer_data(query = '', country_id)
+{
+  $.ajax({
+   url:"{{ route('live_search') }}",
+   method:'GET',
+   data:{query:query, country_id:country_id},
+   dataType:'json',
+   success:function(data) {
+    $('#total_records').html(data.table_data);
+   }
+  })
+ }
+
+ $(document).on('keyup', '.main-search1', function(){
+  var query = $(this).val();
+  var country_id = $( "#count_id" ).val();
+
+if(query){
+    fetch_customer_data(query, country_id);
+}
+
+ });
+});
+
+function getJobFilter(country_id) {
+  var query = $( ".main-search" ).val();
+  if(query){
+  $.ajax({
+    url:"{{ route('live_search') }}",
+    method:'GET',
+    data:{query:query, country_id:country_id},
+    dataType:'json',
+    success: function(data){
+       $('#total_records1').html(data.table_data);
+    }
+  });
+  }
+}
+
+function getJobFilter1(country_id) {
+  var query = $( ".main-search1" ).val();
+  if(query){
+  $.ajax({
+    url:"{{ route('live_search') }}",
+    method:'GET',
+    data:{query:query, country_id:country_id},
+    dataType:'json',
+    success: function(data){
+       $('#total_records').html(data.table_data);
+    }
+  });
+  }
+}
+
+
 function JobFilter(val) {
     var keyword = $("input[name=keyword]").val();
     var country = $("select[name=country_name]").val();
@@ -288,6 +346,25 @@ function JobFilter(val) {
         }
     });
 } 
+
+
+function CandidateFilter(val) {
+    var country = $("select[name=country_name]").val();
+    var state = $("select[name=state]").val();
+    var category = $("select[name=category]").val();
+    var sub_category = $("select[name=sub_category]").val();
+
+    $.ajax({
+        type: "GET",
+        url: "{{ route('candidate-filter') }}",
+        data: {'country' : country, 'state' : state, 'category' : category, 'sub_category' : sub_category},
+        success: function(data){
+            $("#candidate-list").html(data);
+        }
+    });
+} 
+
+
 
 function getSubcategory(val) {
   $.ajax({

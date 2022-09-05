@@ -249,9 +249,6 @@ Route::group(['middleware' => 'auth', 'after' => 'no-cache'], function () {
                 'uses' => 'testimonials@drop']);
             // Testimonials List
 
-
-
-
    });
 
 });
@@ -263,6 +260,7 @@ Route::any('save-register', [App\Http\Controllers\Front\HomeController::class, '
 Route::any('jobs', [App\Http\Controllers\Front\HomeController::class, 'jobs'])->name('jobs');
 Route::any('job-filter', [App\Http\Controllers\Front\HomeController::class, 'jobs'])->name('jobs');
 Route::any('job-filter', [App\Http\Controllers\Front\HomeController::class, 'job_filter'])->name('job-filter');
+Route::any('candidate-filter', [App\Http\Controllers\Front\HomeController::class, 'candidate_filter'])->name('candidate-filter');
 
 
 Route::any('companies', [App\Http\Controllers\Front\HomeController::class, 'companies'])->name('companies');

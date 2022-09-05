@@ -172,6 +172,39 @@ class HomeController extends Controller{
         }
     }
 
+
+    public function candidate_filter(Request $request){
+        try {
+
+            $candidates = User::join('job_seekers_details', 'job_seekers_details.seeker_id', '=', 'users.id')
+            ->join('categories', 'categories.id', '=', 'job_seekers_details.sub_category')
+            ->join('cities', 'cities.id', '=', 'users.city')
+            ->select('categories.name as cat', 'users.id', 'users.name', 'users.profile_image', 'job_seekers_details.experience_years', 'job_seekers_details.experience_months', 'cities.name as city')
+            ->where('users.user_type', 3)
+            ->where('users.status', 1)->where('categories.status', 1);
+
+            if($request->country){
+                $candidates->where('users.country', $request->country);
+            }
+            if($request->state){
+                $candidates->where('users.state', $request->state);
+            }
+
+            if($request->category){
+                $candidates->where('job_seekers_details.category', $request->category);
+            }
+            if($request->sub_category){
+                $candidates->where('job_seekers_details.sub_category', $request->sub_category);
+            }
+
+            $candidates = $candidates->get();
+
+            return view('frontend.pages.candidate_filter', compact('candidates'));
+        } catch (Exception $exception) {
+            return back();
+        }
+    }
+
   
     public function login() {
         $countries = Country::all();

@@ -54,7 +54,7 @@
         <form id="labnol">
         <div class="row">    
         <div class="col-md-3">    
-        <select name="country" id="cont_id">
+        <select name="country" onchange="getJobFilter(this.value)" id="cont_id">
             @foreach($countries as $country)
             <option value="{{ $country->id }}"> {{ $country->country_name }}</option>
             @endforeach

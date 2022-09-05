@@ -43,7 +43,7 @@ header .col-md-4 {
 .mg20{
     margin-bottom: 15px;
 }
-#total_records1 {
+#total_records1, #total_records {
     scroll-behavior: auto;
     overflow: auto;
     max-width: 100%;
@@ -59,18 +59,31 @@ header .col-md-4 {
     border-left: 1px solid #0a66cd;
     border-right: 1px solid #0a66cd;
 }
-#total_records1 li{
+#total_records{
+    top: 73px;
+    left: 0px;
+    border-left: 0px solid #0a66cd; 
+    border-right: 0px solid #0a66cd;
+}
+#total_records1 li,
+#total_records li {
     padding: 10px 20px;
     border-bottom: 1px solid #f1f2f4;
 }
-#total_records1 li:last-child{
+#total_records1 li:last-child,
+#total_records li:last-child {
     border-bottom: 1px solid #0a66cd;
 }
-#total_records1 li a{
+#total_records1 li a,
+#total_records li a{
     color: #000;
     display: block;
 }
 form#labnol:hover #total_records1 {
+    display: block;
+    box-shadow: 0px 11px 9px rgb(0 0 0 / 10%);
+}
+#job_search_form:hover #total_records {
     display: block;
     box-shadow: 0px 11px 9px rgb(0 0 0 / 10%);
 }

@@ -8,17 +8,8 @@
             <div class="jobsearchBox  bg-gray-10 input-transparent with-advanced-filter height-auto-xl">
                <div class="top-content d-flex flex-column flex-xl-row">
                   <div class="left-content">
-                    <!--  <div class="search-col-4 fromGroup has-icon">
-                        <input name="keyword" type="text" placeholder="Job Title, Keyword" value="">
-                        <div class="icon-badge">
-                           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                              <path d="M11 19C15.4183 19 19 15.4183 19 11C19 6.58172 15.4183 3 11 3C6.58172 3 3 6.58172 3 11C3 15.4183 6.58172 19 11 19Z" stroke="#1777e5" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
-                              <path d="M20.9999 21L16.6499 16.65" stroke="#1777e5" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
-                           </svg>
-                        </div>
-                     </div> -->
                      <div class="sec_tool search-col fromGroup has-icon banner-select no-border" style="    margin-left: 5px;">
-                        <select onChange="getState(this.value);" class="rt-selectactive w-100-p select2-hidden-accessible" name="country">
+                        <select onChange="getState(this.value);" class="rt-selectactive w-100-p select2-hidden-accessible" name="country_name">
                            <option value="">All Country</option>
                            @foreach($countries as $country)
                            <option value="{{ $country->id }}"> {{ $country->country_name }}</option>
@@ -32,14 +23,11 @@
                         </div>
                      </div>
 
-                     <div class="search-col fromGroup has-icon banner-select no-border">
-<select onChange="getCity(this.value);" class="rt-selectactive w-100-p select2-hidden-accessible" id="state" name="state">
-
-<option value="" data-select2-id="select2-data-6-kthv"> All States</option>
-            
-</select>
-
-<span class="select2 select2-container select2-container--default select2-container--below" dir="ltr" data-select2-id="select2-data-5-vvlq" style="width: 265px;"><span class="selection"><span class="select2-selection select2-selection--single" role="combobox" aria-haspopup="true" aria-expanded="false" tabindex="0" aria-disabled="false" aria-labelledby="select2-category-mk-container" aria-controls="select2-category-mk-container"><span class="select2-selection__arrow" role="presentation"><b role="presentation"></b></span></span></span><span class="dropdown-wrapper" aria-hidden="true"></span></span>
+            <div class="search-col fromGroup has-icon banner-select no-border">
+            <select onChange="getCity(this.value);" class="rt-selectactive w-100-p select2-hidden-accessible" id="state" name="state">
+            <option value=""> All States</option>      
+            </select>
+<span class="select2 select2-container select2-container--default select2-container--below" style="width: 265px;"><span class="selection"><span class="select2-selection select2-selection--single"><span class="select2-selection__arrow" role="presentation"><b role="presentation"></b></span></span></span><span class="dropdown-wrapper" aria-hidden="true"></span></span>
 <div class="icon-badge">
 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
 <path d="M2 17L12 22L22 17" stroke="#1777e5" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path><path d="M2 12L12 17L22 12" stroke="#1777e5" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path><path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="#1777e5" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
@@ -54,7 +42,7 @@
                            <option value="{{ $category->id }}">{{ $category->name }}</option>
                            @endforeach  
                         </select>
-                        <span class="select2 select2-container select2-container--default select2-container--below" dir="ltr" data-select2-id="select2-data-5-vvlq" style="width: 265px;"><span class="selection"><span class="select2-selection select2-selection--single" role="combobox" aria-haspopup="true" aria-expanded="false" tabindex="0" aria-disabled="false" aria-labelledby="select2-category-mk-container" aria-controls="select2-category-mk-container"><span class="select2-selection__arrow" role="presentation"><b role="presentation"></b></span></span></span><span class="dropdown-wrapper" aria-hidden="true"></span></span>
+                        <span class="select2 select2-container select2-container--default select2-container--below"  style="width: 265px;"><span class="selection"><span class="select2-selection select2-selection--single"><span class="select2-selection__arrow" role="presentation"><b role="presentation"></b></span></span></span><span class="dropdown-wrapper"></span></span>
                         <div class="icon-badge">
                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                               <path d="M2 17L12 22L22 17" stroke="#1777e5" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
@@ -68,17 +56,16 @@
 <select class="rt-selectactive w-100-p select2-hidden-accessible" name="sub_category" id="category-list">
 <option value=""> All Functional Area</option>      
 </select>
-<span class="select2 select2-container select2-container--default select2-container--below" dir="ltr" data-select2-id="select2-data-5-vvlq" style="width: 265px;"><span class="selection"><span class="select2-selection select2-selection--single" role="combobox" aria-haspopup="true" aria-expanded="false" tabindex="0" aria-disabled="false" aria-labelledby="select2-category-mk-container" aria-controls="select2-category-mk-container"><span class="select2-selection__arrow" role="presentation"><b role="presentation"></b></span></span></span><span class="dropdown-wrapper" aria-hidden="true"></span></span>
+<span class="select2 select2-container select2-container--default select2-container--below" style="width: 265px;"><span class="selection"><span class="select2-selection select2-selection--single"><span class="select2-selection__arrow" role="presentation"><b role="presentation"></b></span></span></span><span class="dropdown-wrapper" aria-hidden="true"></span></span>
 <div class="icon-badge">
 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
 <path d="M2 17L12 22L22 17" stroke="#1777e5" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path><path d="M2 12L12 17L22 12" stroke="#1777e5" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path><path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="#1777e5" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
 </svg>
 </div>
 </div>
-
                   </div>
                   <div class="flex-grow-0">
-                  <button type="submit" class="btn btn-primary d-block d-md-inline-block">Find Candidate</button>
+                  <button onclick="CandidateFilter()" class="btn btn-primary d-block d-md-inline-block">Find Candidate</button>
                   </div>
                </div>
             </div>
@@ -89,8 +76,8 @@
 <section class="resume-list">
 <div class="container">
    <div class="tab-content" id="nav-tabContent">
-      <div class="tab-pane  show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
-         <div class="row">
+      <div class="tab-pane show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+         <div class="row" id="candidate-list">
 
          @foreach($candidates as $candidate)
 @php
