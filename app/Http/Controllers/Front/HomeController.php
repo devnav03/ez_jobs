@@ -22,6 +22,7 @@ use App\Models\LoginLog;
 use App\Models\Designation;
 use App\Models\Job;
 use App\Models\Education;
+use App\Models\ProfileView;
 use App\Models\Plan;
 use App\Models\JobSeekersDetail;
 use Carbon\Carbon;
@@ -88,6 +89,70 @@ class HomeController extends Controller{
         return view('frontend.home', compact('countries', 'jobs', 'companies', 'categories', 'vacancies', 'live_job', 'new_job', 'companies_count', 'candidate_count', 'testimonials'));
     }
 
+    public function candidate_profile($id = null){
+
+        try{
+
+            $user_id = Auth::id();
+            $today = date('Y-m-d');
+            $plan_expire =  Auth::user()->plan_expire;
+            $limit = Auth::user()->profile_view_limit;
+            if($plan_expire != NULL && $today <= $plan_expire && $limit != 0){
+
+            $profile_view = ProfileView::where('candidate_id', $id)->where('employer_id', $user_id)->select('id')->first();
+            if(empty($profile_view)){
+                $ProfileView = new ProfileView();
+                $ProfileView->candidate_id = $id;
+                $ProfileView->employer_id = $user_id;
+                $ProfileView->save();
+                User::where('id', $user_id)
+                    ->update([
+                    'profile_view_limit' => Auth::user()->profile_view_limit-1,
+                ]);
+            }
+
+            $profile = User::join('job_seekers_details', 'job_seekers_details.seeker_id', '=', 'users.id')
+            ->join('categories', 'categories.id', '=', 'job_seekers_details.sub_category')
+            ->join('cities', 'cities.id', '=', 'users.city')
+            ->join('countries', 'countries.id', '=', 'users.country')
+            ->join('states', 'states.id', '=', 'users.state')
+            ->join('designations', 'designations.id', '=', 'job_seekers_details.designation_id')
+            ->join('educations', 'educations.id', '=', 'job_seekers_details.education')
+            ->select('categories.name as cat', 
+                'users.id', 
+                'users.name', 
+                'users.profile_image', 
+                'users.email', 'users.mobile', 
+                'users.gender', 
+                'users.date_of_birth', 
+                'users.address', 
+                'designations.name as designation',
+                'educations.name as education',
+                'cities.name as city',
+                'states.name as state',
+                'countries.country_name as country',
+                'job_seekers_details.experience_years', 
+                'job_seekers_details.experience_months',
+                'job_seekers_details.key_skills',
+                'job_seekers_details.salary_lakhs',
+                'job_seekers_details.salary_thousands',
+                'job_seekers_details.resume'
+            )
+            ->where('users.status', 1)->first();
+            $countries = Country::all(); 
+             
+            return view('frontend.pages.candidate_profile', compact('profile', 'countries'));
+
+            } else {
+               return redirect()->route('membership-plan');
+            }
+
+        } catch (Exception $exception) {
+            return back();
+        }
+
+    }
+    
 
     public function action(Request $request){
        

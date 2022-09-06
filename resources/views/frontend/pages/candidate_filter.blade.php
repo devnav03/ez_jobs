@@ -20,12 +20,12 @@ $save_status = get_candidate_save_status($candidate->id);
                         </div>
                         <div class="iconbox-content">
                            <div class="job-mini-title">
-                              <a href="{{ route('login') }}">{{ $candidate->name }}</a>
+                              <a href="{{ route('membership-plan') }}">{{ $candidate->name }}</a>
                            </div>
                            <span class="loacton text-gray-400"> {{ $candidate->cat }} </span>
                            <span class="loacton text-gray-400"><i class="fa fa-clock"></i> {{ $candidate->experience_years }}y {{ $candidate->experience_months }}m &nbsp;&nbsp;&nbsp;&nbsp; <i class="fa fa-map-marker"></i> {{ $candidate->city }} </span>
                            <div class="bottom-link rt-pt-30">
-                              <a href="{{ route('login') }}" class="body-font-4 text-primary-500"> View Profile
+                              <a href="{{ route('membership-plan') }}" class="body-font-4 text-primary-500"> View Profile
                                  <span><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 12H19" stroke="#1777e5" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path><path d="M12 5L19 12L12 19" stroke="#1777e5" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
                                  </span>
                               </a>
@@ -57,12 +57,12 @@ $save_status = get_candidate_save_status($candidate->id);
                         </div>
                         <div class="iconbox-content">
                            <div class="job-mini-title">
-                              <a href="#">{{ $candidate->name }}</a>
+                              <a href="{{ route('candidate-profile', $candidate->id) }}">{{ $candidate->name }}</a>
                            </div>
                            <span class="loacton text-gray-400">{{ $candidate->cat }}</span>
                            <span class="loacton text-gray-400"><i class="fa fa-clock"></i> {{ $candidate->experience_years }}y {{ $candidate->experience_months }}m &nbsp;&nbsp;&nbsp;&nbsp; <i class="fa fa-map-marker"></i> {{ $candidate->city }} </span>
                            <div class="bottom-link rt-pt-30">
-                              <a href="#" class="body-font-4 text-primary-500"> View Profile
+                              <a href="{{ route('candidate-profile', $candidate->id) }}" class="body-font-4 text-primary-500"> View Profile
                                  <span><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 12H19" stroke="#1777e5" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path><path d="M12 5L19 12L12 19" stroke="#1777e5" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
                                  </span>
                               </a>

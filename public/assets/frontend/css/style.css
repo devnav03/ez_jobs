@@ -1388,22 +1388,86 @@ table.dataTable td {
 
 }
 
+.candidate_profile{
+    padding: 50px 0;
+    border-top: 1px solid #eee;
+}
+.top-info h3 {
+    color: #18191c;
+    font-size: 20px;
+}
+.top-info h3 span {
+    padding-left: 20px;
+    color: #5e6670;
+    font-weight: normal;
+    font-size: 15px;
+}
+.top-info h3 span i {
+    font-size: 14px;
+}
+.top-info h6 {
+    color: #0069d9;
+    margin-bottom: 30px;
+}
+.send_message {
+    color: #5e6670;
+    margin-right: 18px;
+    font-weight: 500;
+    font-size: 14px;
+}
+.send_message i{
+    margin-top: 8px;
+    float: left;
+    margin-right: 5px;
+}
+.send_call {
+    background: #0069d9;
+    color: #fff;
+    padding: 8px 25px;
+    font-weight: 500;
+    font-size: 14px;
+    margin-right: 18px;
+}
+.send_call i{
+    margin-right: 5px;
+}
+.about-info h5 {
+    margin-top: 45px;
+    border-bottom: 1px solid #eee;
+    position: relative;
+    padding-bottom: 8px;
+    font-size: 16px;
+    line-height: 19px;   
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+}
+.about-info h5:after{
+    position: absolute;
+    z-index: 1;
+    left: 0;
+    content: "";
+    width: 70px;
+    height: 1px;
+    background: #0069d9;
+    top: 27px;
+}
+.about-info h5 i{
+    margin-right: 4px;
+}
+.send_call:hover{
+    color: #fff;
+}
+.about-info h6{
+    text-transform: uppercase;
+    color: #9199A3;
+    font-size: 14px;
+    margin-top: 45px;
+    padding-bottom: 15px;
+}
+.about-info td{
+    font-size: 14px;
+    font-weight: 400;
+    padding-bottom: 15px;
+}
 
 
 

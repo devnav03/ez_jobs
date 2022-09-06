@@ -304,7 +304,7 @@ Route::get('saveJob', [App\Http\Controllers\Front\JobController::class, 'saveJob
 Route::get('applyjob', [App\Http\Controllers\Front\JobController::class, 'applyjob'])->name('applyjob');
 Route::any('candidates', [App\Http\Controllers\Front\HomeController::class, 'candidates'])->name('candidates');
 Route::get('saveCandidate', [App\Http\Controllers\Front\JobController::class, 'saveCandidate'])->name('saveCandidate');
-
+Route::any('candidate-profile/{id}', [App\Http\Controllers\Front\HomeController::class, 'candidate_profile'])->name('candidate-profile');
 
 
 });
