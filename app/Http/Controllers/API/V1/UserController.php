@@ -18,8 +18,101 @@ use PDF;
 
 class UserController extends Controller
 {
+    
+      public function login(Request $request){
+        try{
+        $credentials = [
+            'email' => $request->get('username'),
+            'password' => $request->get('password'),
+            'status' => 1
+        ];
 
- 
+        $credentials1 = [
+            'mobile' => $request->get('username'),
+            'password' => $request->get('password'),
+            'status' => 1
+        ];
+         
+          $url = route('home');
+          $inputs = $request->all();
+
+            if (Auth::attempt($credentials))  {
+                $user_data = User::where('email', $request->username)->first();
+                $api_key = $this->generateApiKey();
+                if($user_data->api_key){
+                    $api_key = $user_data->api_key; 
+                } else {
+                User::where('email', $request->username)
+                ->update([
+                'api_key' =>  $api_key,
+                 ]);
+                }
+
+                $data['name'] = $user_data->name;
+                $data['user_type'] = $user_data->user_type;
+
+                $data['employer_name'] = $user_data->employer_name;
+                
+                $data['email'] = $user_data->email;
+                if($user_data->profile_image){
+                  $data['image'] = $url.$user_data->profile_image;
+                } else {
+                  $data['image'] =$user_data->profile_image;
+                }
+                $data['mobile'] = $user_data->mobile;  
+                $data['gender'] = $user_data->gender;  
+                $data['address'] = $user_data->address; 
+
+                $data['plan_expire'] = $user_data->plan_expire;  
+                $data['profile_view_limit'] = $user_data->profile_view_limit;  
+                $data['job_post_limit'] = $user_data->job_post_limit; 
+                
+                $data['api_key'] = $api_key;  
+
+                return apiResponseApp(true, 200, null, null, $data);
+              
+            } else if(Auth::attempt($credentials1)) {
+                $user_data = User::where('mobile', $request->username)->first();
+                $api_key = $this->generateApiKey();
+                if($user_data->api_key){
+                    $api_key = $user_data->api_key;
+                } else {
+                User::where('email', $request->username)
+                ->update([
+                'api_key' =>  $api_key,
+                 ]);
+                }
+
+                $data['name'] = $user_data->name;
+                $data['employer_name'] = $user_data->employer_name;
+                $data['user_type'] = $user_data->user_type;
+                $data['email'] = $user_data->email;
+                if($user_data->profile_image){
+                  $data['image'] = $url.$user_data->profile_image;
+                } else {
+                  $data['image'] =$user_data->profile_image;
+                }
+                $data['mobile'] = $user_data->mobile; 
+                $data['gender'] = $user_data->gender;  
+                $data['address'] = $user_data->address; 
+                $data['plan_expire'] = $user_data->plan_expire;  
+                $data['profile_view_limit'] = $user_data->profile_view_limit;  
+                $data['job_post_limit'] = $user_data->job_post_limit; 
+                $data['api_key'] = $api_key; 
+
+                return apiResponseApp(true, 200, null, null, $data);
+
+        } else {
+          
+          $message = 'Invalid login credentials';
+          return apiResponseApp(false, 201, $message, null, null);
+
+        }
+              
+    } catch(Exception $e){
+            return apiResponse(false, 500, lang('messages.server_error'));
+        }
+    }
 
 
     public function force_update(){
@@ -76,6 +169,84 @@ class UserController extends Controller
         return apiResponseApp(true, 200, null, null, $data);
     }
     
+    public function states(Request $request){
+        $data = \DB::table('states')->where('country_id', $request->country_id)->select('id', 'name')->get();
+        return apiResponseApp(true, 200, null, null, $data);
+    }
+    
+    public function cities(Request $request){
+        $data = \DB::table('cities')->where('state_id', $request->state_id)->select('id', 'name')->get();
+        return apiResponseApp(true, 200, null, null, $data);
+    }
+
+
+    public function register(Request $request){
+        try {
+
+          $inputs = $request->all();
+
+          $check_val =  User::where('email', $request->email)->first();
+          if($check_val){
+            $data['message'] = "The email has already registered";
+            return apiResponseApp(false, 201, null, null, $data); 
+          }
+            
+
+          // $check_val1 =  User::where('mobile', $request->mobile)->first();
+          // if($check_val1){
+          //   $data['message'] = "The mobile number has already registered";
+          //   return apiResponseApp(false, 200, null, null, $data); 
+          // }
+          
+          $password = \Hash::make($inputs['password']);
+           unset($inputs['password']);
+
+          $inputs['password'] = $password;
+          // $inputs['user_type'] = 2;
+          $inputs['status'] = 0;
+          $inputs['register_from'] = 'APP';
+
+            $user_id = (new User)->store($inputs);
+            $email = $inputs['email'];
+            $name = $inputs['name'];
+            $home = route('home');
+            $link = route('emailverify', $user_id);
+            $responce = $this->send_email($home, $link, $name, $email);
+
+            $message = "Your Account has been created with EZ-Job. We have sent a confirmation link on your registered email Kindly check & Confirm.";
+            return apiResponseAppmsg(true, 200, $message, null, null);
+
+              // return apiResponseApp(true, 200, null, null, $data);
+
+        } catch(Exception $e){
+
+         // dd($e);
+        return apiResponse(false, 500, lang('messages.server_error'));
+
+        }
+    }
+    
+
+    public function send_email($home, $link, $name, $email){
+        $postdata = http_build_query(
+        array(
+        'home' => $home,
+        'link' => $link,
+        'name' => $name,
+        'email' => $email,
+        )
+        );
+        $opts = array('http' =>
+        array(
+        'method'  => 'POST',
+        'header'  => 'Content-Type: application/x-www-form-urlencoded',
+        'content' => $postdata
+        )
+        );
+        $context  = stream_context_create($opts);
+        $result = file_get_contents('https://sspl20.com/jyoti/uttuapp/api/send-email-ez', false, $context);
+        return $result;
+    }
 
     public function signup_user(Request $request){
         try {
@@ -172,7 +343,6 @@ class UserController extends Controller
 
         }
 
-
     }
 
 
@@ -182,9 +352,8 @@ class UserController extends Controller
         return md5(uniqid(rand(), true));
     }
 
-
    
-      //Update Profile
+    //Update Profile
     public function updateProfile(Request $request){
       try{   
 
@@ -326,61 +495,6 @@ class UserController extends Controller
     }
 
 
-    public function googleLogin(Request $request)
-    {
-        try{
-            $inputs = $request->all();
-            $validator = ( new User )->validatefb( $inputs );
-            if( $validator->fails() ) {
-                return apiResponse(false, 406, "", errorMessages($validator->messages()));
-            } 
-
-            $check_email = (new User)->where('email', $inputs['email'])
-                                    ->where('access_token', null)
-                                    ->get();
-
-            if (count($check_email) >=1) {
-                return apiResponse(false, 500, lang('Email Address already exist in our records'));
-            }
-
-            $api_key = $this->generateApiKey();
-
-            $password = \Hash::make($inputs['email']);
-
-            $inputs = $inputs + [
-                                    'role' => 2,
-                                    'api_key'   => $api_key,
-                                    'provider'   => 'google',
-                                    'user_type'   => '3',
-                                    'status'    => 1,
-                                    'password' => $password
-                                ];
-            
-            $check = (new User)->where('email', $inputs['email'])->first();
-            if (count($check) == 0) {
-                    $user = (new User)->store($inputs);
-                    return apiResponse(true, 200, lang('User Successfully created'));
-            }else{
-                if ($check->access_token == null) {
-                    $user = (new User)->store($inputs);
-                    return apiResponse(true, 200, lang('User Successfully created'));
-                }else{
-                    $user = (new User)->updatestorfb($check->id, $inputs['access_token']);
-                    return apiResponse(true, 200, lang('User Successfully created'));
-                }
-            
-            }
-
-
-        }
-        catch(Exception $exception){
-            return apiResponse(false, 500, lang('messages.server_error'));
-        }
-    }
-
-
-
-
     public function profile(Request $request){
 
         try{
@@ -410,12 +524,6 @@ class UserController extends Controller
         }
 
     }
-
-
-
-
-
-   
 
     
 

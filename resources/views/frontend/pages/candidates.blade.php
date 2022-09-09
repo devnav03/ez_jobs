@@ -34,7 +34,6 @@
 </svg>
 </div>
 </div>
-
                      <div class="search-col fromGroup has-icon banner-select no-border">
                         <select onChange="getSubcategory(this.value);" class="rt-selectactive w-100-p select2-hidden-accessible" name="category">
                            <option value=""> All Industry</option>

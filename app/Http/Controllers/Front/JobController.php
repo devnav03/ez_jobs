@@ -128,7 +128,31 @@ class JobController extends Controller{
         return $data;
     }
 
-    
+    public function job_details($id = null){
+
+        try{
+
+            $job = Job::join('users', 'users.id', '=', 'jobs.employer_id')
+            ->join('cities', 'cities.id', '=', 'jobs.city_id')
+            ->join('states', 'states.id', '=', 'jobs.state_id')
+            ->join('categories', 'categories.id', '=', 'jobs.category_id')
+            ->join('educations', 'educations.id', '=', 'jobs.qualifications')
+            ->join('categories as function_area', 'function_area.id', '=', 'jobs.sub_category')
+            ->select('jobs.id', 'jobs.title', 'jobs.salary', 'jobs.job_type', 'jobs.job_description', 'jobs.created_at', 'users.profile_image', 'users.employer_name', 'users.id as company_id', 'cities.name as city', 'states.name as state', 'categories.name as cat', 'function_area.name as sub_cat', 'educations.name as education')
+            ->where('jobs.status', 1)
+            ->where('jobs.id', $id)
+            ->where('users.status', 1)  
+            ->where('jobs.created_at', '>', now()->subDays(30)->endOfDay())
+            ->first();
+
+            $countries = Country::all();
+
+            return view('frontend.pages.job_details', compact('job', 'countries'));
+
+        } catch (Exception $e) {
+            return back();
+        }
+    }
 
     public function applyjob(Request $request){
         $user_id = Auth::id();

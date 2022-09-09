@@ -6,11 +6,11 @@
                   <div class="card iconxl-size jobcardStyle1 ">
                      <div class="card-body">
                         <div style="text-align: right; color: green; position: absolute; right: 30px; top: 10px;" id="message{{ $job->id }}"></div>
-                        <div class="rt-single-icon-box icb-clmn-lg ">
+                        <div class="rt-single-icon-box icb-clmn-lg">
                            <div class="icon-thumb">
                               <img src="{!! asset("$job->profile_image") !!}" alt="" draggable="false">
                            </div>
-                           <a href="#" class="iconbox-content">
+                           <a href="{{ route('job-details', $job->id) }}" class="iconbox-content">
                               <div class="post-info2">
                                  <div class="post-main-title">{{ $job->title }}<span class="badge rounded-pill bg-primary-50 text-primary-500" style="margin-left: 10px;">{{ $job->job_type }}</span>
                                  </div>
@@ -76,7 +76,7 @@ $applied = check_job_applied($job->id);
                            <div class="icon-thumb">
                               <img src="{!! asset("$job->profile_image") !!}" alt="" draggable="false">
                            </div>
-                           <a href="#" class="iconbox-content">
+                           <a href="{{ route('job-details', $job->id) }}" class="iconbox-content">
                               <div class="post-info2">
                                  <div class="post-main-title">{{ $job->title }}<span class="badge rounded-pill bg-primary-50 text-primary-500" style="margin-left: 10px;">{{ $job->job_type }}</span>
                                  </div>

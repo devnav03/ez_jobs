@@ -138,7 +138,7 @@ class HomeController extends Controller{
                 'job_seekers_details.salary_thousands',
                 'job_seekers_details.resume'
             )
-            ->where('users.status', 1)->first();
+            ->where('users.id', $id)->first();
             $countries = Country::all(); 
              
             return view('frontend.pages.candidate_profile', compact('profile', 'countries'));
@@ -153,6 +153,36 @@ class HomeController extends Controller{
 
     }
     
+
+    public function company_details($id = null){
+        try{
+
+            $countries = Country::all();
+            $company = \DB::table("users")
+            ->join('cities', 'cities.id', '=', 'users.city')
+            ->join('states', 'states.id', '=', 'users.state')
+            ->select('users.id', 'users.name', 'users.profile_image', 'users.employer_name', 'cities.name as city',
+         'users.address', 'states.name as state')
+            ->where('users.status', 1)  
+            ->where('users.user_type', 2)
+            ->where('users.id', $id)
+            ->first(); 
+
+            $jobs = \DB::table("jobs")
+            ->join('users', 'users.id', '=', 'jobs.employer_id')
+            ->join('cities', 'cities.id', '=', 'jobs.city_id')
+            ->select('jobs.id', 'jobs.title', 'jobs.salary', 'jobs.job_type', 'jobs.created_at', 'users.profile_image', 'users.id as company_id', 'cities.name as city')
+            ->where('jobs.status', 1)
+            ->where('users.status', 1) 
+            ->where('jobs.employer_id', $id)   
+            ->where('jobs.created_at', '>', now()->subDays(30)->endOfDay())->inRandomOrder()->paginate(25);
+      
+            return view('frontend.pages.company_details', compact('countries', 'company', 'jobs'));
+
+        } catch (Exception $exception) {
+            return back();
+        }
+    }
 
     public function action(Request $request){
        
@@ -270,7 +300,36 @@ class HomeController extends Controller{
         }
     }
 
-  
+    public function company_filter(Request $request){
+        try {
+
+            $companies = \DB::table("users")
+            ->join('cities', 'cities.id', '=', 'users.city')
+            ->select('users.id', 'users.name', 'users.profile_image', 'users.employer_name', 'cities.name as city')
+            ->where('users.status', 1)  
+            ->where('users.user_type', 2);
+     
+            if($request->country){
+                $companies->where('users.country', $request->country);
+            }
+            if($request->state){
+                $companies->where('users.state', $request->state);
+            }
+            if($request->city){
+                $companies->where('users.city', $request->city);
+            }  
+            if($request->company_name){
+                $companies->where('users.employer_name', 'like', '%'.$request->company_name.'%');
+            }
+
+            $companies = $companies->get();
+
+            return view('frontend.pages.company_filter', compact('companies'));
+        } catch (Exception $exception) {
+            return back();
+        }
+    }
+
     public function login() {
         $countries = Country::all();
         return view('frontend.pages.login', compact('countries'));
@@ -336,14 +395,12 @@ class HomeController extends Controller{
             ->where('users.status', 1)->where('categories.status', 1)->paginate(15);
             $categories = Category::where('status', 1)->where('parent_id', NULL)->select('name', 'id')->get();
 
-
         return view('frontend.pages.candidates', compact('countries', 'candidates', 'categories'));
         } else {
             \Auth::logout();
             \Session::flush();
             return redirect()->route('login');
         }
-
     }
 
     public function profileShow(){

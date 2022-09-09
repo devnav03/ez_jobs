@@ -111,7 +111,7 @@
                            <div class="icon-thumb">
                               <img src="{!! asset("$job->profile_image") !!}" alt="" draggable="false">
                            </div>
-                           <a href="#" class="iconbox-content">
+                           <a href="{{ route('job-details', $job->id) }}" class="iconbox-content">
                               <div class="post-info2">
                                  <div class="post-main-title">{{ $job->title }}<span class="badge rounded-pill bg-primary-50 text-primary-500" style="margin-left: 10px;">{{ $job->job_type }}</span>
                                  </div>
@@ -187,7 +187,7 @@ $applied = check_job_applied($job->id);
                            <div class="icon-thumb">
                               <img src="{!! asset("$job->profile_image") !!}" alt="" draggable="false">
                            </div>
-                           <a href="#" class="iconbox-content">
+                           <a href="{{ route('job-details', $job->id) }}" class="iconbox-content">
                               <div class="post-info2">
                                  <div class="post-main-title">{{ $job->title }}<span class="badge rounded-pill bg-primary-50 text-primary-500" style="margin-left: 10px;">{{ $job->job_type }}</span>
                                  </div>

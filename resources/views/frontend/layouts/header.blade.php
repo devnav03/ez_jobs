@@ -4,7 +4,7 @@
 <section class="top-header">
     <div class="container">
     <div class="row">
-    <div class="col-md-6">
+    <div class="col-md-6 hide_in_phone">
         <ul>
             <li><a href="{{ route('home') }}" @if($route == 'home') class="active" @endif>Home</a></li>
             @if(\Auth::check())

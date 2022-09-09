@@ -11,7 +11,7 @@ class User extends Authenticatable
     use Notifiable;
 
     protected $fillable = [
-        'user_type', 'name', 'employer_name', 'profile_view_limit', 'job_post_limit', 'profile_completion', 'email', 'password', 'state', 'city', 'country', 'mobile' , 'profile_image', 'gender', 'date_of_birth', 'job_description', 'job_search', 'job_branding', 'city_plan', 'address', 'is_verify', 'status', 'updated_at', 'deleted_at', 'created_at'
+        'user_type', 'name', 'employer_name', 'profile_view_limit', 'job_post_limit', 'profile_completion', 'email', 'password', 'state', 'city', 'country', 'mobile' , 'profile_image', 'gender', 'date_of_birth', 'job_description', 'job_search', 'job_branding', 'city_plan', 'address', 'is_verify', 'status', 'updated_at', 'register_from', 'deleted_at', 'api_key', 'created_at'
     ];
 
   

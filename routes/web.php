@@ -261,9 +261,12 @@ Route::any('jobs', [App\Http\Controllers\Front\HomeController::class, 'jobs'])->
 Route::any('job-filter', [App\Http\Controllers\Front\HomeController::class, 'jobs'])->name('jobs');
 Route::any('job-filter', [App\Http\Controllers\Front\HomeController::class, 'job_filter'])->name('job-filter');
 Route::any('candidate-filter', [App\Http\Controllers\Front\HomeController::class, 'candidate_filter'])->name('candidate-filter');
-
+Route::any('company-filter', [App\Http\Controllers\Front\HomeController::class, 'company_filter'])->name('company-filter');
+Route::any('job-details/{id}', [App\Http\Controllers\Front\JobController::class, 'job_details'])->name('job-details');
 
 Route::any('companies', [App\Http\Controllers\Front\HomeController::class, 'companies'])->name('companies');
+Route::any('company-details/{id}', [App\Http\Controllers\Front\HomeController::class, 'company_details'])->name('company-details');
+
 
 Route::any('/email-verify/{id}', [App\Http\Controllers\Front\HomeController::class, 'emailverify'])->name('emailverify');
 Route::any('/approval-waiting/{id}', [App\Http\Controllers\Front\HomeController::class, 'approval_waiting'])->name('approval-waiting');

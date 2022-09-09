@@ -734,7 +734,7 @@ $applied = check_job_applied($job->id);
                         <img src="{!! asset($company->profile_image) !!}" alt="" draggable="false">
                      </div>
                      <div class="iconbox-content">
-                        <div class="body-font-1 rt-mb-12"><a href="#" class="text-gr2q  ay-900 hover:text-primary-500">{{ $company->employer_name }}</a>
+                        <div class="body-font-1 rt-mb-12"><a href="{{ route('company-details', $company->id) }}" class="text-gr2q  ay-900 hover:text-primary-500">{{ $company->employer_name }}</a>
                         </div>
                         <span class="loacton text-gray-400 ">
                         <i class="fa-solid fa-location-dot"></i>
@@ -746,7 +746,7 @@ $applied = check_job_applied($job->id);
                   </div>
                   <div class="post-info d-flex">
                      <div class="flex-grow-1">
-                        <a href="#" type="button" class="btn btn-primary2-50 d-block">
+                        <a href="{{ route('company-details', $company->id) }}" type="button" class="btn btn-primary2-50 d-block">
                            <div class="button-content-wrapper ">
                               <span class="button-icon align-icon-right">
                               <i class="fa-solid fa-arrow-right-long"></i>

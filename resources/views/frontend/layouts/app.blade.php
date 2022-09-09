@@ -36,11 +36,8 @@
         <meta name="twitter:title" content="{{$keyword->meta_tag}}" />
         @endif
     @else
-
 <title>ez-job.co</title>
-
 @endif
-
 <meta name="format-detection" content="telephone=no">
 <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, user-scalable=1">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -54,16 +51,12 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.9.0/slick.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.9.0/slick-theme.css">
     <link rel="stylesheet" type="text/css" href="https://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.4/css/jquery.dataTables.css"/>
-
     <link href="https://www.jqueryscript.net/css/jquerysctipttop.css" rel="stylesheet" type="text/css">
     <script src="https://kit.fontawesome.com/956568d106.js" crossorigin="anonymous"></script>
 {!! Html::style('assets/frontend/css/stellarnav.min.css') !!}
 <!-- {!! HTML::style('assets/frontend/css/bootstrap.min1.css') !!} -->
 {!! HTML::style('assets/frontend/css/style.css') !!}
-
-
 @yield('css')
-
 </head>
 <body class="content-pages">
     <!-- Page-->
@@ -72,12 +65,8 @@
         @include('frontend.layouts.header')      
         <!-- Main Content -->
         @yield('content')
-       
-
         @include('frontend.layouts.footer') 
-
     </div> 
-
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/wow/1.1.2/wow.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
@@ -87,7 +76,6 @@
         <script src="https://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.4/jquery.dataTables.min.js"></script>
         {!! HTML::script('assets/frontend/js/stellarnav.min.js') !!}
         <!-- {!! HTML::script('assets/frontend/js/custom.js') !!} -->
-
 
 <script type="text/javascript" charset="utf-8">
     $(document).ready(function() {
@@ -127,7 +115,6 @@ function saveCandidate(candidate_id) {
         }
     });
 } 
-
 
 function ApplyJob(job_id) {
     $.ajax({
@@ -346,6 +333,22 @@ function JobFilter(val) {
         }
     });
 } 
+
+
+function CompanyFilter(val) {
+    var company_name = $("input[name=company_name]").val();
+    var country = $("select[name=country_name]").val();
+    var state = $("select[name=state]").val();
+    var city = $("select[name=city]").val();
+    $.ajax({
+        type: "GET",
+        url: "{{ route('company-filter') }}",
+        data: {'company_name' : company_name, 'country' : country, 'state' : state, 'city' : city},
+        success: function(data){
+            $("#company-list").html(data);
+        }
+    });
+}
 
 
 function CandidateFilter(val) {
