@@ -7,6 +7,9 @@ use App\Http\Controllers\Controller;
 use App\User;
 use App\Models\UserDevice;
 use App\Models\Category;
+use App\Models\Company;
+use App\Models\JobApplies;
+use App\Models\SaveJob;
 use ElfSundae\Laravel\Hashid\Facades\Hashid;
 use App\Models\Job;
 use App\Models\SmsCode;
@@ -96,8 +99,158 @@ class JobController extends Controller
        return apiResponseApp(true, 200, null, null, $data);
     }
 
+    public function job_apply(Request $request){
+      $user = User::where('api_key', $request->api_key)->select('id')->first();
+      if($user){ 
+        $job = Job::where('id', $request->job_id)->select('employer_id')->first();
+        $save_job1 = JobApplies::where('job_id', $request->job_id)->where('user_id', $user->id)->select('id')->first();
+        if(empty($save_job1)){
+            $SaveJob = new JobApplies();
+            $SaveJob->job_id = $request->job_id;
+            $SaveJob->user_id = $user->id;
+            $SaveJob->employer_id = $job->employer_id;
+            $SaveJob->save();
+        }
+          $message = 'Successfully applied for job';   
+          return apiResponseAppmsg(true, 200, $message, null, null);
+    }
+    }
     
+    public function live_job_search(Request $request){
+      $jobs = \DB::table("jobs")
+            ->join('users', 'users.id', '=', 'jobs.employer_id')
+            ->select('jobs.title')
+            ->where('jobs.status', 1)
+            ->where('users.status', 1) 
+            ->where('jobs.title',  'like', '%'.$request->search.'%')  
+            ->where('jobs.created_at', '>', now()->subDays(30)->endOfDay())
+            ->groupBy('jobs.title')
+            ->inRandomOrder()->limit(10)->get();
+          return apiResponseApp(true, 200, null, null, $jobs);
+    }
 
+    public function job_filter(Request $request){
+
+        $jobs = \DB::table("jobs")
+            ->join('users', 'users.id', '=', 'jobs.employer_id')
+            ->join('cities', 'cities.id', '=', 'jobs.city_id')
+            ->select('jobs.id', 'jobs.title', 'jobs.salary', 'jobs.job_type', 'jobs.created_at', 'users.profile_image', 'users.employer_name', 'cities.name as city')
+            ->where('jobs.status', 1)
+            ->where('users.status', 1)  
+            ->where('jobs.created_at', '>', now()->subDays(30)->endOfDay());
+            if($request->city){
+                $jobs->where('jobs.city_id',$request->city);
+            }
+            if($request->keyword){
+                $jobs->where('jobs.title', 'like', '%'.$request->keyword.'%');
+            }
+            if($request->country){
+                $jobs->where('users.country', $request->country);
+            }
+            if($request->state){
+                $jobs->where('jobs.state_id', $request->state);
+            }
+            if($request->category){
+                $jobs->where('jobs.category_id', $request->category);
+            }
+            if($request->sub_category){
+                $jobs->where('jobs.sub_category', $request->sub_category);
+            }
+            $jobs = $jobs->get();
+
+            $data = [];
+            foreach ($jobs as $value) {
+              $row['id'] = $value->id;
+              $row['title'] = $value->title;
+              $row['salary'] = $value->salary;
+              $row['job_type'] = $value->job_type;
+              $row['posted_at'] = \Carbon\Carbon::parse($value->created_at)->diffForHumans();
+              $row['image'] = route('home').$value->profile_image;
+              $row['city'] = $value->city;  
+              $row['company'] = $value->employer_name;
+              $data[] = $row;
+            }
+            return apiResponseApp(true, 200, null, null, $data);
+
+    }
+
+
+
+
+
+    public function save_job(Request $request){
+      $user = User::where('api_key', $request->api_key)->select('id')->first();
+      if($user){ 
+      $save_job = SaveJob::where('job_id', $request->job_id)->where('user_id', $user->id)->select('id')->first();
+        if(empty($save_job)){
+            $SaveJob = new SaveJob();
+            $SaveJob->job_id = $request->job_id;
+            $SaveJob->user_id = $user->id;
+            $SaveJob->save();            
+        }
+        $message = 'Job successfully saved';
+        return apiResponseAppmsg(true, 200, $message, null, null);
+      }
+    }
+
+
+    public function applied_job_list(Request $request){
+        $user = User::where('api_key', $request->api_key)->select('id')->first();
+        if($user){ 
+          $datas = \DB::table("jobs")
+            ->join('job_applies', 'jobs.id', '=', 'job_applies.job_id')
+            ->join('users', 'users.id', '=', 'jobs.employer_id')
+            ->join('cities', 'cities.id', '=', 'jobs.city_id')
+            ->select('jobs.id', 'jobs.title', 'jobs.salary', 'jobs.job_type', 'jobs.created_at', 'users.profile_image', 'users.id as company_id', 'users.employer_name', 'cities.name as city')
+            ->where('jobs.status', 1)
+            ->where('job_applies.user_id', $user->id)
+            ->where('users.status', 1)  
+            ->where('jobs.created_at', '>', now()->subDays(30)->endOfDay())
+            ->inRandomOrder()->limit(30)->get();
+          $data = [];
+          foreach ($datas as $value) {
+            $row['id'] = $value->id;
+            $row['title'] = $value->title;
+            $row['salary'] = $value->salary;
+            $row['job_type'] = $value->job_type;
+            $row['posted_at'] = \Carbon\Carbon::parse($value->created_at)->diffForHumans();
+            $row['image'] = route('home').$value->profile_image;
+            $row['city'] = $value->city;  
+            $row['company'] = $value->employer_name;
+            $data[] = $row;
+          }
+          return apiResponseApp(true, 200, null, null, $data);
+        }
+    }
+
+    public function saved_job_list(Request $request){
+        $user = User::where('api_key', $request->api_key)->select('id')->first();
+        if($user){ 
+          $datas = \DB::table("jobs")
+            ->join('save_jobs', 'jobs.id', '=', 'save_jobs.job_id')
+            ->join('users', 'users.id', '=', 'jobs.employer_id')
+            ->join('cities', 'cities.id', '=', 'jobs.city_id')
+            ->select('jobs.id', 'jobs.title', 'jobs.salary', 'jobs.job_type', 'jobs.created_at', 'users.profile_image', 'users.id as company_id', 'users.employer_name', 'cities.name as city')
+            ->where('jobs.status', 1)
+            ->where('save_jobs.user_id', $user->id)
+            ->where('users.status', 1)  
+            ->where('jobs.created_at', '>', now()->subDays(30)->endOfDay())
+            ->inRandomOrder()->limit(30)->get();
+          $data = [];
+          foreach ($datas as $value) {
+            $row['id'] = $value->id;
+            $row['title'] = $value->title;
+            $row['salary'] = $value->salary;
+            $row['job_type'] = $value->job_type;
+            $row['posted_at'] = \Carbon\Carbon::parse($value->created_at)->diffForHumans();
+            $row['image'] = route('home').$value->profile_image;
+            $row['city'] = $value->city;  
+            $row['company'] = $value->employer_name;
+            $data[] = $row;
+          }
+          return apiResponseApp(true, 200, null, null, $data);
+        }
+    }
 
 
 

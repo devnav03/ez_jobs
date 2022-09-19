@@ -125,9 +125,12 @@ function get_candidate_save_status($id){
     return App\Models\SaveCandidate::where('candidate_id', $id)->where('employer_id', $user_id)->count();
 }
 
-
 function check_cat_job($id){
     return App\Models\Job::where('employer_id', $id)->where('status', 1)->where('created_at', '>', now()->subDays(30)->endOfDay())->count();
+}
+
+function get_applyed_job_count($id){
+    return App\Models\JobApplies::where('job_id', $id)->count();
 }
 
 

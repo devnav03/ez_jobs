@@ -43,6 +43,12 @@ header .col-md-4 {
 .mg20{
     margin-bottom: 15px;
 }
+.applyed_count {
+    background: #0a66cd; 
+    color: #fff; 
+    font-size: 12px; 
+    padding: 2px 6px;
+}
 #total_records1, #total_records {
     scroll-behavior: auto;
     overflow: auto;
@@ -1611,7 +1617,10 @@ header .col-md-4 {
     margin-right: 7px;
 }
 
-
+.appliers_list h1 span{
+    float: right;
+    font-size: 14px;
+}
 
 
 

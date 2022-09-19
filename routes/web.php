@@ -289,7 +289,12 @@ Route::get('payment-status', [App\Http\Controllers\Front\PlanController::class, 
 Route::any('logout', [App\Http\Controllers\Front\HomeController::class, 'logout'])->name('logout');
 Route::any('my-profile', [App\Http\Controllers\Front\HomeController::class, 'profileShow'])->name('my-profile');
 
+Route::any('saved-job', [App\Http\Controllers\Front\JobController::class, 'saved_job'])->name('saved-job');
+
 Route::any('update-profile', [App\Http\Controllers\Front\HomeController::class, 'update_profile'])->name('update-profile');
+
+Route::any('appliers-list/{id}', [App\Http\Controllers\Front\JobController::class, 'appliers_list'])->name('appliers-list');
+
 
 Route::any('employer-profile-update', [App\Http\Controllers\Front\HomeController::class, 'employer_profile_update'])->name('employer-profile-update');
 

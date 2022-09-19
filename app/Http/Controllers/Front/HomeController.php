@@ -664,6 +664,7 @@ class HomeController extends Controller{
             $link = route('emailverify', $user_id);
             $name = $name;
             $responce = $this->send_email($home, $link, $name, $email);
+            //dd($responce);
            return redirect()->back()->with('message_reg', 'Register Done!');
             
         } catch (Exception $e) {

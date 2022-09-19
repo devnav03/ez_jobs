@@ -77,6 +77,8 @@
             @if((\Auth::user()->user_type) == 2)
             <li><a href="{{ route('job-post') }}">Job Post</a></li>
             <li><a href="{{ route('billing-information') }}">Billings</a></li>
+            @else 
+            <li><a href="{{ route('saved-job') }}">Saved Job</a></li>
             @endif
             <li><a href="{{ route('logout') }}"> Logout </a></li>
 

@@ -22,17 +22,19 @@ Route::any('v1/category', ['as' => 'category','uses' => 'App\Http\Controllers\AP
 Route::any('v1/popular', ['as' => 'popular','uses' => 'App\Http\Controllers\API\V1\JobController@popular']);
 Route::any('v1/functional-areas', ['as' => 'functional-areas','uses' => 'App\Http\Controllers\API\V1\JobController@functional_areas']);
 Route::any('v1/jobs-by-functional-areas', ['as' => 'jobs-by-functional-areas','uses' => 'App\Http\Controllers\API\V1\JobController@jobs_by_functional_areas']);
-
 Route::any('v1/job-details', ['as' => 'job-details','uses' => 'App\Http\Controllers\API\V1\JobController@job_details']);
-
-
-
-Route::any('v1/update-profile', ['as' => 'update-profile','uses' => 'App\Http\Controllers\API\V1\UserController@updateProfile']);
-
+Route::any('v1/job-apply', ['as' => 'job-apply','uses' => 'App\Http\Controllers\API\V1\JobController@job_apply']);
+Route::any('v1/save-job', ['as' => 'save-job','uses' => 'App\Http\Controllers\API\V1\JobController@save_job']);
+Route::any('v1/applied-job-list', ['as' => 'applied-job-list','uses' => 'App\Http\Controllers\API\V1\JobController@applied_job_list']);
+Route::any('v1/saved-job-list', ['as' => 'saved-job-list','uses' => 'App\Http\Controllers\API\V1\JobController@saved_job_list']);
+Route::any('v1/candidate-profile-update', ['as' => 'candidate-profile-update','uses' => 'App\Http\Controllers\API\V1\UserController@candidate_profile_update']);
+Route::any('v1/employer-profile-update', ['as' => 'employer-profile-update','uses' => 'App\Http\Controllers\API\V1\UserController@employer_profile_update']);
+Route::any('v1/live-job-search', ['as' => 'live-job-search','uses' => 'App\Http\Controllers\API\V1\JobController@live_job_search']);
+Route::any('v1/job-filter', ['as' => 'job-filter','uses' => 'App\Http\Controllers\API\V1\JobController@job_filter']);
 Route::any('v1/update-password', ['as' => 'update-password','uses' => 'App\Http\Controllers\API\V1\UserController@changePassword']);
+Route::any('v1/testimonials', ['as' => 'testimonials','uses' => 'App\Http\Controllers\API\V1\UserController@testimonials']);
 
-
-
+Route::any('v1/top-companies', ['as' => 'top-companies','uses' => 'App\Http\Controllers\API\V1\UserController@top_companies']);
 
 
 

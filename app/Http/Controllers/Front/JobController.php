@@ -50,7 +50,6 @@ class JobController extends Controller{
             \Session::flush();
             return redirect()->route('login');
         }
-
     }
 
     public function saveJob(Request $request){
@@ -73,6 +72,39 @@ class JobController extends Controller{
         }
         $data['job_id'] = $request->job_id;
         return $data;
+    }
+
+    public function appliers_list($id = null){
+        try{
+              
+            $user_id = Auth::id();
+            $chk_jobpost = Job::where('id', $id)->where('employer_id', $user_id)->count();
+            if($chk_jobpost != 0){
+            
+            $candidates = User::join('job_seekers_details', 'job_seekers_details.seeker_id', '=', 'users.id')
+            ->join('job_applies', 'job_applies.user_id', '=', 'users.id')
+            ->join('categories', 'categories.id', '=', 'job_seekers_details.sub_category')
+            ->join('cities', 'cities.id', '=', 'users.city')
+            ->select('categories.name as cat', 'users.id', 'users.name', 'users.profile_image', 'job_seekers_details.experience_years', 'job_seekers_details.experience_months', 'cities.name as city', 'job_applies.created_at')
+            ->where('users.user_type', 3)
+            ->where('users.status', 1)
+            ->where('job_applies.job_id', $id)->get();
+            
+            $countries = Country::all();
+            $job = Job::where('id', $id)->select('title', 'created_at')->first();
+
+            //dd($candidates);
+
+            return view('frontend.pages.appliers_list', compact('candidates', 'countries', 'job'));
+
+            } else {
+                return back();
+            }
+
+        } catch (Exception $e) {
+            return back();
+        }
+
     }
 
 
@@ -150,6 +182,32 @@ class JobController extends Controller{
             return view('frontend.pages.job_details', compact('job', 'countries'));
 
         } catch (Exception $e) {
+            return back();
+        }
+    }
+
+    public function saved_job(Request $request){
+        try{
+
+            $user_id = Auth::id();
+            $jobs = \DB::table("jobs")
+            ->join('save_jobs', 'jobs.id', '=', 'save_jobs.job_id')
+            ->join('users', 'users.id', '=', 'jobs.employer_id')
+            ->join('cities', 'cities.id', '=', 'jobs.city_id')
+            ->select('jobs.id', 'jobs.title', 'jobs.salary', 'jobs.job_type', 'jobs.created_at', 'users.profile_image', 'users.id as company_id', 'users.employer_name', 'cities.name as city')
+            ->where('jobs.status', 1)
+            ->where('save_jobs.user_id', $user_id)
+            ->where('users.status', 1)  
+            ->where('jobs.created_at', '>', now()->subDays(30)->endOfDay())
+            ->inRandomOrder()->limit(40)->get();
+
+            $countries = Country::all();
+            if((\Auth::user()->user_type) == 3){
+            return view('frontend.pages.saved_job', compact('jobs', 'countries'));
+            } else {
+                return back();
+            }
+        } catch(Exception $e){
             return back();
         }
     }
