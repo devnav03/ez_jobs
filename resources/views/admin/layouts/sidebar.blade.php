@@ -11,7 +11,6 @@
             <i class="fa fa-users" aria-hidden="true"></i><span class="nav-text"> Employer</span></a>
         </li>
 
-
         <li class="has-subnav"> 
             <a href="{!! route('category.index') !!}">
             <i class="fa fa-pen" aria-hidden="true"></i><span class="nav-text"> Category List</span></a>
@@ -44,6 +43,11 @@
         <li class="has-subnav"> 
             <a href="{!! route('testimonials.index') !!}">
             <i class="fa fa-star"></i> <span class="nav-text">Testimonials</span></a>
+        </li>
+
+        <li class="has-subnav"> 
+            <a href="{!! route('blogs.index') !!}">
+            <i class="fa fa-pen"></i> <span class="nav-text">Blogs</span></a>
         </li>
         
         <!--  <li class="has-subnav">

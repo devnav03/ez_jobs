@@ -237,7 +237,6 @@ class JobController extends Controller{
     
 
     public function edit_job($id = null){
-
         try {
 
             $user_id = Auth::id();

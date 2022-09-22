@@ -587,7 +587,7 @@ h4, .text-h4 {
     flex-shrink: 0;
     margin-right: 16px;
     transition: all 0.4s;
-    background-color: #eff6fe;
+ /*   background-color: #eff6fe;*/
 }
 .popular-category-icon i {
     font-size: 32px;
@@ -611,12 +611,12 @@ h4, .text-h4 {
     background: #FFFFFF;
     box-shadow: 0px 12px 48px rgb(0 44 109 / 10%);
 }
-.popular-category-item:hover .popular-category-icon {
+/*.popular-category-item:hover .popular-category-icon {
     background-color: #0a66cd;
-}
-.popular-category-item:hover .popular-category-icon i {
+}*/
+/*.popular-category-item:hover .popular-category-icon i {
     color: #fff;
-}
+}*/
 
 .bg-gray-20 {
     background-color: #fbfdff !important;
@@ -1523,6 +1523,9 @@ table.dataTable td {
 .hide_in_phone{
     display: none;
 }
+.contact-auth-box{
+    margin-top: 30px;
+}
 header .col-md-2 img {
     margin-top: 15px;
     min-width: 95px;
@@ -1616,11 +1619,109 @@ header .col-md-4 {
 .job_details .col-md-7 ul.rt-list.gap-8 li{
     margin-right: 7px;
 }
-
 .appliers_list h1 span{
     float: right;
     font-size: 14px;
 }
+.blog-index {
+    background: #f3f3f3;
+    padding: 50px 0;
+}
+.blog-index h1{
+    color: #0a66cd;
+    font-size: 28px;
+    font-weight: 600;
+}
+.blog-image {
+    max-height: 200px;
+    overflow: hidden;
+    margin-bottom: 15px;
+}
+.blog-index h3 {
+    font-size: 18px;
+    line-height: 26px;
+    padding: 0 15px 15px 15px;
+    font-weight: 400;
+    min-height: 70px;
+}
+.blog-box {
+    background: #fff;
+}
+.blog-index .col-md-4 {
+    margin-bottom: 30px;
+}
+.blog-index h3 a{
+    color: #000;
+}
+.blog-details-index {
+    background: #fbfdff;
+    border-top: 1px solid #e4e5e8;
+    padding: 35px 0;
+}
+.blog-details-index h2 {
+    font-size: 26px;
+    margin-bottom: 25px;
+    margin-top: 15px;
+}
+.blog-details-index .content {
+    margin-top: 20px;
+}
+.rt-about{
+    border-top: 1px solid #e4e5e8;
+}
+.rt-about h2{
+    font-family: "Inter", sans-serif;
+    font-size: 48px;
+    line-height: 56px;
+    font-weight: 500;
+}
+.rt-about .body-font-3 {
+    font-weight: 500;
+}
+.rt-about .about-counter .icon-72{
+    background: #eef5fc;
+}
+.rt-about .about-counter .card{
+    border: 0px;
+}
+.mission h3{
+    font-size: 40px;
+    line-height: 48px;
+}
+.mission {
+    padding: 60px 0;
+}
+.gallery-about img{
+    margin-bottom: 30px;
+}
+.rt-contact h2 {
+    font-size: 48px;
+    line-height: 56px;
+}
+.rt-contact {
+    padding-top: 60px;
+}
+.contact-auth-box {
+    background: #ffffff;
+    border: 1px solid #edeff5;
+    box-sizing: border-box;
+    box-shadow: 0px 12px 120px rgb(0 29 73 / 8%);
+    border-radius: 12px;
+    padding: 48px;
+    margin-bottom: 55px;
+}
+
+textarea{
+    resize: none;
+}
+
+
+
+
+
+
+
+
 
 
 

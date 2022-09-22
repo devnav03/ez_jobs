@@ -126,8 +126,14 @@ function get_candidate_save_status($id){
 }
 
 function check_cat_job($id){
-    return App\Models\Job::where('employer_id', $id)->where('status', 1)->where('created_at', '>', now()->subDays(30)->endOfDay())->count();
+    return App\Models\Job::where('category_id', $id)->where('status', 1)->where('created_at', '>', now()->subDays(30)->endOfDay())->count();
 }
+
+function check_subcat_job($id){
+    return App\Models\Job::where('sub_category', $id)->where('status', 1)->where('created_at', '>', now()->subDays(30)->endOfDay())->count();
+}
+
+
 
 function get_applyed_job_count($id){
     return App\Models\JobApplies::where('job_id', $id)->count();

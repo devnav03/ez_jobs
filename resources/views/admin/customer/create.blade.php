@@ -24,19 +24,31 @@
                                         <ul>
                                             <li><span>Candidate Name:</span> {{ $result->name }}</li>
                                             <li><span>Email ID:</span> {{ $result->email }}</li>
-                                            <li><span>Mobile:</span> {{ $result->mobile }}</li>
-                                            <li><span>Gender:</span> {{ $result->gender }}</li>
+                                            @if($result->mobile)
+                                            <li><span>Mobile:</span> {{ @$result->mobile }}</li>
+                                            @endif
+                                            @if(@$result->gender)
+                                            <li><span>Gender:</span> {{ @$result->gender }}</li>
+                                            @endif
+                                            @if(@$result->date_of_birth)
                                             <li><span>Date of Birth:</span> {{ date('d M, Y', strtotime( $result->date_of_birth)) }}</li>
-                                            <li><span>Address:</span> {{ $result->address }}</li>
-                                            <li><span>City:</span> {{ $city->name }}</li>
-                                            <li><span>State:</span> {{ $state->name }}</li>
-                                            <li><span>Country:</span> {{ $country->name }}</li>
-                                           
+                                            @endif
+                                            @if(@$result->address)
+                                            <li><span>Address:</span> {{ @$result->address }}</li>
+                                            @endif
+                                            @if(@$city->name)
+                                            <li><span>City:</span> {{ @$city->name }}</li>
+                                            @endif
+                                            @if(@$state->name)
+                                            <li><span>State:</span> {{ @$state->name }}</li>
+                                            @endif
+                                            @if(@$country->name)
+                                            <li><span>Country:</span> {{ @$country->name }}</li>
+                                            @endif
                                             <li><span>Status:</span> @if($result->status == 1) Active @else Inactive @endif</li>
                                         </ul>
                                     </div>
                             </div>
-                                    
                             
                             </div>
                         </div>

@@ -52,6 +52,27 @@ class CategoryController  extends  Controller{
                     'url' =>  $slug_name,
                 ];  
 
+
+            if(isset($inputs['icon']) or !empty($inputs['icon'])) {
+                $image_name = rand(100000, 999999);
+                $fileName = '';
+                if($file = $request->hasFile('icon')) {
+                    $file = $request->file('icon') ;
+                    $img_name = $file->getClientOriginalName();
+                    $fileName = $image_name.$img_name;
+                    $destinationPath = public_path().'/uploads/cat_icon/' ;
+                    $file->move($destinationPath, $fileName);
+                }
+                $fname ='/uploads/cat_icon/';
+                $image = $fname.$fileName;
+            }
+            else{
+                $image = '';
+            }
+            
+            unset($inputs['icon']);
+            $inputs['icon'] = $image;
+
          
             (new Category)->store($inputs);
            
@@ -67,20 +88,33 @@ class CategoryController  extends  Controller{
 
   
     public function update(Request $request, $id = null) {
-
         $result = (new Category)->find($id);
         if (!$result) {
             abort(401);
         }
-
         $inputs = $request->all();
-
         try {
-   
             $inputs = $inputs + [
-                    'updated_by' => Auth::id(),
+                'updated_by' => Auth::id(),
             ];   
-
+            if(isset($inputs['icon']) or !empty($inputs['icon'])) {
+                $image_name = rand(100000, 999999);
+                $fileName = '';
+                if($file = $request->hasFile('icon')) {
+                    $file = $request->file('icon') ;
+                    $img_name = $file->getClientOriginalName();
+                    $fileName = $image_name.$img_name;
+                    $destinationPath = public_path().'/uploads/cat_icon/' ;
+                    $file->move($destinationPath, $fileName);
+                }
+                $fname ='/uploads/cat_icon/';
+                $image = $fname.$fileName;
+            }
+            else{
+                $image = $result->icon;
+            }
+            unset($inputs['icon']);
+            $inputs['icon'] = $image;
             (new Category)->store($inputs, $id);
             return redirect()->route('category.index')
                 ->with('success', lang('messages.updated', lang('category.category')));

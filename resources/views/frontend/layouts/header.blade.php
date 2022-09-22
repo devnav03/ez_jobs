@@ -24,8 +24,7 @@
             <li><a href="{{ route('candidates') }}" @if($route == 'candidates') class="active" @endif>Candidates</a></li>
             <li><a href="{{ route('companies') }}" @if($route == 'companies') class="active" @endif>Companies</a></li>
             @endif
-            <li><a href="#">Blog</a></li>
-        <!--     <li><a href="#">Pricing</a></li> -->
+            <li><a href="{{ route('blogs') }}" @if($route == 'blogs') class="active" @endif>Blog</a></li>
 
         </ul>
 
@@ -81,12 +80,9 @@
             <li><a href="{{ route('saved-job') }}">Saved Job</a></li>
             @endif
             <li><a href="{{ route('logout') }}"> Logout </a></li>
-
             </ul>
             </div>
-
            
-
             @else 
             <a href="{{ route('register') }}" class="sign-in-btn">Create Account</a>
             <a href="{{ route('login')}}" class="login-btn">Log In</a>

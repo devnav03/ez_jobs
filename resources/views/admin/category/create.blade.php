@@ -67,12 +67,32 @@
                                     </div>
                                     </div>
 
-                                    <div class="col-md-6 mgn20">
+                      <!--               <div class="col-md-6 mgn20">
                                          <div class="form-group"> 
                                             {!! Form::label('icon', lang('Icon'), array('class' => '')) !!}
                                             {!! Form::text('icon', null, array('class' => 'form-control', 'required' => 'true')) !!}
                                         </div> 
+                                    </div> -->
+
+                                    <div class="col-md-6" style="margin-top: 20px;">
+                                        <div class="form-group"> 
+                                            {!! Form::label('icon', lang('Icon'), array('class' => '')) !!}
+                                            @if(!empty($result->icon))
+                                            <input name="icon" type='file' accept="image/png, image/jpeg" id="imgInp" />
+                                            @else
+                                            <input name="icon" type='file' accept="image/png, image/jpeg" required="true" id="imgInp" />
+                                            @endif
+                                            <img id="blah" style="max-width: 55%;margin-top:10px;" src="#" alt="" />
+                                        </div>
+                                        @if(!empty($result->icon))
+                                            <div class="form-group"> 
+                                                 {!! Html::image(asset($result->icon),'' ,array('width' => 80 ,'class'=>'img-responsive') ) !!}
+           
+                                            </div>
+                                        @endif
                                     </div>
+
+
                            
                                     </div>
                                     

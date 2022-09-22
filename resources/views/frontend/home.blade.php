@@ -40,12 +40,12 @@
                         </div>
                      </div>
                   </form>
-                  <div class="f-size-14 banner-quciks-links aos-init aos-animate" data-aos="fadeindown" data-aos-duration="1000" data-aos-delay="500">
+                  <!-- <div class="f-size-14 banner-quciks-links aos-init aos-animate" data-aos="fadeindown" data-aos-duration="1000" data-aos-delay="500">
                      <span class="text-gray-400">Suggestion: </span>
                      <a href="#">Design/Creative, </a>
                      <a href="#">Garments/Textile, </a><a href="#">Engineer/Architects,</a>
                      <a href="#">Hospitality/ Travel/ Tourism</a>
-                  </div>
+                  </div> -->
                </div>
             </div>
             <div class="col-xl-6 d-flex align-items-center">
@@ -386,7 +386,7 @@
          <div class="col-lg-3 col-md-6 col-sm-6">
             <div class="most-popular-wrap">
                <div class="most-popular-item">
-                  <h3><a href="#">{{ $vacanc->title }}</a></h3>
+                  <h3><a href="{{ route('most-popular-vacancies', $vacanc->title) }}">{{ $vacanc->title }}</a></h3>
                   <p>{{ $vacanc->count }} Open Positions</p>
                </div>
             </div>
@@ -420,16 +420,16 @@
       <div class="rt-spacer-40 rt-spacer-md-20"></div>
       <div class="row">
 
-         @foreach($categories as $category)
+ @foreach($categories as $category)
 @php
 $job = check_cat_job($category->id);
 @endphp          
          <div class="col-xl-3 col-lg-4 col-md-6">
-            <a href="#">
+            <a href="{{ route('functional-area', $category->id) }}">
                <div class="popular-category-item">
                   <div class="popular-category-icon">
                      @if($category->icon)
-                     {!! $category->icon !!}
+                     <img src="{!! asset($category->icon) !!}" alt="">
                      @else
                      <i class="fas fa-pen"></i>
                      @endif
@@ -731,7 +731,7 @@ $applied = check_job_applied($job->id);
                <div class="card-body">
                   <div class="rt-single-icon-box">
                      <div class="icon-thumb company-logo">
-                        <img src="{!! asset($company->profile_image) !!}" alt="" draggable="false">
+                        <img src="{!! asset($company->profile_image) !!}" alt="">
                      </div>
                      <div class="iconbox-content">
                         <div class="body-font-1 rt-mb-12"><a href="{{ route('company-details', $company->id) }}" class="text-gr2q  ay-900 hover:text-primary-500">{{ $company->employer_name }}</a>
@@ -848,8 +848,6 @@ $applied = check_job_applied($job->id);
    <div class="row">
       <div class="col-12 position-parent">
          <div id="col-slide-test" class="owl-carousel owl-theme">
-
-
          @foreach($testimonials as $testimonial)
             <div class="testimonals-box">
                <div class="rt-mb-12">
@@ -879,13 +877,10 @@ $applied = check_job_applied($job->id);
                   <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
                      <path fill-rule="evenodd" clip-rule="evenodd" d="M16 28C16 30.1217 15.1571 32.1566 13.6569 33.6569C12.1566 35.1571 10.1217 36 8 36C5.87827 36 3.84344 35.1571 2.34315 33.6569C0.842854 32.1566 0 30.1217 0 28C0 23.58 8 0 8 0H12L8 20C10.1217 20 12.1566 20.8429 13.6569 22.3431C15.1571 23.8434 16 25.8783 16 28ZM36 28C36 30.1217 35.1571 32.1566 33.6569 33.6569C32.1566 35.1571 30.1217 36 28 36C25.8783 36 23.8434 35.1571 22.3431 33.6569C20.8429 32.1566 20 30.1217 20 28C20 23.58 28 0 28 0H32L28 20C30.1217 20 32.1566 20.8429 33.6569 22.3431C35.1571 23.8434 36 25.8783 36 28Z" fill="#DADDE6"></path>
                   </svg>
-
                   </div>
                </div>
             </div>
          @endforeach
-
-
          </div>
       </div>
    </div>
@@ -893,7 +888,6 @@ $applied = check_job_applied($job->id);
    <div class="rt-spacer-100 rt-spacer-md-50"></div>
 </section>
 @if(\Auth::check())
-
 @else
 <section class="cta-area rt-pt-100 rt-mb-80 rt-pt-md-50 rt-mb-md-40">
    <div class="container">

@@ -41,7 +41,6 @@ $later = new DateTime($today);
 $abs_diff = $later->diff($earlier)->format("%a");
 $applyed_count = get_applyed_job_count($plan->id);
 @endphp
-
     <tr>
         <td>{{ $plan->title }}</td>
         <td>{{ $plan->cat }}</td>

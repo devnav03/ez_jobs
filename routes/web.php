@@ -68,7 +68,6 @@ Route::group(['middleware' => 'auth', 'after' => 'no-cache'], function () {
             Route::any('category/import', 'CustomerController@ImportCategory')->name('category.import');
             // Category Master route end
 
-
             // Designations Master route start
             Route::resource('designation', 'App\Http\Controllers\DesignationController', [
                 'names' => [
@@ -90,6 +89,28 @@ Route::group(['middleware' => 'auth', 'after' => 'no-cache'], function () {
             Route::any('designation/drop/{id?}', ['as' => 'designation.drop',
                 'uses' => 'designation@drop']);
             // Designations
+
+            // Blogs Master route start
+            Route::resource('blogs', 'App\Http\Controllers\BlogController', [
+                'names' => [
+                    'index'     => 'blogs.index',
+                    'create'    => 'blogs.create',
+                    'store'     => 'blogs.store',
+                    'edit'      => 'blogs.edit',
+                    'update'    => 'blogs.update',
+                ],
+                'except' => ['show','destroy']
+            ]);
+
+            Route::any('blogs/paginate/{page?}', ['as' => 'blogs.paginate',
+                'uses' => 'App\Http\Controllers\BlogController@Paginate']);
+            Route::any('blogs/action', ['as' => 'blogs.action',
+                'uses' => 'App\Http\Controllers\BlogController@Action']);
+            Route::any('blogs/toggle/{id?}', ['as' => 'blogs.toggle',
+                'uses' => 'App\Http\Controllers\BlogController@Toggle']);
+            Route::any('blogs/drop/{id?}', ['as' => 'blogs.drop',
+                'uses' => 'blogs@drop']);
+            // Blogs
 
 
             // Plans Master route start
@@ -227,6 +248,31 @@ Route::group(['middleware' => 'auth', 'after' => 'no-cache'], function () {
             // Transaction List
 
 
+            // Contact route start
+            Route::resource('contact-enquiry','ContactController', [
+                'names' => [
+                    'index'     => 'contact-enquiry.index',
+                    'create'    => 'contact-enquiry.create',
+                    'store'     => 'contact-enquiry.store',
+                    'edit'      => 'contact-enquiry.edit',
+                    'update'    => 'contact-enquiry.update',
+                ],
+                'except' => ['show','destroy']
+            ]);
+
+            Route::any('contact-enquiry/paginate/{page?}', ['as' => 'contact-enquiry.paginate',
+                'uses' => 'ContactController@ContactPaginate']);
+            Route::any('contact-enquiry/action', ['as' => 'contact-enquiry.action',
+                'uses' => 'ContactController@ContactAction']);
+            Route::any('contact-enquiry/toggle/{id?}', ['as' => 'contact-enquiry.toggle',
+                'uses' => 'ContactController@ContactToggle']);
+            Route::any('contact-enquiry/drop/{id?}', ['as' => 'contact-enquiry.drop',
+                'uses' => 'ContactController@drop']);
+
+            Route::any('export-enquiry', 'CustomerController@export_enquiry')->name('export-enquiry');
+            // Contact route end
+
+
             // Testimonials List route start
             Route::resource('testimonials', 'App\Http\Controllers\TestimonialController', [
                 'names' => [
@@ -257,25 +303,28 @@ Route::any('/', [App\Http\Controllers\Front\HomeController::class, 'index'])->na
 Route::any('login', [App\Http\Controllers\Front\HomeController::class, 'login'])->name('login');
 Route::any('register', [App\Http\Controllers\Front\HomeController::class, 'register'])->name('register');
 Route::any('save-register', [App\Http\Controllers\Front\HomeController::class, 'save_register'])->name('save-register');
+Route::post('contact-enquiry', [App\Http\Controllers\Front\HomeController::class, 'contactEnquiry'])->name('contact-enquiry');
+Route::any('about-us', [App\Http\Controllers\Front\HomeController::class, 'about_us'])->name('about-us');
+Route::any('contact-us', [App\Http\Controllers\Front\HomeController::class, 'contact_us'])->name('contact-us');
 Route::any('jobs', [App\Http\Controllers\Front\HomeController::class, 'jobs'])->name('jobs');
 Route::any('job-filter', [App\Http\Controllers\Front\HomeController::class, 'jobs'])->name('jobs');
+Route::any('blogs', [App\Http\Controllers\Front\HomeController::class, 'blogs'])->name('blogs');
+Route::any('blog/{url}', [App\Http\Controllers\Front\HomeController::class, 'blog_details'])->name('blog_details');
+Route::any('most-popular-vacancies/{title}', [App\Http\Controllers\Front\HomeController::class, 'most_popular_vacancies'])->name('most-popular-vacancies');
 Route::any('job-filter', [App\Http\Controllers\Front\HomeController::class, 'job_filter'])->name('job-filter');
 Route::any('candidate-filter', [App\Http\Controllers\Front\HomeController::class, 'candidate_filter'])->name('candidate-filter');
 Route::any('company-filter', [App\Http\Controllers\Front\HomeController::class, 'company_filter'])->name('company-filter');
 Route::any('job-details/{id}', [App\Http\Controllers\Front\JobController::class, 'job_details'])->name('job-details');
-
 Route::any('companies', [App\Http\Controllers\Front\HomeController::class, 'companies'])->name('companies');
 Route::any('company-details/{id}', [App\Http\Controllers\Front\HomeController::class, 'company_details'])->name('company-details');
-
-
 Route::any('/email-verify/{id}', [App\Http\Controllers\Front\HomeController::class, 'emailverify'])->name('emailverify');
 Route::any('/approval-waiting/{id}', [App\Http\Controllers\Front\HomeController::class, 'approval_waiting'])->name('approval-waiting');
 Route::any('log-in', [App\Http\Controllers\Front\HomeController::class, 'postLogin'])->name('log-in');
-
+Route::any('job-by-functional-area/{id}', [App\Http\Controllers\Front\HomeController::class, 'job_by_functional_area'])->name('job-by-functional-area');
+Route::any('functional-area/{id}', [App\Http\Controllers\Front\HomeController::class, 'functional_area'])->name('functional-area');
 Route::get('getState', [App\Http\Controllers\CategoryController::class, 'getState'])->name('getState');
 Route::get('getCity', [App\Http\Controllers\CategoryController::class, 'getCity'])->name('getCity');
 Route::get('live_search', [App\Http\Controllers\Front\HomeController::class, 'action'])->name('live_search');
-
 Route::any('/search-job/{search}/{country_id}', [App\Http\Controllers\Front\HomeController::class, 'search_job'])->name('search-job');
 
 Route::group(['middleware' => 'user-auth', 'after' => 'no-cache'], function () {
@@ -294,7 +343,6 @@ Route::any('saved-job', [App\Http\Controllers\Front\JobController::class, 'saved
 Route::any('update-profile', [App\Http\Controllers\Front\HomeController::class, 'update_profile'])->name('update-profile');
 
 Route::any('appliers-list/{id}', [App\Http\Controllers\Front\JobController::class, 'appliers_list'])->name('appliers-list');
-
 
 Route::any('employer-profile-update', [App\Http\Controllers\Front\HomeController::class, 'employer_profile_update'])->name('employer-profile-update');
 

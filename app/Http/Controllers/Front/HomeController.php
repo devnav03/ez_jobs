@@ -14,6 +14,8 @@ use App\Models\Country;
 use App\Models\State;
 use App\Models\City;
 use App\Models\Category;
+use App\Models\Blog;
+use App\Models\Contact;
 use App\Models\Testimonial;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -89,6 +91,86 @@ class HomeController extends Controller{
         return view('frontend.home', compact('countries', 'jobs', 'companies', 'categories', 'vacancies', 'live_job', 'new_job', 'companies_count', 'candidate_count', 'testimonials'));
     }
 
+    public function blogs(){
+        try {
+            $blogs = Blog::where('status', 1)->select('title', 'image', 'url')->get();
+            $countries = Country::all();
+            return view('frontend.pages.blogs', compact('countries', 'blogs'));
+        } catch (Exception $exception) {
+            return back();
+        }
+    }
+
+
+    public function about_us(){
+        try {
+
+        $user_id = Auth::id();
+        if($user_id){
+            if((\Auth::user()->user_type) == 2){
+                $testimonials = Testimonial::where('status', 1)->where('category', 1)->select('comment', 'rating', 'name', 'designation', 'image')->get();
+            } else {
+                $testimonials = Testimonial::where('status', 1)->where('category', 2)->select('comment', 'rating', 'name', 'designation', 'image')->get();
+            }
+        } else {
+               $testimonials = Testimonial::where('status', 1)->where('category', 2)->select('comment', 'rating', 'name', 'designation', 'image')->get();
+        }
+
+        $countries = Country::all();
+        $new_job = Job::where('status', 1)->where('created_at', '>', now()->subDays(30)->endOfDay())->count();
+        $companies_count = User::where('status', 1)->where('user_type', 2)->count();
+        $candidate_count = User::where('status', 1)->where('user_type', 3)->count();
+
+        return view('frontend.pages.about_us', compact('countries', 'new_job', 'companies_count', 'testimonials', 'candidate_count'));
+        } catch (Exception $exception) {
+            return back();
+        }
+    }
+
+    public function contact_us(){
+        $countries = Country::all();
+        return view('frontend.pages.contact_us', compact('countries'));
+    }
+    
+    public function contactEnquiry(Request $request){
+        try{
+            $inputs = $request->all();
+            $validator = (new Contact)->front_contact($inputs);
+            if( $validator->fails() ) {
+              return back()->withErrors($validator)->withInput();
+            } 
+     
+            (new Contact)->store($inputs);
+            // $email = $inputs['email'];
+            // $data['mail_data'] = $inputs;
+             
+            // \Mail::send('email.enquiry', $data, function($message) use ($email){
+            //     $message->from($email);
+            //     $message->to('navjot@shailersolutions.com');
+            //     $message->subject('Enquiry');
+            // });
+
+            return back()->with('enquiry_sub', lang('messages.created', lang('comment_sub')));
+
+        } catch(Exception $exception) {
+           // dd($exception);
+         
+                return back();
+        }
+    }
+
+    public function blog_details($url = null){
+        try {
+
+            $blog = Blog::where('status', 1)->where('url', $url)->select('title', 'image', 'content')->first();
+            $countries = Country::all();
+            return view('frontend.pages.blog_detail', compact('countries', 'blog'));
+
+        } catch (Exception $exception) {
+            return back();
+        }
+    }
+
     public function candidate_profile($id = null){
 
         try{
@@ -97,6 +179,7 @@ class HomeController extends Controller{
             $today = date('Y-m-d');
             $plan_expire =  Auth::user()->plan_expire;
             $limit = Auth::user()->profile_view_limit;
+            
             if($plan_expire != NULL && $today <= $plan_expire && $limit != 0){
 
             $profile_view = ProfileView::where('candidate_id', $id)->where('employer_id', $user_id)->select('id')->first();
@@ -341,6 +424,7 @@ class HomeController extends Controller{
     }
     
     public function jobs() {
+        try {
         $countries = Country::all();
         $user_id = Auth::id();
         $function_area =  JobSeekersDetail::where('seeker_id', $user_id)->select('sub_category')->first();
@@ -368,22 +452,84 @@ class HomeController extends Controller{
         $categories = Category::where('status', 1)->where('parent_id', NULL)->select('name', 'id')->get();
 
         return view('frontend.pages.jobs', compact('countries', 'jobs', 'categories'));
+        } catch (Exception $e) {
+            return back();
+        }
+    }
+
+
+    public function most_popular_vacancies($title = null){
+        try {
+        
+        $countries = Country::all();
+        $jobs = \DB::table("jobs")
+        ->join('users', 'users.id', '=', 'jobs.employer_id')
+        ->join('cities', 'cities.id', '=', 'jobs.city_id')
+        ->select('jobs.id', 'jobs.title', 'jobs.salary', 'jobs.job_type', 'jobs.created_at', 'users.profile_image', 'users.id as company_id', 'cities.name as city')
+        ->where('jobs.status', 1)
+        ->where('jobs.title', $title) 
+        ->where('jobs.created_at', '>', now()->subDays(30)->endOfDay())->inRandomOrder()->paginate(15);
+        $categories = Category::where('status', 1)->where('parent_id', NULL)->select('name', 'id')->get();
+
+        return view('frontend.pages.jobs', compact('countries', 'jobs', 'categories'));
+
+        } catch (Exception $e) {
+            return back();
+        }
+    }
+
+    public function functional_area($id = null){
+        try {
+            $categories = Category::where('status', 1)->where('parent_id', $id)->select('id', 'name', 'icon', 'url')->inRandomOrder()->get();
+            $countries = Country::all();
+            $job = Category::where('id', $id)->select('name')->first();
+            return view('frontend.pages.functional_area', compact('countries', 'categories', 'job'));
+
+        } catch (Exception $e) {
+            return back();
+        }
+    }
+
+    public function job_by_functional_area($id = null){
+        try {
+
+        $countries = Country::all();
+        $jobs = \DB::table("jobs")
+        ->join('users', 'users.id', '=', 'jobs.employer_id')
+        ->join('cities', 'cities.id', '=', 'jobs.city_id')
+        ->select('jobs.id', 'jobs.title', 'jobs.salary', 'jobs.job_type', 'jobs.created_at', 'users.profile_image', 'users.id as company_id', 'cities.name as city')
+        ->where('jobs.status', 1)
+        ->where('jobs.sub_category', $id) 
+        ->where('jobs.created_at', '>', now()->subDays(30)->endOfDay())->inRandomOrder()->paginate(15);
+        $categories = Category::where('status', 1)->where('parent_id', NULL)->select('name', 'id')->get();
+
+        return view('frontend.pages.jobs', compact('countries', 'jobs', 'categories'));
+
+        } catch (Exception $e) {
+            return back();
+        }
+
     }
     
     public function companies() {
-        $countries = Country::all();
-        $companies = \DB::table("users")
-        ->join('cities', 'cities.id', '=', 'users.city')
-        ->select('users.id', 'users.name', 'users.profile_image', 'users.employer_name', 'cities.name as city')
-        ->where('users.status', 1)  
-        ->where('users.user_type', 2)
-        ->inRandomOrder()->paginate(9); 
-        return view('frontend.pages.companies', compact('countries', 'companies'));
+        try {
+            $countries = Country::all();
+            $companies = \DB::table("users")
+            ->join('cities', 'cities.id', '=', 'users.city')
+            ->select('users.id', 'users.name', 'users.profile_image', 'users.employer_name', 'cities.name as city')
+            ->where('users.status', 1)  
+            ->where('users.user_type', 2)
+            ->inRandomOrder()->paginate(9); 
+            return view('frontend.pages.companies', compact('countries', 'companies'));
+
+        } catch (Exception $e) {
+            return back();
+        }
     }
     
 
     public function candidates() {
-          
+        try {  
         if((\Auth::user()->user_type) == 2){
 
             $countries = Country::all();
@@ -400,6 +546,9 @@ class HomeController extends Controller{
             \Auth::logout();
             \Session::flush();
             return redirect()->route('login');
+        }
+        } catch (Exception $e) {
+            return back();
         }
     }
 

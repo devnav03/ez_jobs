@@ -52,11 +52,47 @@ class Billing extends Model
              $orderEntity = (array_key_exists($search['sort_entity'], $sortBy)) ? $sortBy[$search['sort_entity']] : $orderEntity;
          }
 
-         if (is_array($search) && count($search) > 0) {
-             $keyword = (array_key_exists('keyword', $search)) ?
-                 " AND (users.employer_name LIKE '%" .addslashes(trim($search['keyword'])) . "%')" : "";
-             $filter .= $keyword;
-         }
+        // if (is_array($search) && count($search) > 0) {
+        //     $keyword = (array_key_exists('keyword', $search)) ?
+        //         " AND (users.employer_name LIKE '%" .addslashes(trim($search['keyword'])) . "%')" : "";
+        //     $filter .= $keyword;
+        // }
+
+        if(isset($search['status'])){
+            if($search['status'] == 2){
+                unset($search['status']);
+                $search['status'] = 0;
+            }
+        }
+
+        if(isset($search['from'])){
+            $search['from'] = date('Y-m-d H:i:s', strtotime($search['from']));
+        }
+
+        if(isset($search['to'])){
+            $search['to'] = date('Y-m-d H:i:s', strtotime($search['to']));
+            $search['to'] = date('Y-m-d H:i:s', strtotime($search['to'] . ' +1 day'));
+        }
+
+        if (is_array($search) && count($search) > 0) {
+            $f1 = (array_key_exists('plan_id', $search)) ? " AND (billings.plan_id = '" .
+                addslashes($search['plan_id']) . "')" : "";
+
+            $f5 = (array_key_exists('employer', $search)) ? " AND (billings.user_id = '" .
+                addslashes($search['employer']) . "')" : "";    
+              
+
+            $f2 = (array_key_exists('from', $search)) ? " AND (billings.created_at >= '" .
+                addslashes($search['from']) . "')" : "";  
+
+
+            $f3 = (array_key_exists('status', $search)) ? " AND (billings.status = '" .
+                addslashes($search['status']) . "')" : "";
+
+           $f4 =  (array_key_exists('to', $search)) ? " AND (billings.created_at <= '" .
+                addslashes($search['to']) . "')" : ""; 
+            $filter .= $f1 . $f2 . $f3 . $f4 . $f5;
+        } 
 
          return $this->join('users', 'users.id', '=', 'billings.user_id')
                 ->join('plans', 'plans.id', '=', 'billings.plan_id')

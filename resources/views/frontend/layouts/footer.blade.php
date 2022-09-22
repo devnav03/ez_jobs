@@ -11,8 +11,7 @@
                         <div class="body-font-2 text-gray-500">
                                 <div class="body-font-2 text-gray-500">
                                     <span>Call Now:</span>
-                                    <a href="tel:319-555-0115" class="text-gray-10">
-                                        319-555-0115</a>
+                                    <a href="tel:319-555-0115" class="text-gray-10">319-555-0115</a>
                                 </div>
                                 <div class="max-312 body-font-4 mt-2 text-gray-500">
                                 6391 Elgin St. Celina, Delaware 10299, New York, United States of America
@@ -20,34 +19,38 @@
                         </div>
                     </address>
                 </div>
-                <div class="col-lg-2 col-md-3 col-sm-6 rt-single-widget ">
+                <div class="col-lg-3 col-md-4 col-sm-6 rt-single-widget ">
                     <h2 class="footer-title">Quick Link</h2>
                     <ul class="rt-usefulllinks2">
-                        <li><a href="#">About</a></li>
-                        <li><a href="#">Contact</a></li>
-                        <li><a href="#">Pricing</a></li>
-                        <li><a href="#">Blog</a></li>
+                        <li><a href="{{ route('about-us') }}">About</a></li>
+                        <li><a href="{{ route('blogs') }}">Blog</a></li>
+                        <li><a href="{{ route('contact-us') }}">Contact</a></li>
                     </ul>
                 </div>
+                @if(\Auth::check())
+                @if(((\Auth::user()->user_type)) == 3)
+                <div class="col-lg-3 col-md-5 col-sm-6 rt-single-widget ">
+                    <h2 class="footer-title">For You</h2>
+                    <ul class="rt-usefulllinks2">
+                        <li><a href="{{ route('jobs') }}">Browse Jobs</a></li>
+                        <li><a href="{{ route('companies') }}">Browse Employers</a></li>
+                        <li><a href="{{ route('saved-job') }}">Saved Jobs</a></li>
+                    </ul>
+                </div>
+                @endif
+                @if(((\Auth::user()->user_type)) == 2) 
+                <div class="col-lg-3 col-md-5 col-sm-6 rt-single-widget ">
+                    <h2 class="footer-title">For You</h2>
+                    <ul class="rt-usefulllinks2">
+                        <li><a href="{{ route('job-post') }}">Job Post</a></li>
+                        <li><a href="{{ route('candidates') }}">Browse Candidates</a></li>
+                        <li><a href="{{ route('billing-information') }}">Billings</a></li>
+                        <li><a href="{{ route('membership-plan') }}">Plan</a></li>
+                    </ul>
+                </div>
+                @endif
+                @endif
                 <div class="col-lg-2 col-md-3 col-sm-6 rt-single-widget ">
-                    <h2 class="footer-title">Candidate</h2>
-                    <ul class="rt-usefulllinks2">
-                        <li><a href="#">Browse Jobs</a></li>
-                        <li><a href="#">Browse Candidates</a></li>
-                        <li><a href="#">Candidate Dashboard</a></li>
-                        <li><a href="#">Saved Jobs</a></li>
-                    </ul>
-                </div>
-                <div class="col-lg-2 col-md-4 col-sm-6 rt-single-widget ">
-                    <h2 class="footer-title">Employers</h2>
-                    <ul class="rt-usefulllinks2">
-                        <li><a href="#">Post a Job</a></li>
-                        <li><a href="#">Browse Employers</a></li>
-                        <li><a href="#">Employers Dashboard</a></li>
-                        <li><a href="#">Applications</a></li>
-                    </ul>
-                </div>
-                <div class="col-lg-2 col-md-4 col-sm-6 rt-single-widget ">
                     <h2 class="footer-title">Support</h2>
                     <ul class="rt-usefulllinks2">
                         <li><a href="#">Faqs</a></li>

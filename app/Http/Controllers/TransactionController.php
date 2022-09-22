@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Storage;
 use App\Models\Billing;
 use App\Models\Category;
 use App\Models\Country;
+use App\Models\Plan;
 use App\Models\Education;
 use App\User;
 use Illuminate\Http\Request;
@@ -21,7 +22,11 @@ class TransactionController  extends  Controller{
 
     public function index() {
         if((\Auth::user()->user_type) == 1){
-            return view('admin.transaction.index');
+
+            $employers = User::where('status', 1)->where('user_type', 2)->select('id', 'employer_name')->get();
+            $plans = Plan::where('status', 1)->select('id', 'name', 'category')->orderBy('category', 'ASC')->get(); 
+
+            return view('admin.transaction.index', compact('employers', 'plans'));
         } else {
             \Auth::logout();
             \Session::flush();
