@@ -11,6 +11,7 @@ use ElfSundae\Laravel\Hashid\Facades\Hashid;
 use App\Models\Notify;
 use App\Models\SmsCode;
 use App\Models\ForceUpdate;
+use App\Models\Plan;
 use App\Models\Testimonial;
 use App\Models\JobSeekersDetail;
 use Auth;
@@ -125,6 +126,19 @@ class UserController extends Controller
       } catch(Exception $e){
            return apiResponse(false, 500, lang('messages.server_error'));
         }
+    }
+
+    public function plans(Request $request){
+      $user = User::where('api_key', $request->api_key)->select('user_type')->first();
+      if(@$user->user_type == 2){ 
+
+        $data['job_post_plans'] = Plan::where('status', 1)->where('category', 1)->select('id', 'name', 'price', 'description', 'job_description', 'job_search', 'job_branding', 'city')->get();
+
+        $data['profile_view_plans'] = Plan::where('status', 1)->where('category', 2)->select('id', 'name', 'price', 'profile_view', 'duration')->get();
+
+        return apiResponseApp(true, 200, null, null, $data);
+
+      }
     }
 
     public function top_companies(Request $request){

@@ -203,6 +203,28 @@ Route::group(['middleware' => 'auth', 'after' => 'no-cache'], function () {
                 'uses' => 'education@drop']);
             // Education
 
+            // Faqs route start
+            Route::resource('faqs', 'App\Http\Controllers\FaqController', [
+                'names' => [
+                    'index'     => 'faqs.index',
+                    'create'    => 'faqs.create',
+                    'store'     => 'faqs.store',
+                    'edit'      => 'faqs.edit',
+                    'update'    => 'faqs.update',
+                ],
+                'except' => ['show','destroy']
+            ]);
+
+            Route::any('faqs/paginate/{page?}', ['as' => 'faqs.paginate',
+                'uses' => 'App\Http\Controllers\FaqController@Paginate']);
+            Route::any('faqs/action', ['as' => 'faqs.action',
+                'uses' => 'App\Http\Controllers\FaqController@Action']);
+            Route::any('faqs/toggle/{id?}', ['as' => 'faqs.toggle',
+                'uses' => 'App\Http\Controllers\FaqController@Toggle']);
+            Route::any('faqs/drop/{id?}', ['as' => 'faqs.drop',
+                'uses' => 'faqs@drop']);
+            // Faqs
+
             // Jobs List route start
             Route::resource('jobs-list', 'App\Http\Controllers\JobsListController', [
                 'names' => [
@@ -223,6 +245,7 @@ Route::group(['middleware' => 'auth', 'after' => 'no-cache'], function () {
                 'uses' => 'App\Http\Controllers\JobsListController@Toggle']);
             Route::any('jobs-list/drop/{id?}', ['as' => 'jobs-list.drop',
                 'uses' => 'jobs-list@drop']);
+            Route::any('jobs/applies/{id}', 'App\Http\Controllers\JobsListController@job_applies')->name('job_applies');
             // Jobs List
 
             // Transaction route start
@@ -246,6 +269,17 @@ Route::group(['middleware' => 'auth', 'after' => 'no-cache'], function () {
             Route::any('transaction/drop/{id?}', ['as' => 'transaction.drop',
                 'uses' => 'transaction@drop']);
             // Transaction List
+
+            // Content Management route start
+            Route::resource('content-management','App\Http\Controllers\ContentManagementController', [
+                'names' => [
+                    'index'     => 'content-management',
+                    'edit'      => 'content-management.edit',
+                    'update'    => 'content-management.update',
+                ],
+                'except' => ['show','destroy']
+            ]);
+            // Content Management route end
 
 
             // Contact route start
@@ -271,7 +305,6 @@ Route::group(['middleware' => 'auth', 'after' => 'no-cache'], function () {
 
             Route::any('export-enquiry', 'CustomerController@export_enquiry')->name('export-enquiry');
             // Contact route end
-
 
             // Testimonials List route start
             Route::resource('testimonials', 'App\Http\Controllers\TestimonialController', [
@@ -304,6 +337,8 @@ Route::any('login', [App\Http\Controllers\Front\HomeController::class, 'login'])
 Route::any('register', [App\Http\Controllers\Front\HomeController::class, 'register'])->name('register');
 Route::any('save-register', [App\Http\Controllers\Front\HomeController::class, 'save_register'])->name('save-register');
 Route::post('contact-enquiry', [App\Http\Controllers\Front\HomeController::class, 'contactEnquiry'])->name('contact-enquiry');
+Route::get('privacy-policy', [App\Http\Controllers\Front\HomeController::class, 'privacy_policy'])->name('privacy-policy');
+Route::get('terms-and-conditions', [App\Http\Controllers\Front\HomeController::class, 'terms_and_conditions'])->name('terms-and-conditions');
 Route::any('about-us', [App\Http\Controllers\Front\HomeController::class, 'about_us'])->name('about-us');
 Route::any('contact-us', [App\Http\Controllers\Front\HomeController::class, 'contact_us'])->name('contact-us');
 Route::any('jobs', [App\Http\Controllers\Front\HomeController::class, 'jobs'])->name('jobs');
@@ -367,6 +402,8 @@ Route::any('candidate-profile/{id}', [App\Http\Controllers\Front\HomeController:
 
 
 Route::get('getSubcategory', [App\Http\Controllers\Front\HomeController::class, 'getSubcategory'])->name('getSubcategory');
+
+Route::any('faq', [App\Http\Controllers\Front\HomeController::class, 'faq'])->name('faq');
 
 Route::get('reset', function (){
     Artisan::call('route:clear');

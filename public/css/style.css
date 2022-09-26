@@ -4782,7 +4782,7 @@ div#vmap {
 .fa-android, .fa-tv, .fa-wifi,
 .fa-thumbs-up, .fa-building,
 .fa-users, .fa-dollar-sign,
-.fa-graduation-cap {
+.fa-graduation-cap, .fa-question {
 	position: relative;
 	display: table-cell;
 	width: 60px;

@@ -22,7 +22,7 @@
     left: 0px;
     z-index: 1;
     content: "";
-    top: 20px;
+    top: 68px;
 }
 
 </style>
@@ -42,7 +42,7 @@ var options = {
     zoomEnabled: true,
     animationEnabled: true,
     title: {
-        text: "Employers Registration"
+        text: ""
     },
     axisY: {
         lineThickness: 1
@@ -64,7 +64,7 @@ var options = {
     zoomEnabled: true,
     animationEnabled: true,
     title: {
-        text: "Candidates Registration"
+        text: ""
     },
     axisY: {
         lineThickness: 1
@@ -180,10 +180,12 @@ chart1.render();
     <div class="social grid col-md-12">
     <div class="grid-info row">
         <div class="col-md-6" style="padding-left: 0px;">
+            <h5 style="text-align: center; margin-top: 30px; font-weight: 600; font-size: 18px;">Employers Registration</h5>
             <div id="chartContainer" style="height: 370px; width: 100%;margin-top:20px;"></div>
             <div class="remove_marker"></div>
         </div>
         <div class="col-md-6" style="padding-right: 0px;">
+            <h5 style="text-align: center; margin-top: 30px; font-weight: 600; font-size: 18px;">Candidates Registration</h5>
            <div id="revContainer" style="height: 370px; width: 100%;margin-top:20px;"></div>
            <div class="remove_marker"></div>
         </div>

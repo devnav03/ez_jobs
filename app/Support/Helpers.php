@@ -119,7 +119,10 @@ function check_job_applied($id){
     $user_id  = Auth::id();
     return App\Models\JobApplies::where('job_id', $id)->where('user_id', $user_id)->count();
 }
-
+function check_jobs_total_applied($id){
+    $user_id  = Auth::id();
+    return App\Models\JobApplies::where('job_id', $id)->count();
+}
 function get_candidate_save_status($id){
     $user_id  = Auth::id();
     return App\Models\SaveCandidate::where('candidate_id', $id)->where('employer_id', $user_id)->count();

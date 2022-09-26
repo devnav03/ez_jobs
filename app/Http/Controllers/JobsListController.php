@@ -65,7 +65,28 @@ class JobsListController  extends  Controller{
                 ->with('error', lang('messages.server_error').$exception->getMessage());
         }
     }
+    
 
+    public function job_applies($id = null){
+        try {
+
+            $candidates = User::join('job_seekers_details', 'job_seekers_details.seeker_id', '=', 'users.id')
+            ->join('job_applies', 'job_applies.user_id', '=', 'users.id')
+            ->join('categories', 'categories.id', '=', 'job_seekers_details.sub_category')
+            ->join('cities', 'cities.id', '=', 'users.city')
+            ->select('categories.name as cat', 'users.id', 'users.name', 'users.profile_image', 'job_seekers_details.experience_years', 'job_seekers_details.experience_months', 'cities.name as city', 'job_applies.created_at')
+            ->where('users.user_type', 3)
+            ->where('users.status', 1)
+            ->where('job_applies.job_id', $id)->get();
+            
+            $job = Job::where('id', $id)->select('title', 'created_at', 'id')->first();
+
+            return view('admin.job.job_applies', compact('candidates', 'job'));
+            
+        } catch (Exception $e) {
+            return back();
+        }
+    }
   
     public function update(Request $request, $id = null) {
         $result = (new Job)->find($id);
@@ -101,7 +122,7 @@ class JobsListController  extends  Controller{
                 ->join('states', 'states.id', '=','jobs.state_id')
                 ->join('cities', 'cities.id', '=','jobs.city_id')
                 ->join('educations', 'educations.id', '=','jobs.qualifications')
-                ->select('jobs.title', 'jobs.category_id', 'jobs.sub_category', 'jobs.salary', 'jobs.job_type', 'jobs.created_at', 'categories.name as cat', 'c2.name as sub_cat', 'jobs.status', 'users.name as member_name', 'users.employer_name', 'users.mobile', 'users.email', 'states.name as state', 'cities.name as city', 'educations.name as education', 'jobs.job_description', 'users.profile_image')
+                ->select('jobs.title', 'jobs.category_id', 'jobs.sub_category', 'jobs.salary', 'jobs.job_type', 'jobs.created_at', 'categories.name as cat', 'c2.name as sub_cat', 'jobs.status', 'users.name as member_name', 'users.employer_name', 'users.mobile', 'users.email', 'states.name as state', 'cities.name as city', 'educations.name as education', 'jobs.job_description', 'users.profile_image', 'jobs.id')
                 ->where('jobs.id', $id)
                 ->first();
 

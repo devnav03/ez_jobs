@@ -31,8 +31,8 @@
                                     <div class="col-md-6">
                                         <ul>
                                             <li><span>Job Title:</span> {{ $job->title }}</li>
-                                            <li><span>Industry:</span> {{ $job->title }}</li>
-                                            <li><span>Functional Area:</span> {{ $job->title }}</li>
+                                            <li><span>Industry:</span> {{ $job->cat }}</li>
+                                            <li><span>Functional Area:</span> {{ $job->sub_cat }}</li>
                                             <li><span>Job Type:</span> {{ $job->job_type }}</li>
                                             <li><span>Salary:</span> {{ $job->salary }}</li> 
                                             <li><span>Qualifications:</span> {{ $job->education }}</li> 
@@ -40,7 +40,7 @@
                                             <li><span>State:</span> {{ $job->state }}</li>
                                             <li><span>Job Status:</span> @if($job->status == 1) Active @else Inactive @endif</li>
                                             <li><span>Posted At:</span> {{ date('d M, Y', strtotime($job->created_at)) }}</li>
-                                            <li><span>Appliers</span> </li>
+                                            <li><span>Appliers</span> {{ check_jobs_total_applied($job->id) }} <a href="{{ route('job_applies', $job->id) }}"><i style="background: #0a66cd; color: #fff; padding: 5px 8px; font-size: 13px;" class="fa fa-eye"></i></a> </li>
                                         </ul>
                                         
                                     </div>
@@ -61,7 +61,7 @@
 <style type="text/css">
 .form-body li{
     list-style: none;
-    font-size: 16px;
+    font-size: 14px;
     margin-bottom: 10px;
 }
 .form-body li span {

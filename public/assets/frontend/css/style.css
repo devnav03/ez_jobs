@@ -1714,6 +1714,69 @@ header .col-md-4 {
 textarea{
     resize: none;
 }
+.faq-index{
+    padding: 60px 0;
+}
+.faq-index .card button {
+    background: #0a66cd;
+    color: #fff;
+    width: 100%;
+    text-align: left;
+}
+.faq-index .card .card-header{
+    padding: 0px;
+    background: transparent;
+    border: 0px;
+}
+
+.faq-index .collapse .card-body{
+    padding: 0px;
+}
+.faq-index .card  {
+    border: 0px;
+    box-shadow: none;
+    outline: none;
+    margin-bottom: 20px;
+}
+.faq-index .accordion{
+    width: 100%;
+}
+
+.terms_condition{
+    padding: 60px 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

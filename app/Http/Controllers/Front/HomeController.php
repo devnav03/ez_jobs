@@ -17,12 +17,14 @@ use App\Models\Category;
 use App\Models\Blog;
 use App\Models\Contact;
 use App\Models\Testimonial;
+use App\Models\ContentManagement;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\User;
 use App\Models\LoginLog;
 use App\Models\Designation;
 use App\Models\Job;
+use App\Models\Faq;
 use App\Models\Education;
 use App\Models\ProfileView;
 use App\Models\Plan;
@@ -100,7 +102,37 @@ class HomeController extends Controller{
             return back();
         }
     }
+    
+    public function terms_and_conditions(){
+        try{
+            $countries = Country::all();
+            $terms_and_conditions = ContentManagement::where('id', 1)->select('terms_condition')->first(); 
+            return view('frontend.pages.term-condition', compact('terms_and_conditions', 'countries'));
+        } catch(\Exception $ex){
 
+        //dd($ex);
+        return back();
+        }
+    } 
+
+    public function privacy_policy(){
+        try {
+            $countries = Country::all();
+            $privacy = ContentManagement::where('id', 1)->select('privacy_policy')->first(); 
+            return view('frontend.pages.privacy_policy', compact('privacy', 'countries'));
+        }
+        catch (\Exception $exception) {
+        return back();
+        }
+    }
+
+    public function faq(){
+
+        $countries = Country::all();
+        $faqs = Faq::where('status', 1)->select('title', 'description')->get();
+
+        return view('frontend.pages.faq', compact('countries', 'faqs'));
+    }
 
     public function about_us(){
         try {
@@ -229,11 +261,9 @@ class HomeController extends Controller{
             } else {
                return redirect()->route('membership-plan');
             }
-
         } catch (Exception $exception) {
             return back();
         }
-
     }
     
 
@@ -288,12 +318,10 @@ class HomeController extends Controller{
            'table_data'  => $output,
           );
           echo json_encode($data);
-
     }
 
     public function search_job($search = null, $country_id = null){
         try {
-
             $jobs = \DB::table("jobs")
             ->join('users', 'users.id', '=', 'jobs.employer_id')
             ->join('cities', 'cities.id', '=', 'jobs.city_id')
@@ -303,13 +331,10 @@ class HomeController extends Controller{
             ->where('users.status', 1)  
             ->where('users.country', $country_id)  
             ->where('jobs.created_at', '>', now()->subDays(30)->endOfDay())->inRandomOrder()->paginate(15);
-
             //dd($jobs);
-
             $categories = Category::where('status', 1)->where('parent_id', NULL)->select('name', 'id')->get();
             $countries = Country::all();
             return view('frontend.pages.jobs', compact('countries', 'jobs', 'categories'));
-
         } catch (Exception $exception) {
             return back();
         }

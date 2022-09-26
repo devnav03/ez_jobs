@@ -174,8 +174,17 @@ class JobController extends Controller
 
     }
 
+    public function job_posts(Request $request){
+
+      $user = User::where('api_key', $request->api_key)->where('user_type', 2)->select('id')->first();
+      if($user){ 
+
+      
 
 
+      }
+    }
+      
 
 
     public function save_job(Request $request){

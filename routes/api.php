@@ -37,11 +37,9 @@ Route::any('v1/testimonials', ['as' => 'testimonials','uses' => 'App\Http\Contro
 Route::any('v1/top-companies', ['as' => 'top-companies','uses' => 'App\Http\Controllers\API\V1\UserController@top_companies']);
 
 
-
-
-
-
-
+// Employers API
+Route::any('v1/plans', ['as' => 'plans','uses' => 'App\Http\Controllers\API\V1\UserController@plans']);
+Route::any('v1/job-posts', ['as' => 'job-posts','uses' => 'App\Http\Controllers\API\V1\UserController@job_posts']);
 
 
 

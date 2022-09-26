@@ -49,7 +49,20 @@
             <a href="{!! route('blogs.index') !!}">
             <i class="fa fa-pen"></i> <span class="nav-text">Blogs</span></a>
         </li>
+
+        <li class="has-subnav"> 
+            <a href="{!! route('faqs.index') !!}">
+            <i class="fa fa-question"></i> <span class="nav-text">FAQ's</span></a>
+        </li>
+
+        <li class="has-subnav"> 
+            <a href="{!! route('content-management') !!}">
+            <i class="fa fa-pen"></i> <span class="nav-text">CMS Pages</span></a>
+        </li>
+
         
+
+
         <!--  <li class="has-subnav">
             <a href="{!! route('login-logs.index') !!}"><i class="fa fa-user-lock" aria-hidden="true"></i><span class="nav-text">Login Attempts</span></a>
         </li> -->

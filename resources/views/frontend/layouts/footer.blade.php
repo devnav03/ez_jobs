@@ -53,9 +53,9 @@
                 <div class="col-lg-2 col-md-3 col-sm-6 rt-single-widget ">
                     <h2 class="footer-title">Support</h2>
                     <ul class="rt-usefulllinks2">
-                        <li><a href="#">Faqs</a></li>
-                        <li><a href="#">Privacy &amp; Policy</a></li>
-                        <li><a href="#">Terms &amp; Condition</a></li>
+                        <li><a href="{{ route('faq') }}">Faqs</a></li>
+                        <li><a href="{{ route('privacy-policy') }}">Privacy &amp; Policy</a></li>
+                        <li><a href="{{ route('terms-and-conditions') }}">Terms &amp; Condition</a></li>
                     </ul>
                 </div>
             </div><!-- /.row -->
