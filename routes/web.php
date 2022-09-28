@@ -362,6 +362,17 @@ Route::get('getCity', [App\Http\Controllers\CategoryController::class, 'getCity'
 Route::get('live_search', [App\Http\Controllers\Front\HomeController::class, 'action'])->name('live_search');
 Route::any('/search-job/{search}/{country_id}', [App\Http\Controllers\Front\HomeController::class, 'search_job'])->name('search-job');
 
+//Forgot Password
+Route::get('forgot-password', [App\Http\Controllers\Front\HomeController::class, 'forgotPassword'])->name('forgot.password');
+Route::post('forgot-password/check-email', [App\Http\Controllers\Front\HomeController::class, 'checkEmail'])->name('forgot_password.check_email');
+Route::get('update-password/{id}', [App\Http\Controllers\Front\HomeController::class, 'updatePassword'])->name('update_password');
+Route::post('change-password-new', [App\Http\Controllers\Front\HomeController::class, 'newPassword'])->name('change_password-new'); 
+
+Route::post('/change-password-forgot', [App\Http\Controllers\Front\HomeController::class, 'changePasswordForgot'])->name('change_password_forgot');
+Route::post('/change_password', [App\Http\Controllers\Front\HomeController::class, 'changePasswordStoreForgot'])->name('change_password.store');
+
+//Forgot Password End
+
 Route::group(['middleware' => 'user-auth', 'after' => 'no-cache'], function () {
 
 Route::any('membership-plan', [App\Http\Controllers\Front\PlanController::class, 'membership_plan'])->name('membership-plan');

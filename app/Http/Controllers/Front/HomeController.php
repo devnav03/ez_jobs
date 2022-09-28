@@ -23,6 +23,7 @@ use App\Http\Controllers\Controller;
 use App\User;
 use App\Models\LoginLog;
 use App\Models\Designation;
+// use ElfSundae\Laravel\Hashid\Facades\Hashid;
 use App\Models\Job;
 use App\Models\Faq;
 use App\Models\Education;
@@ -123,6 +124,104 @@ class HomeController extends Controller{
         }
         catch (\Exception $exception) {
         return back();
+        }
+    }
+
+    public function forgotPassword() {
+        $countries = Country::all();
+        return view('frontend.pages.forgot-password', compact('countries'));
+    }
+
+    public function updatePassword($user_id)  {
+
+        $user_id = \decrypt($user_id);
+        $user = User::where('id', $user_id)->first();
+        $countries = Country::all();
+
+        return view('frontend.pages.forgot_change_password', compact('user_id', 'user', 'countries'));
+    }
+
+
+    public function changePasswordForgot(Request $request) {
+        try{
+          $inputs = $request->all();
+
+          $validator = (new User)->validate_password_forgot($inputs);
+          if( $validator->fails() ) {
+              return back()->withErrors($validator)->withInput();
+          }
+          
+          $password = \Hash::make($inputs['new_password']);
+          $id = $inputs['user_id'];
+          unset($inputs['new_password']);
+
+           $inputs = $inputs + ['password' => $password];
+          //dd($inputs);
+            (new User)->store($inputs, $id);
+           //dd(User::find($id));
+
+          return back()->with('success', 'Password Successfully Changed');
+        } catch(Exception $exception){
+
+        return back();
+      }
+    }
+
+    public function checkEmail(Request $request)
+    {
+        try{
+            $inputs = $request->all();
+            // $validator = (new User)->validateForgotPasswordEmail($inputs);
+            // if( $validator->fails() ) {
+            //     return back()->withErrors($validator)->withInput();
+            // }
+            $user_detail = User::where('email', $inputs['email'])->first();
+            if(!empty($user_detail)) {
+
+                $user_id = \encrypt($user_detail->id);
+                $email = $user_detail->email;
+
+                // \Mail::send('email.forgot_password', $data, function($message) use($email){
+                //     $message->from('no-reply@ez-job.co');
+                //     $message->to($email);
+                //     $message->subject('EZ Jobs - Forgot Password');
+                // });
+
+                $home = route('home');
+
+                $link = route('update_password', $user_id);
+
+                $postdata = http_build_query(
+                    array(
+                    'home' => $home,
+                    'email' => $email,
+                    'user_id' => $link,
+                    )
+                );
+                $opts = array('http' =>
+                    array(
+                        'method'  => 'POST',
+                        'header'  => 'Content-Type: application/x-www-form-urlencoded',
+                        'content' => $postdata
+                    )
+                );
+
+                $context  = stream_context_create($opts);
+                $result = file_get_contents('https://sspl20.com/jyoti/uttuapp/api/forgot-pasw', false, $context);
+                
+                //dd($result);
+            }
+            else{
+                return back()->with('failure_email', 'Email not Found.');
+            }
+
+            return back()->with('success_forgot', 'Please Check Your Mail');
+
+        } catch (\Exception $exception) {
+         // dd($exception);
+            return back()
+                ->withInput()
+                ->with('error', lang('messages.server_error').$exception->getMessage());
         }
     }
 

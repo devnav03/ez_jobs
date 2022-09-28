@@ -139,8 +139,7 @@ class JobController extends Controller{
 
         }
 
-            $data['button'] = '<button title="delete from save" value="'.$request->candidate_id.'" onclick="saveCandidate(this.value)" class="text-primary-500 hoverbg-primary-50 plain-button icon-button">
-                        <i class="fa-solid fa-bookmark"></i></button>'; 
+            $data['button'] = '<button title="delete from save" value="'.$request->candidate_id.'" onclick="saveCandidate(this.value)" class="text-primary-500 hoverbg-primary-50 plain-button icon-button"><i class="fa-solid fa-bookmark"></i></button>'; 
             $data['message'] = 'Candidate successfully saved';
         } else {
             \DB::table('save_candidates')->where('id', $save_job->id)->delete();

@@ -37,7 +37,7 @@
                         </div>
                         <div class="flex-grow-0">
                            <span class="body-font-4">
-                           <a href="#" class="text-primary-500">Forget Password</a>
+                           <a href="{{ route('forgot.password') }}" class="text-primary-500">Forget Password</a>
                            </span>
                         </div>
                      </div>

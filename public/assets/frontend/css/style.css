@@ -1745,10 +1745,22 @@ textarea{
 .terms_condition{
     padding: 60px 0;
 }
-
-
-
-
+.forgot-password {
+    padding: 50px 0;
+}
+.forgot-password button.btn.text-uppercase {
+    background: #0a66cd;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 500;
+    margin-top: 10px;
+}
+.forgot-password label.text-capitalize{
+    color: #0a66cd;
+    font-weight: 600;
+    font-size: 20px;
+    margin-bottom: 15px;
+}
 
 
 

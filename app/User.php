@@ -61,6 +61,12 @@ class User extends Authenticatable
         return \Validator::make($inputs, $rules);
     }
 
+    public function validate_password_forgot($inputs, $id = null)  {   
+        $rules['new_password']     = 'required|same:confirm_password';
+        $rules['confirm_password']  = 'required';
+        return \Validator::make($inputs, $rules);
+    }
+
     public function validateLoginUser($inputs, $id = null)
     {
         $rules['email'] = 'required';

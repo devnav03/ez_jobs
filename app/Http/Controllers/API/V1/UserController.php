@@ -69,7 +69,8 @@ class UserController extends Controller
                 $data['plan_expire'] = $user_data->plan_expire;  
                 $data['profile_view_limit'] = $user_data->profile_view_limit;  
                 $data['job_post_limit'] = $user_data->job_post_limit; 
-                
+                $data['profile_completion'] = $user_data->profile_completion; 
+                  
                 $data['api_key'] = $api_key;  
 
                 return apiResponseApp(true, 200, null, null, $data);
@@ -101,6 +102,7 @@ class UserController extends Controller
                 $data['plan_expire'] = $user_data->plan_expire;  
                 $data['profile_view_limit'] = $user_data->profile_view_limit;  
                 $data['job_post_limit'] = $user_data->job_post_limit; 
+                $data['profile_completion'] = $user_data->profile_completion;
                 $data['api_key'] = $api_key; 
 
                 return apiResponseApp(true, 200, null, null, $data);

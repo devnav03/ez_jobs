@@ -20,6 +20,9 @@ Route::any('v1/cities', ['as' => 'cities','uses' => 'App\Http\Controllers\API\V1
 Route::any('v1/register', ['as' => 'register','uses' => 'App\Http\Controllers\API\V1\UserController@register']);
 Route::any('v1/category', ['as' => 'category','uses' => 'App\Http\Controllers\API\V1\JobController@category']);
 Route::any('v1/popular', ['as' => 'popular','uses' => 'App\Http\Controllers\API\V1\JobController@popular']);
+Route::any('v1/latest', ['as' => 'latest','uses' => 'App\Http\Controllers\API\V1\JobController@latest']);
+
+
 Route::any('v1/functional-areas', ['as' => 'functional-areas','uses' => 'App\Http\Controllers\API\V1\JobController@functional_areas']);
 Route::any('v1/jobs-by-functional-areas', ['as' => 'jobs-by-functional-areas','uses' => 'App\Http\Controllers\API\V1\JobController@jobs_by_functional_areas']);
 Route::any('v1/job-details', ['as' => 'job-details','uses' => 'App\Http\Controllers\API\V1\JobController@job_details']);
@@ -40,6 +43,26 @@ Route::any('v1/top-companies', ['as' => 'top-companies','uses' => 'App\Http\Cont
 // Employers API
 Route::any('v1/plans', ['as' => 'plans','uses' => 'App\Http\Controllers\API\V1\UserController@plans']);
 Route::any('v1/job-posts', ['as' => 'job-posts','uses' => 'App\Http\Controllers\API\V1\UserController@job_posts']);
+Route::any('v1/candidates', ['as' => 'candidates','uses' => 'App\Http\Controllers\API\V1\CandidateController@candidates']);
+Route::any('v1/candidate-details', ['as' => 'candidate-details','uses' => 'App\Http\Controllers\API\V1\CandidateController@candidate_details']);
+
+Route::any('v1/candidate-filter', ['as' => 'candidate-filter','uses' => 'App\Http\Controllers\API\V1\CandidateController@candidate_filter']);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

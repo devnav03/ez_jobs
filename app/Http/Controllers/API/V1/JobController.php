@@ -9,7 +9,9 @@ use App\Models\UserDevice;
 use App\Models\Category;
 use App\Models\Company;
 use App\Models\JobApplies;
+use App\Models\JobSeekersDetail;
 use App\Models\SaveJob;
+use App\Models\Country;
 use ElfSundae\Laravel\Hashid\Facades\Hashid;
 use App\Models\Job;
 use App\Models\SmsCode;
@@ -28,10 +30,115 @@ class JobController extends Controller
     }
 
     public function popular(Request $request){
-      $vacancies = Job::select(\DB::raw('sum(status) as count'), 'title')->groupBy('title')->orderBy('count','desc')->where('status', 1)->where('created_at', '>', now()->subDays(30)->endOfDay())->limit(20)->get();
-       return apiResponseApp(true, 200, null, null, $vacancies);
+
+      // $vacancies = Job::select(\DB::raw('sum(status) as count'), 'title')->groupBy('title')->orderBy('count','desc')->where('status', 1)->where('created_at', '>', now()->subDays(30)->endOfDay())->limit(20)->get();
+      $user = User::where('api_key', $request->api_key)->select('id')->first();
+      if($user){ 
+        $function_area =  JobSeekersDetail::where('seeker_id', $user->id)->select('sub_category')->first();
+        if(!empty($function_area)){
+
+            $jobs = \DB::table("jobs")
+            ->join('users', 'users.id', '=', 'jobs.employer_id')
+            ->join('cities', 'cities.id', '=', 'jobs.city_id')
+            ->select('jobs.id', 'jobs.title', 'jobs.salary', 'jobs.job_type', 'users.profile_image', 'users.id as company_id', 'cities.name as city', 'jobs.created_at', 'users.country')
+            ->where('jobs.status', 1)
+            ->where('jobs.sub_category', $function_area->sub_category)
+            ->where('users.status', 1)  
+            ->where('jobs.created_at', '>', now()->subDays(30)->endOfDay())
+            ->inRandomOrder()->limit(10)->get();
+
+
+        } else {
+            $jobs = \DB::table("jobs")
+            ->join('users', 'users.id', '=', 'jobs.employer_id')
+            ->join('cities', 'cities.id', '=', 'jobs.city_id')
+            ->select('jobs.id', 'jobs.title', 'jobs.salary', 'jobs.job_type', 'users.profile_image', 'users.id as company_id', 'cities.name as city', 'jobs.created_at', 'users.country')
+            ->where('jobs.status', 1)
+            ->where('users.status', 1)  
+            ->where('jobs.created_at', '>', now()->subDays(30)->endOfDay())
+            ->inRandomOrder()->limit(10)->get();
+        }
+
+          $data = [];
+          $url = route('home');
+          foreach ($jobs as $job) {
+            $company = User::where('id', $job->company_id)->select('employer_name')->first();
+            $country = Country::where('id', $job->country)->select('country_name')->first();
+
+            $job_list['id'] = $job->id;
+            $job_list['title'] = $job->title;
+            $job_list['salary'] = $job->salary;
+            $job_list['job_type'] = $job->job_type;
+            $job_list['posted_at'] = \Carbon\Carbon::parse($job->created_at)->diffForHumans();
+            $job_list['image'] = $url.$job->profile_image;
+            $job_list['city'] = $job->city;
+            $job_list['country'] = $country->country_name;
+            $job_list['company'] = $company->employer_name;
+            $data[] = $job_list;
+          }
+
+
+        return apiResponseApp(true, 200, null, null, $data);
+      }
+
     }
     
+
+
+    public function latest(Request $request){
+
+      // $vacancies = Job::select(\DB::raw('sum(status) as count'), 'title')->groupBy('title')->orderBy('count','desc')->where('status', 1)->where('created_at', '>', now()->subDays(30)->endOfDay())->limit(20)->get();
+      $user = User::where('api_key', $request->api_key)->select('id')->first();
+      if($user){ 
+        $function_area =  JobSeekersDetail::where('seeker_id', $user->id)->select('sub_category')->first();
+        if(!empty($function_area)){
+
+            $jobs = \DB::table("jobs")
+            ->join('users', 'users.id', '=', 'jobs.employer_id')
+            ->join('cities', 'cities.id', '=', 'jobs.city_id')
+            ->select('jobs.id', 'jobs.title', 'jobs.salary', 'jobs.job_type', 'users.profile_image', 'users.id as company_id', 'cities.name as city', 'jobs.created_at', 'users.country')
+            ->where('jobs.status', 1)
+            ->where('jobs.sub_category', $function_area->sub_category)
+            ->where('users.status', 1)  
+            ->where('jobs.created_at', '>', now()->subDays(30)->endOfDay())
+            ->orderBy('jobs.id', 'desc')->limit(10)->get();
+
+
+        } else {
+            $jobs = \DB::table("jobs")
+            ->join('users', 'users.id', '=', 'jobs.employer_id')
+            ->join('cities', 'cities.id', '=', 'jobs.city_id')
+            ->select('jobs.id', 'jobs.title', 'jobs.salary', 'jobs.job_type', 'users.profile_image', 'users.id as company_id', 'cities.name as city', 'jobs.created_at', 'users.country')
+            ->where('jobs.status', 1)
+            ->where('users.status', 1)  
+            ->where('jobs.created_at', '>', now()->subDays(30)->endOfDay())
+            ->orderBy('jobs.id', 'desc')->limit(10)->get();
+        }
+
+          $data = [];
+          $url = route('home');
+          foreach ($jobs as $job) {
+            $company = User::where('id', $job->company_id)->select('employer_name')->first();
+            $country = Country::where('id', $job->country)->select('country_name')->first();
+
+            $job_list['id'] = $job->id;
+            $job_list['title'] = $job->title;
+            $job_list['salary'] = $job->salary;
+            $job_list['job_type'] = $job->job_type;
+            $job_list['posted_at'] = \Carbon\Carbon::parse($job->created_at)->diffForHumans();
+            $job_list['image'] = $url.$job->profile_image;
+            $job_list['city'] = $job->city;
+            $job_list['country'] = $country->country_name;
+            $job_list['company'] = $company->employer_name;
+            $data[] = $job_list;
+          }
+
+
+        return apiResponseApp(true, 200, null, null, $data);
+      }
+
+    }
+
     public function functional_areas(Request $request){
       $data = Category::where('status', 1)->where('parent_id', $request->category_id)->select('id', 'name')->inRandomOrder()->get();
        return apiResponseApp(true, 200, null, null, $data);
@@ -66,7 +173,6 @@ class JobController extends Controller
           $data['industry'] = @$job->cat;
           $data['function_area'] = @$job->sub_cat;
           $data['education'] = @$job->education;
-
 
           return apiResponseApp(true, 200, null, null, $data);
 
