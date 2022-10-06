@@ -37,8 +37,8 @@
 @if(((\Auth::user()->user_type)) != 2)
 
  <div class="iconbox-extra align-self-center">
-                              <div class="pull-left">
-                              <div id="button{{$job->id}}">
+    <div class="pull-left">
+    <div id="button{{$job->id}}">
 @php
 $saved = check_job_save($job->id);
 $applied = check_job_applied($job->id);
@@ -80,20 +80,30 @@ $applied = check_job_applied($job->id);
 @endif
 
 
-
 </div>
 </div>
 
 <div class="row">	
 <div class="col-md-7">
-<h4>Job Description</h4>
+<h2 style="margin-top: 40px; font-size: 24px;">{{ $job->title }}</h2>    
+<h4 style="margin-top: 15px;">Job Description</h4>
 {!! $job->job_description !!}
+<p style="font-size: 17px; margin-top: 35px; font-weight: 600;">Hiring Insights</p>
+<p style="color: #808080;"><i style="font-size: 14px;" class="fa fa-user-plus"></i> &nbsp;{!! $job->number_of_positions !!}</p>
+
+<p style="font-size: 17px; margin-top: 35px; font-weight: 600;">Job activity</p>
+
+@if($job->updated_at)
+<p style="color: #808080;"><i style="font-size: 14px;" class="fa fa-clock"></i> &nbsp; Updated {{ \Carbon\Carbon::parse($job->updated_at)->diffForHumans() }} </p>
+@else
+<p style="color: #808080;"><i style="font-size: 14px;" class="fa fa-clock"></i> &nbsp; Posted {{ \Carbon\Carbon::parse($job->created_at)->diffForHumans() }} </p>
+@endif
+
+
 
 <div class="share-job rt-pt-50">
 <ul class="rt-list gap-8">
-    <li class="d-inline-block body-font-3 text-gray-900">
-        Share This Job:
-    </li>
+    <li class="d-inline-block body-font-3 text-gray-900">Share This Job:</li>
     <li class="d-inline-block ms-3">
         <a href="https://www.facebook.com/sharer/sharer.php?u={{ route('job-details', $job->id) }}">
             <button class="btn btn-outline-plain">

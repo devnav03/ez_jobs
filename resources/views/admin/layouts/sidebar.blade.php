@@ -60,6 +60,11 @@
             <i class="fa fa-pen"></i> <span class="nav-text">CMS Pages</span></a>
         </li>
 
+        <li class="has-subnav"> 
+            <a href="{!! route('contact-enquiry.index') !!}">
+            <i class="fa fa-envelope"></i> <span class="nav-text">Manage Enquiries</span></a>
+        </li>
+
         
 
 

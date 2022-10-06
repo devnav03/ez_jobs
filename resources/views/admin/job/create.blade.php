@@ -39,6 +39,7 @@
                                             <li><span>City:</span> {{ $job->city }}</li>
                                             <li><span>State:</span> {{ $job->state }}</li>
                                             <li><span>Job Status:</span> @if($job->status == 1) Active @else Inactive @endif</li>
+                                            <li><span>Number of Positions:</span> {{ $job->number_of_positions }}</li>
                                             <li><span>Posted At:</span> {{ date('d M, Y', strtotime($job->created_at)) }}</li>
                                             <li><span>Appliers</span> {{ check_jobs_total_applied($job->id) }} <a href="{{ route('job_applies', $job->id) }}"><i style="background: #0a66cd; color: #fff; padding: 5px 8px; font-size: 13px;" class="fa fa-eye"></i></a> </li>
                                         </ul>
@@ -68,7 +69,7 @@
     color: #1777e5;
 }
 .form-body li span{
-    width: 120px;
+    width: 150px;
     display: inline-block;
 }
 </style>

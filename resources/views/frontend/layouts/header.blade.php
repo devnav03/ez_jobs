@@ -11,14 +11,12 @@
                @if(((\Auth::user()->user_type)) == 2)
                <li><a href="{{ route('candidates') }}" @if($route == 'candidates') class="active" @endif>Candidates</a></li>
                <li><a href="{{ route('membership-plan') }}" @if($route == 'membership-plan') class="active" @endif>Plans</a></li>
-      
                @endif
 
                @if(((\Auth::user()->user_type)) == 3)
                <li><a href="{{ route('jobs') }}" @if($route == 'jobs') class="active" @endif>Find Job</a></li>
                <li><a href="{{ route('companies') }}" @if($route == 'companies') class="active" @endif>Companies</a></li>
                @endif
-
             @else
             <li><a href="{{ route('jobs') }}" @if($route == 'jobs') class="active" @endif>Find Job</a></li>
             <li><a href="{{ route('candidates') }}" @if($route == 'candidates') class="active" @endif>Candidates</a></li>
@@ -78,7 +76,10 @@
             <li><a href="{{ route('billing-information') }}">Billings</a></li>
             @else 
             <li><a href="{{ route('saved-job') }}">Saved Job</a></li>
+            <li><a href="{{ route('applied-job') }}">Applied Job</a></li>
             @endif
+            
+            <li><a href="{{ route('change-password') }}">Change Password</a></li>
             <li><a href="{{ route('logout') }}"> Logout </a></li>
             </ul>
             </div>

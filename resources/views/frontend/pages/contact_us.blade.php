@@ -40,33 +40,62 @@
                             <div class="row">
                                 <div class="col-xl-6 col-lg-6">
                                     <div class="fromGroup rt-mb-15">
-                                        <input id="name" class=" form-control" type="text" placeholder="Name" name="name" value="{{ old('name') }}" required="true">
-                                        @if($errors->has('name'))
-                                          <span class="text-danger">{{$errors->first('name')}}</span>
+                                        <input id="first_name" class=" form-control" type="text" placeholder="First Name*" name="first_name" value="{{ old('first_name') }}" required="true">
+                                        @if($errors->has('first_name'))
+                                          <span class="text-danger">{{$errors->first('first_name')}}</span>
                                         @endif
                                     </div>
                                 </div>
                                 <div class="col-xl-6 col-lg-6">
                                     <div class="fromGroup rt-mb-15">
-                                        <input id="email" class="form-control " type="email" placeholder="Email" name="email" value="{{ old('email') }}" required="true">
+                                        <input id="last_name" class=" form-control" type="text" placeholder="Last Name" name="last_name" value="{{ old('last_name') }}">
+                                        <input type="hidden" name="two" value="{{ $two }}">
+                                        <input type="hidden" name="three" value="{{ $three }}">
+                                        @if($errors->has('last_name'))
+                                          <span class="text-danger">{{$errors->first('last_name')}}</span>
+                                        @endif
+                                    </div>
+                                </div>
+                                <div class="col-xl-12 col-lg-12">
+                                    <div class="fromGroup rt-mb-15">
+                                        <input id="email" class="form-control " type="email" placeholder="Email*" name="email" value="{{ old('email') }}" required="true">
                                         @if($errors->has('email'))
                                           <span class="text-danger">{{$errors->first('email')}}</span>
                                         @endif
                                     </div>
                                 </div>
-                            </div>
-                            <div class="fromGroup rt-mb-15">
-                                <input id="subject" class="form-control " type="text" placeholder="Subjects" name="subject" value="{{ old('subject') }}" required="true">
-                                @if($errors->has('subject'))
-                                  <span class="text-danger">{{$errors->first('subject')}}</span>
-                                @endif
+                                <div class="col-xl-6 col-lg-6">
+                                    <div class="fromGroup rt-mb-15">
+                                        <input id="mobile" class="form-control " type="number" placeholder="Mobile No*" name="mobile" value="{{ old('mobile') }}" required="true">
+                                        @if($errors->has('mobile'))
+                                          <span class="text-danger">{{$errors->first('mobile')}}</span>
+                                        @endif
+                                    </div>
+                                </div>
+                                <div class="col-xl-6 col-lg-6">
+                                    <div class="fromGroup rt-mb-15">
+                                        <input id="phone_number" class="form-control " type="number" placeholder="Phone Number" name="phone_number" value="{{ old('phone_number') }}">
+                                        @if($errors->has('phone_number'))
+                                          <span class="text-danger">{{$errors->first('phone_number')}}</span>
+                                        @endif
+                                    </div>
+                                </div>
                             </div>
                             <div class="rt-mb-30 tarea-dafault">
-                                <textarea id="message" class="form-control " type="text" placeholder="Message" name="message">{{ old('message') }}</textarea>
+                                <textarea id="message" class="form-control " type="text" placeholder="Message*" name="message">{{ old('message') }}</textarea>
                                 @if($errors->has('message'))
                                   <span class="text-danger">{{$errors->first('message')}}</span>
                                 @endif
                            </div>
+                           <div class="col-md-12">
+                            <p style="float: left; margin-top: 20px; margin-right: 10px;color: #f00;">Fill Captcha</p>
+                            <p style="float: left; margin-top: 20px; margin-right: 10px;">{{ $three }} + {{ $two }} = </p> <input style="float: left; width: 75px; text-align: center; margin-top: 10px; margin-bottom: 15px;" required="true" type="number" name="rec_value"> 
+                            
+                           @if(session()->has('recap_sub'))
+                               <span class="text-danger" style="margin-top: -10px; width: 100%;float: left;">recaptcha not valid </span>
+                           @endif
+                           </div>
+
                             <button type="submit" class="btn btn-primary d-block rt-mb-15" id="submitButton">
                                 <span class="button-content-wrapper ">
                                     <span class="button-icon align-icon-right">

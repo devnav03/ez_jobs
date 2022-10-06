@@ -5,6 +5,7 @@
     <th>Member Name</th>
     <th>{!! lang('common.email') !!}</th>    
     <th>{!! lang('common.mobile') !!}</th> 
+    <th style="width: 150px; text-align: center;">Vacancy Available</th>
     <th width="6%" class="text-center"> {!! lang('common.status') !!} </th>
     <th class="text-center">{!! lang('common.action') !!}</th>
 </tr>
@@ -19,6 +20,7 @@
     <td>{!! $detail->name !!}</td>
     <td>{!! $detail->email !!}</td>
     <td>{!! $detail->mobile !!}</td>
+    <td style="text-align: center;">@if($detail->vacancy == 1)  Yes @else No  @endif</td>
     <td class="text-center">
         <a href="javascript:void(0);" class="toggle-status" data-message="{!! lang('messages.change_status') !!}" data-route="{!! route('customer.toggle', $detail->id) !!}" title="@if($detail->status == 0) Deactive @else Active @endif">
             {!! Html::image('images/' . $detail->status . '.gif') !!}

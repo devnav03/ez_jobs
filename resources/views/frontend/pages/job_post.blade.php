@@ -81,8 +81,8 @@ bkLib.onDomLoaded(function() { nicEditors.allTextAreas() });
         @endif
       </div>
   <div class="col-md-6 mgn20"> 
-    <label>Salary<span>*</span></label>  
-    <input type="text" value="{{ old('salary') }}" name="salary" required="true" class="form-control">
+    <label>Annual Salary<span>*</span></label>  
+    <input type="number" value="{{ old('salary') }}" name="salary" required="true" class="form-control">
     @if($errors->has('salary'))
     <span class="text-danger">{{$errors->first('salary')}}</span>
     @endif
@@ -99,6 +99,15 @@ bkLib.onDomLoaded(function() { nicEditors.allTextAreas() });
     <span class="text-danger">{{$errors->first('qualifications')}}</span>
     @endif
   </div>
+
+  <div class="col-md-6 mgn20"> 
+    <label>Number of Positions<span>*</span></label>  
+    <input type="text" value="{{ old('number_of_positions') }}" name="number_of_positions" required="true" class="form-control">
+    @if($errors->has('number_of_positions'))
+    <span class="text-danger">{{$errors->first('number_of_positions')}}</span>
+    @endif
+  </div>
+
 
   <div class="col-md-12 mgn20"> 
     <label>Job Description<span>*</span></label>  

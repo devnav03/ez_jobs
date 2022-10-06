@@ -118,15 +118,55 @@ class UserController extends Controller
             return apiResponse(false, 500, lang('messages.server_error'));
         }
     }
-
+    
+    public function education(){
+        $data = \DB::table('educations')->select('id', 'name')->get();
+        return apiResponseApp(true, 200, null, null, $data);
+    }
 
     public function force_update(){
-
       try{
         $data['support'] = ForceUpdate::where('id', 1)->select('force_update', 'version')->first();
         return apiResponseApp(true, 200, null, null, $data);
       } catch(Exception $e){
            return apiResponse(false, 500, lang('messages.server_error'));
+        }
+    }
+
+    public function candidate_profile(Request $request){
+        $user = User::where('api_key', $request->api_key)->first();
+        if($user){ 
+                $url = route('home'); 
+                $data['name'] = $user->name;
+                $data['email'] = $user->email;
+                $data['state'] = $user->state;
+                $data['city'] = $user->city;
+                $data['country'] = $user->country;
+                $data['mobile'] = $user->mobile;
+                if($user->profile_image){
+                $data['profile_image'] = $url.$user->profile_image;
+                } else {
+                $data['profile_image'] = '';    
+                }
+                $data['gender'] = $user->gender;
+                $data['date_of_birth'] = $user->date_of_birth;
+                $data['address'] = $user->address;
+                $details = JobSeekersDetail::where('seeker_id', $user->id)->first();
+                $data['category'] = @$details->category;
+                $data['sub_category'] = @$details->sub_category;
+                $data['designation_id'] = @$user->designation_id;
+                $data['education'] = @$details->education;
+                $data['experience_years'] = @$details->experience_years;
+                $data['experience_months'] = @$user->experience_months;
+                $data['key_skills'] = @$details->key_skills;
+                $data['salary_lakhs'] = @$details->salary_lakhs;
+                $data['salary_thousands'] = @$user->salary_thousands;
+                if(@$details->resume){
+                $data['resume'] = $url.@$details->resume;
+                } else {
+                $data['resume'] = '';    
+                }
+            return apiResponseApp(true, 200, null, null, $data);
         }
     }
 

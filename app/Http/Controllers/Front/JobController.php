@@ -41,6 +41,7 @@ class JobController extends Controller{
                 ->join('categories as c2', 'c2.id', '=','jobs.sub_category')
                 ->select('jobs.id', 'jobs.title', 'jobs.category_id', 'jobs.sub_category', 'jobs.salary', 'jobs.job_type', 'jobs.created_at', 'categories.name as cat', 'c2.name as sub_cat', 'jobs.status')
                 ->where('jobs.employer_id', $user_id)
+                ->orderBy('jobs.id', 'DESC')
                 ->get();
             $countries = Country::all();
         return view('frontend.pages.job', compact('plans', 'countries'));
@@ -159,6 +160,33 @@ class JobController extends Controller{
         return $data;
     }
 
+
+    public function applied_job(){
+
+        try{
+
+            $countries = Country::all();
+            $user_id = Auth::id();
+            $jobs = \DB::table("jobs")
+            ->join('job_applies', 'jobs.id', '=', 'job_applies.job_id')
+            ->join('categories', 'categories.id', '=', 'jobs.category_id')
+            ->join('categories as c2', 'c2.id', '=', 'jobs.sub_category')
+            ->join('users', 'users.id', '=', 'jobs.employer_id')
+            ->join('cities', 'cities.id', '=', 'jobs.city_id')
+            ->select('jobs.id', 'jobs.title', 'jobs.salary', 'jobs.job_type', 'jobs.created_at', 'users.profile_image', 'users.id as company_id', 'users.employer_name', 'cities.name as city', 'categories.name as cat', 'c2.name as sub_cat', 'job_applies.status')
+            ->where('jobs.status', 1)
+            ->where('job_applies.user_id', $user_id)
+            ->where('users.status', 1)  
+            ->where('jobs.created_at', '>', now()->subDays(30)->endOfDay())
+            ->get();
+
+            return view('frontend.pages.job_applies', compact('jobs', 'countries'));
+
+        } catch (Exception $e) {
+            return back();
+        }
+    }
+
     public function job_details($id = null){
 
         try{
@@ -169,7 +197,7 @@ class JobController extends Controller{
             ->join('categories', 'categories.id', '=', 'jobs.category_id')
             ->join('educations', 'educations.id', '=', 'jobs.qualifications')
             ->join('categories as function_area', 'function_area.id', '=', 'jobs.sub_category')
-            ->select('jobs.id', 'jobs.title', 'jobs.salary', 'jobs.job_type', 'jobs.job_description', 'jobs.created_at', 'users.profile_image', 'users.employer_name', 'users.id as company_id', 'cities.name as city', 'states.name as state', 'categories.name as cat', 'function_area.name as sub_cat', 'educations.name as education')
+            ->select('jobs.id', 'jobs.title', 'jobs.salary', 'jobs.job_type', 'jobs.job_description', 'jobs.created_at', 'jobs.updated_at', 'users.profile_image', 'users.employer_name', 'users.id as company_id', 'cities.name as city', 'states.name as state', 'categories.name as cat', 'function_area.name as sub_cat', 'educations.name as education', 'jobs.number_of_positions')
             ->where('jobs.status', 1)
             ->where('jobs.id', $id)
             ->where('users.status', 1)  
@@ -319,6 +347,7 @@ class JobController extends Controller{
                 $job->salary = $request->salary;
                 $job->qualifications = $request->qualifications;
                 $job->job_description = $request->job_description;
+                $job->number_of_positions = $request->number_of_positions;
                 $job->employer_id = $user_id;
                 $job->save();
             } else {
@@ -336,6 +365,7 @@ class JobController extends Controller{
             $inputs = $request->all(); 
             $validator = (new Job)->validate($inputs);
             if ($validator->fails()) {
+                //dd($validator);
                 return redirect()->route('edit-job', $request->id)
                 ->withInput()->withErrors($validator);
             } 
@@ -351,11 +381,13 @@ class JobController extends Controller{
                     'city_id' => $request->city_id,
                     'salary' => $request->salary,
                     'qualifications' => $request->qualifications,
+                    'number_of_positions' => $request->number_of_positions,
                     'job_description' => $request->job_description,
                 ]);
           
             return redirect()->route('job-post')->with('job_updated', 'job_updated');
         } catch (Exception $e) {
+            //dd($e);
             return back();
         }
     }

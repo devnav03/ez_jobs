@@ -54,24 +54,9 @@ $applyed_count = get_applyed_job_count($plan->id);
 </tbody>
 </table>
 
-
 </div>
 </div>
 </section>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 @endsection    
 

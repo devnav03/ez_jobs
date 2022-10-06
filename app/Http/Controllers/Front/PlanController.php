@@ -257,7 +257,6 @@ class PlanController extends Controller{
 
             $home = route('home');
         
-
             // \Mail::send('email.billing_admin', $data, function($message) use ($email){
             //   $message->from($email);
             //   $message->to('no-reply@ez-job.co');

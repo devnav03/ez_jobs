@@ -48,7 +48,8 @@ Route::any('v1/candidate-details', ['as' => 'candidate-details','uses' => 'App\H
 
 Route::any('v1/candidate-filter', ['as' => 'candidate-filter','uses' => 'App\Http\Controllers\API\V1\CandidateController@candidate_filter']);
 
-
+Route::any('v1/education', ['as' => 'education','uses' => 'App\Http\Controllers\API\V1\UserController@education']);
+Route::any('v1/candidate-profile', ['as' => 'candidate-profile','uses' => 'App\Http\Controllers\API\V1\UserController@candidate_profile']);
 
 
 

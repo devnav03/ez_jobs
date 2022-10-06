@@ -140,7 +140,46 @@ class HomeController extends Controller{
 
         return view('frontend.pages.forgot_change_password', compact('user_id', 'user', 'countries'));
     }
+    
+    public function changePassword() {
+        $countries = Country::all();
+        return view('frontend.pages.change-password', compact('countries')); 
+    }
 
+    public function changePasswordStore(Request $request){
+    
+    try{
+        $inputs = $request->all();
+        $validator = (new User)->password_validate($inputs);
+          if( $validator->fails() ) {
+            return back()->withErrors($validator)->withInput();
+        }
+
+        $id =  Auth::id();
+        $user = User::where('id', $id)->first();
+        $password = \Hash::make($inputs['new_password']);
+        $old_password = \Hash::make($inputs['old_password']);
+
+        // dd($user->id);
+     
+        if (!\Hash::check($request->old_password, $user->password)){
+          return back()->with('old_password_not_match', 'old_password_not_match');  
+
+       } else {
+
+             unset($inputs['new_password']);
+        $inputs = $inputs + ['password' => $password];
+       (new User)->store($inputs, $id);
+
+       return back()->with('password_change', 'password_change');
+       }    
+
+    } catch(Exception $exception){
+
+      return back();
+    }
+
+  }
 
     public function changePasswordForgot(Request $request) {
         try{
@@ -260,7 +299,9 @@ class HomeController extends Controller{
 
     public function contact_us(){
         $countries = Country::all();
-        return view('frontend.pages.contact_us', compact('countries'));
+        $two = mt_rand(1,9); 
+        $three = mt_rand(100,999);
+        return view('frontend.pages.contact_us', compact('countries', 'two', 'three'));
     }
     
     public function contactEnquiry(Request $request){
@@ -270,6 +311,16 @@ class HomeController extends Controller{
             if( $validator->fails() ) {
               return back()->withErrors($validator)->withInput();
             } 
+
+            $rec_total = $request->two + $request->three;
+            if($request->rec_value == $rec_total){
+
+
+            if($request->last_name){
+                $inputs['name'] = $request->first_name .' '.$request->last_name;
+            } else {
+                $inputs['name'] = $request->first_name;
+            }
      
             (new Contact)->store($inputs);
             // $email = $inputs['email'];
@@ -282,6 +333,9 @@ class HomeController extends Controller{
             // });
 
             return back()->with('enquiry_sub', lang('messages.created', lang('comment_sub')));
+        } else {
+            return back()->with('recap_sub', lang('messages.created', lang('comment_sub')));
+        }
 
         } catch(Exception $exception) {
            // dd($exception);

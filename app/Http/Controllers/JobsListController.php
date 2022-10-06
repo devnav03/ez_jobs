@@ -122,7 +122,7 @@ class JobsListController  extends  Controller{
                 ->join('states', 'states.id', '=','jobs.state_id')
                 ->join('cities', 'cities.id', '=','jobs.city_id')
                 ->join('educations', 'educations.id', '=','jobs.qualifications')
-                ->select('jobs.title', 'jobs.category_id', 'jobs.sub_category', 'jobs.salary', 'jobs.job_type', 'jobs.created_at', 'categories.name as cat', 'c2.name as sub_cat', 'jobs.status', 'users.name as member_name', 'users.employer_name', 'users.mobile', 'users.email', 'states.name as state', 'cities.name as city', 'educations.name as education', 'jobs.job_description', 'users.profile_image', 'jobs.id')
+                ->select('jobs.title', 'jobs.category_id', 'jobs.sub_category', 'jobs.salary', 'jobs.job_type', 'jobs.created_at', 'categories.name as cat', 'c2.name as sub_cat', 'jobs.status', 'users.name as member_name', 'users.employer_name', 'users.mobile', 'users.email', 'states.name as state', 'cities.name as city', 'educations.name as education', 'jobs.job_description', 'users.profile_image', 'jobs.id', 'jobs.number_of_positions')
                 ->where('jobs.id', $id)
                 ->first();
 

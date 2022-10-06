@@ -11,7 +11,7 @@ class JobApplies extends Model
     protected $table = 'job_applies';
    
     protected $fillable = [
-        'job_id', 'user_id', 'employer_id', 'created_at', 'updated_at', 'deleted_at'
+        'job_id', 'user_id', 'employer_id', 'status', 'created_at', 'updated_at', 'deleted_at'
     ];
 
 

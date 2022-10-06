@@ -283,7 +283,7 @@ Route::group(['middleware' => 'auth', 'after' => 'no-cache'], function () {
 
 
             // Contact route start
-            Route::resource('contact-enquiry','ContactController', [
+            Route::resource('contact-enquiry','App\Http\Controllers\ContactController', [
                 'names' => [
                     'index'     => 'contact-enquiry.index',
                     'create'    => 'contact-enquiry.create',
@@ -295,13 +295,13 @@ Route::group(['middleware' => 'auth', 'after' => 'no-cache'], function () {
             ]);
 
             Route::any('contact-enquiry/paginate/{page?}', ['as' => 'contact-enquiry.paginate',
-                'uses' => 'ContactController@ContactPaginate']);
+                'uses' => 'App\Http\Controllers\ContactController@ContactPaginate']);
             Route::any('contact-enquiry/action', ['as' => 'contact-enquiry.action',
-                'uses' => 'ContactController@ContactAction']);
+                'uses' => 'App\Http\Controllers\ContactController@ContactAction']);
             Route::any('contact-enquiry/toggle/{id?}', ['as' => 'contact-enquiry.toggle',
-                'uses' => 'ContactController@ContactToggle']);
+                'uses' => 'App\Http\Controllers\ContactController@ContactToggle']);
             Route::any('contact-enquiry/drop/{id?}', ['as' => 'contact-enquiry.drop',
-                'uses' => 'ContactController@drop']);
+                'uses' => 'App\Http\Controllers\ContactController@drop']);
 
             Route::any('export-enquiry', 'CustomerController@export_enquiry')->name('export-enquiry');
             // Contact route end
@@ -386,6 +386,8 @@ Route::any('my-profile', [App\Http\Controllers\Front\HomeController::class, 'pro
 
 Route::any('saved-job', [App\Http\Controllers\Front\JobController::class, 'saved_job'])->name('saved-job');
 
+Route::any('applied-job', [App\Http\Controllers\Front\JobController::class, 'applied_job'])->name('applied-job');
+
 Route::any('update-profile', [App\Http\Controllers\Front\HomeController::class, 'update_profile'])->name('update-profile');
 
 Route::any('appliers-list/{id}', [App\Http\Controllers\Front\JobController::class, 'appliers_list'])->name('appliers-list');
@@ -407,6 +409,10 @@ Route::get('applyjob', [App\Http\Controllers\Front\JobController::class, 'applyj
 Route::any('candidates', [App\Http\Controllers\Front\HomeController::class, 'candidates'])->name('candidates');
 Route::get('saveCandidate', [App\Http\Controllers\Front\JobController::class, 'saveCandidate'])->name('saveCandidate');
 Route::any('candidate-profile/{id}', [App\Http\Controllers\Front\HomeController::class, 'candidate_profile'])->name('candidate-profile');
+
+Route::get('/change-password', [App\Http\Controllers\Front\HomeController::class, 'changePassword'])->name('change-password');
+Route::post('/change-password', [App\Http\Controllers\Front\HomeController::class, 'changePasswordStore'])->name('change-password.store');
+
 
 
 });

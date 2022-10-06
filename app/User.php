@@ -67,6 +67,13 @@ class User extends Authenticatable
         return \Validator::make($inputs, $rules);
     }
 
+    public function password_validate($inputs, $id = null) {
+        $rules['old_password'] = 'required';
+        $rules['new_password'] = 'required|min:6|max:20|confirmed';
+        
+        return \Validator::make($inputs, $rules);
+    }
+
     public function validateLoginUser($inputs, $id = null)
     {
         $rules['email'] = 'required';
@@ -138,6 +145,7 @@ class User extends Authenticatable
                 'employer_name', 
                 'mobile',  
                 'status',
+                'vacancy',
             ];
          $sortBy = [
              'name' => 'name',

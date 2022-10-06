@@ -10,16 +10,16 @@ class Contact extends Model
     protected $table = 'contact_enquiry';
 
     protected $fillable = [
-        'name', 'email', 'message', 'subject', 'created_at', 'updated_at'
+        'name', 'first_name', 'last_name', 'email', 'message', 'mobile', 'phone_number', 'created_at', 'updated_at', 'deleted_at'
     ];
 
 
     public function front_contact($inputs, $id=null) {
         
-            $rules['name'] = 'required|max:50';
+            $rules['first_name'] = 'required|max:50';
             $rules['email'] = 'required|max:100';
             $rules['message'] = 'required|max:500';
-            $rules['subject'] = 'required|max:100';
+            $rules['mobile'] = 'required|max:15';
             
 
         return \Validator::make($inputs, $rules);
@@ -44,7 +44,8 @@ class Contact extends Model
             'id',
             'name',
             'email',
-            'subject',
+            'mobile',
+            'phone_number',
             'message',
             'created_at'
         ];
@@ -69,7 +70,7 @@ class Contact extends Model
              $filter .= $keyword;
          }
 
-         return $this
+         return $this->where('deleted_at', null)
                 ->whereRaw($filter)
                 ->orderBy($orderEntity, $orderAction)
                 ->skip($skip)->take($take)
@@ -77,8 +78,7 @@ class Contact extends Model
      }
 
   
-     public function totalContact($search = null)
-     {
+    public function totalContact($search = null) {
          $filter = 1; // if no search add where
 
          // when search
@@ -90,5 +90,9 @@ class Contact extends Model
          return $this->select(\DB::raw('count(*) as total'))
              ->whereRaw($filter)->first();
      }
+
+    public function tempDelete($id) {
+        $this->find($id)->update(['deleted_at' => convertToUtc()]);
+    }
 
 }

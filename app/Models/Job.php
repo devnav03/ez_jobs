@@ -11,8 +11,7 @@ class Job extends Model
     protected $table = 'jobs';
    
     protected $fillable = [
-        'employer_id', 'title', 'category_id', 'sub_category', 'state_id', 'city_id', 'salary', 'job_type',
-         'qualifications', 'job_description', 'status', 'created_at', 'updated_at', 'deleted_at'
+        'employer_id', 'title', 'category_id', 'number_of_positions', 'sub_category', 'state_id', 'city_id', 'salary', 'job_type', 'qualifications', 'job_description', 'status', 'created_at', 'updated_at', 'deleted_at'
     ];
 
     public function validate($inputs, $id = null){
@@ -24,6 +23,7 @@ class Job extends Model
         $rules['city_id'] = 'required';
         $rules['salary']  = 'required|max:255';
         $rules['job_type'] = 'required|max:255';
+        $rules['number_of_positions'] = 'required|max:255';
         $rules['qualifications'] = 'required|max:255';
         $rules['job_description'] = 'required';
 
