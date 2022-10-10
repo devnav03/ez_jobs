@@ -292,3 +292,7 @@
 [03-08-2022 12:59:59] PayPal\Core\PayPalHttpConnection : INFO: Response Status 	: 200
 [03-08-2022 12:59:59] PayPal\Core\PayPalHttpConnection : INFO: POST https://api.sandbox.paypal.com/v1/payments/payment/PAYID-MLVHCKY4HT02432PF175715Y/execute
 [03-08-2022 13:00:02] PayPal\Core\PayPalHttpConnection : INFO: Response Status 	: 200
+[10-10-2022 12:43:53] PayPal\Core\PayPalHttpConnection : INFO: POST https://api.sandbox.paypal.com/v1/oauth2/token
+[10-10-2022 12:43:55] PayPal\Core\PayPalHttpConnection : INFO: Response Status 	: 200
+[10-10-2022 12:43:55] PayPal\Core\PayPalHttpConnection : INFO: POST https://api.sandbox.paypal.com/v1/payments/payment
+[10-10-2022 12:43:57] PayPal\Core\PayPalHttpConnection : INFO: Response Status 	: 201

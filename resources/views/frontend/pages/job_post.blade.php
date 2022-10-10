@@ -82,7 +82,7 @@ bkLib.onDomLoaded(function() { nicEditors.allTextAreas() });
       </div>
   <div class="col-md-6 mgn20"> 
     <label>Annual Salary<span>*</span></label>  
-    <input type="number" value="{{ old('salary') }}" name="salary" required="true" class="form-control">
+    <input type="text" value="{{ old('salary') }}" name="salary" required="true" class="form-control">
     @if($errors->has('salary'))
     <span class="text-danger">{{$errors->first('salary')}}</span>
     @endif

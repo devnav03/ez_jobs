@@ -21,9 +21,9 @@
     </td>
     <td class="text-center col-md-1">
         <a class="btn btn-xs btn-primary" href="{{ route('category.edit', [$detail->id]) }}"><i class="fa fa-edit"></i></a>
-        <!-- <a title="{!! lang('common.delete') !!}" class="btn btn-xs btn-danger __drop" data-route="{!! route('category.drop', [$detail->id]) !!}" data-message="{!! lang('messages.sure_delete', string_manip(lang('category.category'))) !!}" href="javascript:void(0)">
+        <a title="{!! lang('common.delete') !!}" class="btn btn-xs btn-danger __drop" data-route="{!! route('category.drop', [$detail->id]) !!}" data-message="{!! lang('messages.sure_delete', string_manip(lang('category.category'))) !!}" href="javascript:void(0)">
                 <i class="fa fa-times"></i>
-            </a> -->
+            </a>
     </td>    
 </tr>
 @endforeach

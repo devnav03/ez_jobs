@@ -56,6 +56,11 @@
         </li>
 
         <li class="has-subnav"> 
+            <a href="{!! route('slider.index') !!}">
+            <i class="fa fa-image"></i> <span class="nav-text">Banners</span></a>
+        </li>
+
+        <li class="has-subnav"> 
             <a href="{!! route('content-management') !!}">
             <i class="fa fa-pen"></i> <span class="nav-text">CMS Pages</span></a>
         </li>

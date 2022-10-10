@@ -7,6 +7,7 @@ use App\User;
 use App\Models\State;
 use App\Models\City;
 use App\Models\Country;
+use App\Models\JobSeekersDetail;
 use League\Flysystem\Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
@@ -36,7 +37,11 @@ class CustomerController extends Controller
     public function create()
     {
 
-        return view('admin.customer.create');
+        $countries = Country::all();
+        $states = [];
+        $city = [];
+
+        return view('admin.customer.edit', compact('countries', 'states', 'city'));
      
     }
 
@@ -46,11 +51,11 @@ class CustomerController extends Controller
         $request['unique_id'] = mt_rand(100000,999999);
         $inputs = $request->all(); 
 
-        $validator = (new User)->validate($inputs);
-        if ($validator->fails()) {
-            return redirect()->route('customer.create')
-            ->withInput()->withErrors($validator);
-        }            
+        // $validator = (new User)->validate($inputs);
+        // if ($validator->fails()) {
+        //     return redirect()->route('job-seekers.create')
+        //     ->withInput()->withErrors($validator);
+        // }            
         
         try{
 
@@ -60,29 +65,24 @@ class CustomerController extends Controller
             $inputs = $inputs + ['password' => $password];
             // Generating API key
 
-            $name = $request->first_name .' '. $request->last_name;
-            $remember_token = $this->generateTokenKey();
+            // $name = $request->first_name .' '. $request->last_name;
+            // $remember_token = $this->generateTokenKey();
             $inputs = $inputs + [
-                                  'remember_token'  => $remember_token,
-                                  'name'  => $name,
-                                  'created_by'  => authUserId()
+                                  // 'remember_token'  => $remember_token,
+                                    'user_type'  => 3,
+                                    'status'  => 1,
+                                  // 'created_by'  => authUserId()
                                 ];
 
             $user_id = (new User)->store($inputs);  
 
-          if($request->user_type == 2) {
             return view('admin.customer.index')
                 ->with('success', lang('messages.created', lang('customer.customer')));
-          } 
-          if($request->user_type == 3) {
-            return view('admin.customer.admin')
-                ->with('success', lang('messages.created', lang('customer.customer')));
-          }  
           
         }
         catch (Exception $exception) {
          //   dd($exception);
-            return redirect()->route('customer.create')
+            return redirect()->route('job-seekers.create')
                 ->withInput()
                 ->with('error', lang('messages.server_error'));
         }
@@ -96,42 +96,34 @@ class CustomerController extends Controller
 
         if (!$result) {
 
-            return redirect()->route('customer.index')
+            return redirect()->route('job-seekers.index')
                 ->with('error', lang('messages.invalid_id', string_manip(lang('customer.customer'))));
         }
 
         $inputs = $request->all();
-        $validator = (new User)->validate_update($inputs, $id);
-        if ($validator->fails()) {
-            return redirect()->route('customer.edit',[$id])
-            ->withInput()->withErrors($validator);
-        } 
+        // $validator = (new User)->validate_update($inputs, $id);
+        // if ($validator->fails()) {
+        //     return redirect()->route('customer.edit',[$id])
+        //     ->withInput()->withErrors($validator);
+        // } 
 
         try {
-             
-             $name = $request->first_name .' '. $request->last_name;
-             $inputs = $inputs + [
-                'name'  => $name,
-                'updated_by'=> authUserId()
-              ];
+             // $name = $request->first_name .' '. $request->last_name;
+             // $inputs = $inputs + [
+             //    'name'  => $name,
+             //    'updated_by'=> authUserId()
+             //  ];
           
             (new User)->store($inputs, $id); 
 
-        if($request->user_type == 2) {
-          return redirect()->route('customer')
-                ->with('success', lang('messages.updated', lang('customer.customer')));
-        }
-
-        if($request->user_type == 3) {
-          return redirect()->route('admin_users')
-                ->with('success', lang('messages.updated', lang('customer.customer')));
-        }
+            return redirect()->route('job-seekers.index')
+                ->with('success', lang('messages.updated', lang('Job Seeker')));
       
         } catch (\Exception $exception) {
 
-        //  dd($exception);
+           // dd($exception);
 
-            return redirect()->route('customer.edit',[$id])
+            return redirect()->route('job-seekers.edit-update',[$id])
                 ->with('error', lang('messages.server_error'));
  
         }
@@ -148,16 +140,43 @@ class CustomerController extends Controller
             abort(404);
         }
    
-
        if(((\Auth::user()->user_type)) == 1){
         $state = State::where('id', $result->state)->select('name')->first();
         $city =  City::where('id', $result->city)->select('name')->first();
         $country = Country::where('id', $result->country)->select('country_name  as name')->first();
+        // $details = JobSeekersDetail::where('seeker_id', $result->id)->first();
+        $details = JobSeekersDetail::join('categories as c2', 'c2.id', '=', 'job_seekers_details.category')
+        ->join('categories', 'categories.id', '=', 'job_seekers_details.sub_category')
+        ->join('designations', 'designations.id', '=', 'job_seekers_details.designation_id')
+        ->join('educations', 'educations.id', '=', 'job_seekers_details.education')
+        ->select('categories.name as sub_cat', 'c2.name as cat', 'job_seekers_details.experience_years', 'job_seekers_details.experience_months', 'designations.name as designation', 'educations.name as education', 'job_seekers_details.key_skills', 'job_seekers_details.salary_lakhs', 'job_seekers_details.salary_thousands', 'job_seekers_details.resume')
+        ->where('job_seekers_details.seeker_id', $result->id)->first();
 
-         return view('admin.customer.create', compact('result', 'state', 'city', 'country'));
-      } else {
+        return view('admin.customer.create', compact('result', 'state', 'city', 'country', 'details'));
+    } else {
         echo "404";
       }
+
+    }
+
+
+    public function edit_update($id = null){
+        try{
+                $result = User::find($id);
+                if (!$result) {
+                abort(404);
+                }
+            
+            $countries = Country::all();
+            $states = State::where('country_id', $result->country)->get();
+            $city =  City::where('state_id', $result->state)->get();
+
+            return view('admin.customer.edit', compact('result', 'states', 'city', 'countries'));
+
+        } catch (\Exception $exception) {
+            //  dd($exception);
+            return back();
+        }
 
     }
 
@@ -176,13 +195,13 @@ class CustomerController extends Controller
         try {
             // get the unit w.r.t id
              $result = (new User)->find($id);
-             if($result->status == 1) {
-                 $response = ['status' => 0, 'message' => lang('user.user_in_use')];
-             }
-             else {
+             // if($result->status == 1) {
+             //     $response = ['status' => 0, 'message' => lang('user.user_in_use')];
+             // }
+             // else {
                  (new User)->tempDelete($id);
-                 $response = ['status' => 1, 'message' => lang('messages.deleted', lang('user.user'))];
-             }
+                 $response = ['status' => 1, 'message' => lang('messages.deleted', lang('User'))];
+             // }
         }
         catch (Exception $exception) {
             $response = ['status' => 0, 'message' => lang('messages.server_error')];

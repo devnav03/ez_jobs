@@ -130,6 +130,7 @@ class User extends Authenticatable
          return $this
              ->whereRaw($filter)
              ->where('user_type', 3)
+             ->where('deleted_at', null)
              ->orderBy($orderEntity, $orderAction)
              ->skip($skip)->take($take)->get($fields);
     }
@@ -212,11 +213,14 @@ class User extends Authenticatable
                     ->first();
     }
 
-
     public function updatePassword($password){
         return $this->where('id', authUserId())->update(['password' => $password]);
     } 
- 
+    
+
+    public function tempDelete($id) {
+        $this->find($id)->update(['deleted_at' => convertToUtc()]);
+    }
 
 
 

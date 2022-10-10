@@ -245,13 +245,13 @@ class CategoryController  extends  Controller{
         try {
             // get the unit w.r.t id
             $result = (new Category)->find($id);
-            if($result->status == 1) {
-                $response = ['status' => 0, 'message' => lang('category.category_in_use')];
-            }
-             else {
+            // if($result->status == 1) {
+            //     $response = ['status' => 0, 'message' => lang('category.category_in_use')];
+            // }
+            //  else {
                 (new Category)->tempDelete($id);
                 $response = ['status' => 1, 'message' => lang('messages.deleted', lang('category.category'))];
-             }
+             // }
         }
         catch (Exception $exception) {
             $response = ['status' => 0, 'message' => lang('messages.server_error')];

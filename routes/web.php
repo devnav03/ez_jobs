@@ -61,8 +61,9 @@ Route::group(['middleware' => 'auth', 'after' => 'no-cache'], function () {
                 'uses' => 'App\Http\Controllers\CategoryController@categoryAction']);
             Route::any('category/toggle/{id?}', ['as' => 'category.toggle',
                 'uses' => 'App\Http\Controllers\CategoryController@categoryToggle']);
+
             Route::any('category/drop/{id?}', ['as' => 'category.drop',
-                'uses' => 'category@drop']);
+                'uses' => 'App\Http\Controllers\CategoryController@drop']);
 
             Route::any('category/upload-category', 'CustomerController@upload_category')->name('upload-category');
             Route::any('category/import', 'CustomerController@ImportCategory')->name('category.import');
@@ -155,7 +156,10 @@ Route::group(['middleware' => 'auth', 'after' => 'no-cache'], function () {
             Route::any('job-seekers/toggle/{id?}', ['as' => 'customer.toggle',
                 'uses' => 'App\Http\Controllers\CustomerController@customerToggle']);
             Route::any('job-seekers/drop/{id?}', ['as' => 'customer.drop',
-                'uses' => 'customer@drop']);
+                'uses' => 'App\Http\Controllers\CustomerController@drop']);
+            
+            Route::any('job-seekers/edit-update/{id}', 'App\Http\Controllers\CustomerController@edit_update')->name('job-seekers.edit-update');
+            
             // job seekers
 
 
@@ -200,7 +204,7 @@ Route::group(['middleware' => 'auth', 'after' => 'no-cache'], function () {
             Route::any('education/toggle/{id?}', ['as' => 'education.toggle',
                 'uses' => 'App\Http\Controllers\EducationController@Toggle']);
             Route::any('education/drop/{id?}', ['as' => 'education.drop',
-                'uses' => 'education@drop']);
+                'uses' => 'App\Http\Controllers\EducationController@drop']);
             // Education
 
             // Faqs route start
@@ -247,6 +251,34 @@ Route::group(['middleware' => 'auth', 'after' => 'no-cache'], function () {
                 'uses' => 'jobs-list@drop']);
             Route::any('jobs/applies/{id}', 'App\Http\Controllers\JobsListController@job_applies')->name('job_applies');
             // Jobs List
+
+
+            // Slider route start
+            Route::resource('slider','App\Http\Controllers\SliderController', [
+                'names' => [
+                    'index'     => 'slider.index',
+                    'create'    => 'slider.create',
+                    'store'     => 'slider.store',
+                    'edit'      => 'slider.edit',
+                    'update'    => 'slider.update',
+                ],
+                'except' => ['show','destroy']
+            ]);
+
+            Route::any('slider/paginate/{page?}', ['as' => 'slider.paginate',
+                'uses' => 'App\Http\Controllers\SliderController@sliderPaginate']);
+            Route::any('slider/action', ['as' => 'slider.action',
+                'uses' => 'App\Http\Controllers\SliderController@sliderAction']);
+            Route::any('slider/toggle/{id?}', ['as' => 'slider.toggle',
+                'uses' => 'App\Http\Controllers\SliderController@sliderToggle']);
+            Route::any('slider/drop/{id?}', ['as' => 'slider.drop',
+                'uses' => 'App\Http\Controllers\SliderController@drop']);
+            Route::any('slider/change-status/{id?}', ['as' => 'slider.drop',
+                'uses' => 'App\Http\Controllers\SliderController@drop'])->name('sliderToggle');
+
+            Route::any('slider/change-status/{id?}', 'App\Http\Controllers\SliderController@sliderToggle')->name('sliderToggle');
+
+            // Slider route end
 
             // Transaction route start
             Route::resource('transaction', 'App\Http\Controllers\TransactionController', [
@@ -387,6 +419,9 @@ Route::any('my-profile', [App\Http\Controllers\Front\HomeController::class, 'pro
 Route::any('saved-job', [App\Http\Controllers\Front\JobController::class, 'saved_job'])->name('saved-job');
 
 Route::any('applied-job', [App\Http\Controllers\Front\JobController::class, 'applied_job'])->name('applied-job');
+
+Route::any('saved-job-seekers', [App\Http\Controllers\Front\JobController::class, 'saved_job_seekers'])->name('saved-job-seekers');
+
 
 Route::any('update-profile', [App\Http\Controllers\Front\HomeController::class, 'update_profile'])->name('update-profile');
 

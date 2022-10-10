@@ -16,7 +16,7 @@ class Category extends Model
     ];
 
     public function validate($inputs, $id = null){
-        $rules['name'] = 'required|unique:categories';
+        $rules['name'] = 'required';
         return \Validator::make($inputs, $rules);
     }
 
@@ -111,7 +111,7 @@ class Category extends Model
 
     public function tempDelete($id)
     {
-        $this->find($id)->update([ 'deleted_by' => authUserId(), 'deleted_at' => convertToUtc()]);
+        $this->find($id)->update(['deleted_at' => convertToUtc()]);
     }
 
 

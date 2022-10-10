@@ -109,6 +109,35 @@ class JobController extends Controller{
     }
 
 
+    public function saved_job_seekers(){
+        try {
+
+            $user_id = Auth::id();
+            if((\Auth::user()->user_type) == 2){
+
+                $countries = Country::all();
+
+                $candidates = User::join('job_seekers_details', 'job_seekers_details.seeker_id', '=', 'users.id')
+                ->join('save_candidates', 'save_candidates.candidate_id', '=', 'users.id')
+                ->join('categories', 'categories.id', '=', 'job_seekers_details.sub_category')
+                ->join('cities', 'cities.id', '=', 'users.city')
+                ->select('categories.name as cat', 'users.id', 'users.name', 'users.profile_image', 'job_seekers_details.experience_years', 'job_seekers_details.experience_months', 'cities.name as city', 'job_seekers_details.salary_lakhs', 'job_seekers_details.salary_thousands')
+                    ->where('users.user_type', 3)
+                    ->where('users.status', 1)->where('save_candidates.employer_id', $user_id)->get();
+
+                return view('frontend.pages.saved_job_seekers', compact('candidates', 'countries'));
+
+            } else {
+                return back();
+            }
+
+        } catch (Exception $e) {
+            return back();
+        }
+
+    }
+
+
     public function saveCandidate(Request $request){
         $user_id = Auth::id();
         //dd($request);

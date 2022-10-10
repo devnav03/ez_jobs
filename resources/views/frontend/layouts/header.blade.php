@@ -73,9 +73,10 @@
             <li><a href="{{ route('my-profile') }}"> My Profile </a></li>
             @if((\Auth::user()->user_type) == 2)
             <li><a href="{{ route('job-post') }}">Job Post</a></li>
+            <li><a href="{{ route('saved-job-seekers') }}">Saved Job Seekers</a></li>
             <li><a href="{{ route('billing-information') }}">Billings</a></li>
             @else 
-            <li><a href="{{ route('saved-job') }}">Saved Job</a></li>
+            <li><a href="{{ route('saved-job') }}">Saved Jobs</a></li>
             <li><a href="{{ route('applied-job') }}">Applied Job</a></li>
             @endif
             

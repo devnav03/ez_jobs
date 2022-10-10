@@ -45,6 +45,23 @@
                                             @if(@$country->name)
                                             <li><span>Country:</span> {{ @$country->name }}</li>
                                             @endif
+                                            
+                                            @if($details)
+                                            <li><span>Industry:</span> {{ @$details->cat }}</li>
+                                            <li><span>Functional Area:</span> {{ @$details->sub_cat }}</li>
+
+                                            <li><span>Education:</span> {{ @$details->education }}</li>
+                                            <li><span>Designation:</span> {{ @$details->designation }}</li>
+                                            <li><span>Salary:</span> {{ @$details->salary_lakhs }}.{{ @$details->salary_thousands }} LPA</li>
+                                            <li><span>Experience:</span> {{ @$details->experience_years }}y {{ @$details->experience_months }}m</li>
+                                            
+                                            <li><span>Key Skills:</span> {{ @$details->key_skills }}</li>
+                                            
+                                            <li><span>Resume:</span> <a target="_blank" href="{{ asset(@$details->resume)}}">Download</a></li>     
+
+
+                                            @endif
+
                                             <li><span>Status:</span> @if($result->status == 1) Active @else Inactive @endif</li>
                                         </ul>
                                     </div>

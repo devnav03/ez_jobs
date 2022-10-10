@@ -10,7 +10,7 @@
     <div class="grids">       
         <div class="row">
             <div class="col-md-12">                
-                <h1 class="page-header">Job Seekers Listing</h1>
+                <h1 class="page-header">Job Seekers Listing <a class="btn btn-sm btn-primary pull-right" href="{!! route('job-seekers.create') !!}"> <i class="fa fa-plus fa-fw"></i> Add New Job Seekers</a></h1>
 
                 <div class="agile-tables">
                     <div class="w3l-table-info">

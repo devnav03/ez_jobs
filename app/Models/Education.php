@@ -15,7 +15,7 @@ class Education extends Model
     ];
 
     public function validate($inputs, $id = null){
-        $rules['name'] = 'required|unique:educations';
+        $rules['name'] = 'required';
         return \Validator::make($inputs, $rules);
     }
 
@@ -105,9 +105,8 @@ class Education extends Model
              ->whereRaw($filter)->first();
      }
 
-    public function tempDelete($id)
-    {
-        $this->find($id)->update([ 'deleted_by' => authUserId(), 'deleted_at' => convertToUtc()]);
+    public function tempDelete($id) {
+        $this->find($id)->update(['deleted_at' => convertToUtc()]);
     }
 
 

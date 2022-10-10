@@ -125,7 +125,7 @@ class EducationController  extends  Controller{
             $data = (new Education)->getEducations($inputs, $start, $perPage);
             $totalGameMaster = (new Education)->totalEducations($inputs);
             $total = $totalGameMaster->total;
-     //   dd($data);
+            // dd($data);
 
         } else {
 
@@ -198,13 +198,13 @@ class EducationController  extends  Controller{
         try {
             // get the unit w.r.t id
             $result = (new Education)->find($id);
-            if($result->status == 1) {
-                $response = ['status' => 0, 'message' => lang('Education In Use')];
-            }
-             else {
+            // if($result->status == 1) {
+            //     $response = ['status' => 0, 'message' => lang('Education In Use')];
+            // }
+            //  else {
                 (new Education)->tempDelete($id);
                 $response = ['status' => 1, 'message' => lang('messages.deleted', lang('Education'))];
-             }
+             // }
         }
         catch (Exception $exception) {
             $response = ['status' => 0, 'message' => lang('messages.server_error')];
