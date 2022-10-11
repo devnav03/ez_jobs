@@ -1,6 +1,17 @@
 @extends('frontend.layouts.app')
 @section('content')
-<section class="banner-section">
+
+<section class="banner">
+   <div id="main-slide" class="owl-carousel owl-theme">
+      @foreach($sliders as $slider)
+         <div class="item">
+            <a href="{{ $slider->link }}"><img src="{!! asset($slider->image) !!}" alt="{{ $slider->title }}" draggable="false"></a>
+         </div>
+      @endforeach
+   </div>
+</section>
+
+<!-- <section class="banner-section">
    <div class="rt-single-banner5">
       <div class="container position-parent">
          <div class="row">
@@ -39,14 +50,14 @@
                            <button type="button" class="btn btn-primary d-block d-md-inline-block ">Find Job</button>
                         </div>
                      </div>
-                  </form>
+                  </form> -->
                   <!-- <div class="f-size-14 banner-quciks-links aos-init aos-animate" data-aos="fadeindown" data-aos-duration="1000" data-aos-delay="500">
                      <span class="text-gray-400">Suggestion: </span>
                      <a href="#">Design/Creative, </a>
                      <a href="#">Garments/Textile, </a><a href="#">Engineer/Architects,</a>
                      <a href="#">Hospitality/ Travel/ Tourism</a>
                   </div> -->
-               </div>
+      <!--          </div>
             </div>
             <div class="col-xl-6 d-flex align-items-center">
                <div class="banner-mockup d-none d-xl-block w-100 text-right">
@@ -298,7 +309,7 @@
          </div>
       </div>
    </div>
-</section>
+</section> -->
 <div class="counter-area">
    <div class="container">
       <div class="row">

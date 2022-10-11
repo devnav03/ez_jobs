@@ -11,7 +11,7 @@ class Job extends Model
     protected $table = 'jobs';
    
     protected $fillable = [
-        'employer_id', 'title', 'category_id', 'number_of_positions', 'sub_category', 'state_id', 'city_id', 'salary', 'job_type', 'qualifications', 'job_description', 'status', 'created_at', 'updated_at', 'deleted_at'
+        'employer_id', 'title', 'category_id', 'number_of_positions', 'sub_category', 'state_id', 'city_id', 'salary', 'job_type', 'qualifications', 'experience_to', 'experience_from', 'job_description', 'status', 'created_at', 'updated_at', 'deleted_at'
     ];
 
     public function validate($inputs, $id = null){

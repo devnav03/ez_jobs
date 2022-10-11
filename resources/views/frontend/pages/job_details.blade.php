@@ -86,6 +86,8 @@ $applied = check_job_applied($job->id);
 <div class="row">	
 <div class="col-md-7">
 <h2 style="margin-top: 40px; font-size: 24px;">{{ $job->title }}</h2>    
+<h6 style="color: #808080; font-size: 17px; font-weight: normal;">Experience: @if($job->experience_from == 0) Fresher @elseif($job->experience_from == 0.5) 6 Months @else {{ $job->experience_from }}Year @endif @if($job->experience_to)- @if($job->experience_to == 0.5) 6 Months   @else {{ $job->experience_from }} Year @endif @endif  </h6>
+
 <h4 style="margin-top: 15px;">Job Description</h4>
 {!! $job->job_description !!}
 <p style="font-size: 17px; margin-top: 35px; font-weight: 600;">Hiring Insights</p>

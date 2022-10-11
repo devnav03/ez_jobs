@@ -89,7 +89,7 @@ bkLib.onDomLoaded(function() { nicEditors.allTextAreas() });
       </div>
   <div class="col-md-6 mgn20"> 
     <label>Salary<span>*</span></label>  
-    <input type="number" value="{{ $job->salary }}" name="salary" required="true" class="form-control">
+    <input type="text" value="{{ $job->salary }}" name="salary" required="true" class="form-control">
     @if($errors->has('salary'))
     <span class="text-danger">{{$errors->first('salary')}}</span>
     @endif
@@ -113,6 +113,60 @@ bkLib.onDomLoaded(function() { nicEditors.allTextAreas() });
     @if($errors->has('number_of_positions'))
     <span class="text-danger">{{$errors->first('number_of_positions')}}</span>
     @endif
+  </div>
+
+  <div class="col-md-3 mgn20"> 
+  <label>Experience From<span>*</span></label>  
+  <select name="experience_from" class="form-control" required="true">
+    <option value="">Select</option>
+    <option value="0" @if($job->experience_from == 0) selected @endif>Fresher</option>
+    <option value="0.5" @if($job->experience_from == 0.5) selected @endif>6 Months</option>
+    <option value="1" @if($job->experience_from == 1) selected @endif>1 Year</option>
+    <option value="2" @if($job->experience_from == 2) selected @endif>2 Years</option>
+    <option value="3" @if($job->experience_from == 3) selected @endif>3 Years</option>
+    <option value="4" @if($job->experience_from == 4) selected @endif>4 Years</option>
+    <option value="5" @if($job->experience_from == 5) selected @endif>5 Years</option>
+    <option value="6" @if($job->experience_from == 6) selected @endif>6 Years</option>
+    <option value="7" @if($job->experience_from == 7) selected @endif>7 Years</option>
+    <option value="8" @if($job->experience_from == 8) selected @endif>8 Years</option>
+    <option value="9" @if($job->experience_from == 9) selected @endif>9 Years</option>
+    <option value="10" @if($job->experience_from == 10) selected @endif>10 Years</option>
+    <option value="11" @if($job->experience_from == 11) selected @endif>11 Years</option>
+    <option value="12" @if($job->experience_from == 12) selected @endif>12 Years</option>
+    <option value="13" @if($job->experience_from == 13) selected @endif>13 Years</option>
+    <option value="14" @if($job->experience_from == 14) selected @endif>14 Years</option>
+    <option value="15" @if($job->experience_from == 15) selected @endif>15 Years</option>
+  </select>
+  @if($errors->has('experience_from'))
+  <span class="text-danger">{{$errors->first('experience_from')}}</span>
+  @endif
+  </div>
+
+  <div class="col-md-3 mgn20"> 
+  <label>Experience To</label>  
+  <select name="experience_to" class="form-control">
+    <option value="">Select</option>
+    <option value="0.5" @if($job->experience_to == 0.5) selected @endif>6 Months</option>
+    <option value="1" @if($job->experience_to == 1) selected @endif>1 Year</option>
+    <option value="2" @if($job->experience_to == 2) selected @endif>2 Years</option>
+    <option value="3" @if($job->experience_to == 3) selected @endif>3 Years</option>
+    <option value="4" @if($job->experience_to == 4) selected @endif>4 Years</option>
+    <option value="5" @if($job->experience_to == 5) selected @endif>5 Years</option>
+    <option value="6" @if($job->experience_to == 6) selected @endif>6 Years</option>
+    <option value="7" @if($job->experience_to == 7) selected @endif>7 Years</option>
+    <option value="8" @if($job->experience_to == 8) selected @endif>8 Years</option>
+    <option value="9" @if($job->experience_to == 9) selected @endif>9 Years</option>
+    <option value="10" @if($job->experience_to == 10) selected @endif>10 Years</option>
+    <option value="11" @if($job->experience_to == 11) selected @endif>11 Years</option>
+    <option value="12" @if($job->experience_to == 12) selected @endif>12 Years</option>
+    <option value="13" @if($job->experience_to == 13) selected @endif>13 Years</option>
+    <option value="14" @if($job->experience_to == 14) selected @endif>14 Years</option>
+    <option value="15" @if($job->experience_to == 15) selected @endif>15 Years</option>
+    <option value="20" @if($job->experience_to == 20) selected @endif>20 Years</option>
+  </select>
+  @if($errors->has('experience_from'))
+  <span class="text-danger">{{$errors->first('experience_from')}}</span>
+  @endif
   </div>
   
 

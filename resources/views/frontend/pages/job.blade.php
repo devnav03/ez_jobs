@@ -7,6 +7,10 @@
 @if(session()->has('job_posted'))
       <div class="alert alert-success" role="alert">Job Successfully Posted</div>
 @endif 
+@if(session()->has('job_delete'))
+      <div class="alert alert-success" role="alert">Job Successfully Deleted</div>
+@endif
+
 @if(session()->has('job_updated'))
       <div class="alert alert-success" role="alert">Job Successfully Updated</div>
 @endif
@@ -48,7 +52,9 @@ $applyed_count = get_applyed_job_count($plan->id);
         <td>{{ $applyed_count }} @if($applyed_count != 0) <a class="applyed_count" href="{{ route('appliers-list', $plan->id) }}"><i class="fa fa-eye"></i></a>  @endif </td>
         <td>@if($abs_diff > 30) Inactive @else @if($plan->status == 1) Active @else Inactive @endif @endif </td>
         <td>{{ date('d M, Y', strtotime($plan->created_at)) }} </td>
-        <td>@if($abs_diff <= 30) <a href="{{ route('edit-job', $plan->id) }}">Edit</a> @endif</td>
+        <td>@if($abs_diff <= 30) <a style="background: #0a66cd; color: #fff; font-size: 13px; padding: 5px 7px;" href="{{ route('edit-job', $plan->id) }}">Edit</a> @endif 
+        <a style="background: #f00; color: #fff; font-size: 13px; padding: 5px 7px;" href="{{ route('delete-job', $plan->id) }}">Delete</a>
+        </td>
     </tr>
   @endforeach 
 </tbody>

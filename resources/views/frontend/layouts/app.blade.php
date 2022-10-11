@@ -188,6 +188,39 @@ $('#col-slide-test').owlCarousel({
     }
 });
 
+$('#main-slide').owlCarousel({
+    autoplay: true,
+    smartSpeed: 900,
+    loop: true,
+    margin: 20,
+    nav: false,
+    center:false,
+    autoplay:true,
+    autoplayHoverPause:true,
+    navText: ['<img src="assets/frontend/images/left.png">','<img src="assets/frontend/images/right.png">'],
+    dots: false,
+    responsive:{
+        0:{
+            items:1,
+            nav: false
+        },
+        575:{
+            items:1,
+            nav: false
+        },
+        768:{
+            items:1,
+            nav: false
+        },
+        992:{
+            items:1
+        },
+        1200:{
+            items:1
+        }
+    }
+});
+
 function getState(val) {
   $.ajax({
     type: "GET",

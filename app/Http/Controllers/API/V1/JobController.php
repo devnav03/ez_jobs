@@ -145,6 +145,9 @@ class JobController extends Controller
     }
 
     public function job_details(Request $request){
+        
+        $user = User::where('api_key', $request->api_key)->select('id')->first();
+        if($user){ 
 
         $job = Job::join('users', 'users.id', '=', 'jobs.employer_id')
             ->join('cities', 'cities.id', '=', 'jobs.city_id')
@@ -166,6 +169,20 @@ class JobController extends Controller
           $data['job_description'] = @$job->job_description;
           $data['posted_at'] = \Carbon\Carbon::parse(@$job->created_at)->diffForHumans();
           $data['image'] = route('home').@$job->profile_image;
+          
+          $SaveJob = SaveJob::where('job_id', $request->job_id)->where('user_id', $user->id)->first();
+          if($SaveJob){
+            $data['save_job'] = 1;  
+          } else {
+            $data['save_job'] = 0;   
+          }
+          
+          $JobApplies = JobApplies::where('job_id', $request->job_id)->where('user_id', $user->id)->first();
+          if($JobApplies){
+            $data['job_apply'] = 1;  
+          } else {
+            $data['job_apply'] = 0;   
+          }
 
           $data['employer_name'] = @$job->employer_name;
           $data['city'] = @$job->city;
@@ -175,7 +192,16 @@ class JobController extends Controller
           $data['education'] = @$job->education;
 
           return apiResponseApp(true, 200, null, null, $data);
-
+        }
+    }
+    
+    public function remove_save_job(Request $request){
+        $user = User::where('api_key', $request->api_key)->select('id')->first();
+        if($user){ 
+            SaveJob::where('job_id', $request->job_id)->where('user_id', $user->id)->delete();
+            $message = 'Saved job Successfully removed';   
+            return apiResponseAppmsg(true, 200, $message, null, null);
+        }
     }
     
     public function jobs_by_functional_areas(Request $request){
@@ -348,6 +374,7 @@ class JobController extends Controller
             ->select('jobs.id', 'jobs.title', 'jobs.salary', 'jobs.job_type', 'jobs.created_at', 'users.profile_image', 'users.id as company_id', 'users.employer_name', 'cities.name as city')
             ->where('jobs.status', 1)
             ->where('save_jobs.user_id', $user->id)
+            ->where('save_jobs.deleted_at', null) 
             ->where('users.status', 1)  
             ->where('jobs.created_at', '>', now()->subDays(30)->endOfDay())
             ->inRandomOrder()->limit(30)->get();

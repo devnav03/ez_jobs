@@ -422,10 +422,12 @@ Route::any('applied-job', [App\Http\Controllers\Front\JobController::class, 'app
 
 Route::any('saved-job-seekers', [App\Http\Controllers\Front\JobController::class, 'saved_job_seekers'])->name('saved-job-seekers');
 
-
 Route::any('update-profile', [App\Http\Controllers\Front\HomeController::class, 'update_profile'])->name('update-profile');
 
 Route::any('appliers-list/{id}', [App\Http\Controllers\Front\JobController::class, 'appliers_list'])->name('appliers-list');
+
+Route::any('applier-consider/{id}', [App\Http\Controllers\Front\JobController::class, 'applier_consider'])->name('applier-consider');
+Route::any('applier-reject/{id}', [App\Http\Controllers\Front\JobController::class, 'applier_reject'])->name('applier-reject');
 
 Route::any('employer-profile-update', [App\Http\Controllers\Front\HomeController::class, 'employer_profile_update'])->name('employer-profile-update');
 
@@ -436,6 +438,8 @@ Route::any('update-job', [App\Http\Controllers\Front\JobController::class, 'upda
 
 Route::any('billing-information', [App\Http\Controllers\Front\PlanController::class, 'billing_information'])->name('billing-information');
 Route::any('edit-job/{id}', [App\Http\Controllers\Front\JobController::class, 'edit_job'])->name('edit-job');
+
+Route::any('delete-job/{id}', [App\Http\Controllers\Front\JobController::class, 'delete_job'])->name('delete-job');
 
 Route::get('getQuantity', [App\Http\Controllers\Front\PlanController::class, 'getQuantity'])->name('getQuantity');
 

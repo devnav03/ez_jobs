@@ -27,6 +27,7 @@ use App\Models\Designation;
 use App\Models\Job;
 use App\Models\Faq;
 use App\Models\Education;
+use App\Models\Slider;
 use App\Models\ProfileView;
 use App\Models\Plan;
 use App\Models\JobSeekersDetail;
@@ -91,14 +92,17 @@ class HomeController extends Controller{
                $testimonials = Testimonial::where('status', 1)->where('category', 2)->select('comment', 'rating', 'name', 'designation', 'image')->get();
         }
 
-        return view('frontend.home', compact('countries', 'jobs', 'companies', 'categories', 'vacancies', 'live_job', 'new_job', 'companies_count', 'candidate_count', 'testimonials'));
+        $sliders = Slider::where('status', 1)->where('page', 'home')->where('deleted_at', NULL)->select('image', 'link', 'title')->get();
+
+        return view('frontend.home', compact('countries', 'jobs', 'companies', 'categories', 'vacancies', 'live_job', 'new_job', 'companies_count', 'candidate_count', 'testimonials', 'sliders'));
     }
 
     public function blogs(){
         try {
             $blogs = Blog::where('status', 1)->select('title', 'image', 'url')->get();
             $countries = Country::all();
-            return view('frontend.pages.blogs', compact('countries', 'blogs'));
+            $sliders = Slider::where('status', 1)->where('page', 'blog')->where('deleted_at', NULL)->select('image', 'link', 'title')->get();
+            return view('frontend.pages.blogs', compact('countries', 'blogs', 'sliders'));
         } catch (Exception $exception) {
             return back();
         }
@@ -628,8 +632,11 @@ class HomeController extends Controller{
         } 
 
         $categories = Category::where('status', 1)->where('parent_id', NULL)->select('name', 'id')->get();
+        $sliders = Slider::where('status', 1)->where('page', 'find_job')->where('deleted_at', NULL)->select('image', 'link', 'title')->get();
 
-        return view('frontend.pages.jobs', compact('countries', 'jobs', 'categories'));
+     //   dd($sliders);
+
+        return view('frontend.pages.jobs', compact('countries', 'jobs', 'categories', 'sliders'));
         } catch (Exception $e) {
             return back();
         }
@@ -698,7 +705,8 @@ class HomeController extends Controller{
             ->where('users.status', 1)  
             ->where('users.user_type', 2)
             ->inRandomOrder()->paginate(9); 
-            return view('frontend.pages.companies', compact('countries', 'companies'));
+            $sliders = Slider::where('status', 1)->where('page', 'companies')->where('deleted_at', NULL)->select('image', 'link', 'title')->get();
+            return view('frontend.pages.companies', compact('countries', 'companies', 'sliders'));
 
         } catch (Exception $e) {
             return back();

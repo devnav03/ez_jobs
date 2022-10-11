@@ -1,6 +1,16 @@
 @extends('frontend.layouts.app')
 @section('content')
-
+@if(isset($sliders))
+<section class="banner">
+   <div id="main-slide" class="owl-carousel owl-theme">
+      @foreach($sliders as $slider)
+         <div class="item">
+            <a href="{{ $slider->link }}"><img src="{!! asset($slider->image) !!}" alt="{{ $slider->title }}" draggable="false"></a>
+         </div>
+      @endforeach
+   </div>
+</section>
+@endif
 <section class="filter_index">
 <div class="container">
         <div class="row align-items-center ">

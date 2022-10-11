@@ -108,6 +108,60 @@ bkLib.onDomLoaded(function() { nicEditors.allTextAreas() });
     @endif
   </div>
 
+  <div class="col-md-3 mgn20"> 
+  <label>Experience From<span>*</span></label>  
+  <select name="experience_from" class="form-control" required="true">
+    <option value="">Select</option>
+    <option value="0">Fresher</option>
+    <option value="0.5">6 Months</option>
+    <option value="1">1 Year</option>
+    <option value="2">2 Years</option>
+    <option value="3">3 Years</option>
+    <option value="4">4 Years</option>
+    <option value="5">5 Years</option>
+    <option value="6">6 Years</option>
+    <option value="7">7 Years</option>
+    <option value="8">8 Years</option>
+    <option value="9">9 Years</option>
+    <option value="10">10 Years</option>
+    <option value="11">11 Years</option>
+    <option value="12">12 Years</option>
+    <option value="13">13 Years</option>
+    <option value="14">14 Years</option>
+    <option value="15">15 Years</option>
+  </select>
+  @if($errors->has('experience_from'))
+  <span class="text-danger">{{$errors->first('experience_from')}}</span>
+  @endif
+  </div>
+
+  <div class="col-md-3 mgn20"> 
+  <label>Experience To</label>  
+  <select name="experience_to" class="form-control">
+    <option value="">Select</option>
+    <option value="0.5">6 Months</option>
+    <option value="1">1 Year</option>
+    <option value="2">2 Years</option>
+    <option value="3">3 Years</option>
+    <option value="4">4 Years</option>
+    <option value="5">5 Years</option>
+    <option value="6">6 Years</option>
+    <option value="7">7 Years</option>
+    <option value="8">8 Years</option>
+    <option value="9">9 Years</option>
+    <option value="10">10 Years</option>
+    <option value="11">11 Years</option>
+    <option value="12">12 Years</option>
+    <option value="13">13 Years</option>
+    <option value="14">14 Years</option>
+    <option value="15">15 Years</option>
+    <option value="20">20 Years</option>
+  </select>
+  @if($errors->has('experience_from'))
+  <span class="text-danger">{{$errors->first('experience_from')}}</span>
+  @endif
+  </div>
+
 
   <div class="col-md-12 mgn20"> 
     <label>Job Description<span>*</span></label>  

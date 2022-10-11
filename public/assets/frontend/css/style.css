@@ -494,7 +494,7 @@ h1, .text-h1 {
     color: #767F8C !important;
 }
 .counter-area {
-    padding-bottom: 70px;
+    padding: 55px 0;
     background: rgba(241, 242, 244, 0.6);
 }
 .card.counterbox:hover .icon-72 i{
@@ -510,7 +510,6 @@ h1, .text-h1 {
 .container {
     max-width: 1320px;
 }
-
 
 }
 
@@ -1785,10 +1784,22 @@ textarea{
 #table.display.dataTable{
     margin-bottom: 15px;
 }
-
-
-
-
+.membership_box {
+    border: 1px solid #e4e5e8;
+    text-align: center;
+    padding: 30px;
+    border-radius: 16px;
+    margin-bottom: 40px;
+    background: #D3D3D3;
+}
+.membership_box h5{
+    font-size: 18px;
+    font-weight: 400;
+}
+.membership_box h6{
+    font-size: 20px;
+    padding-top: 10px;
+}
 
 
 

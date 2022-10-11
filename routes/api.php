@@ -36,9 +36,9 @@ Route::any('v1/live-job-search', ['as' => 'live-job-search','uses' => 'App\Http\
 Route::any('v1/job-filter', ['as' => 'job-filter','uses' => 'App\Http\Controllers\API\V1\JobController@job_filter']);
 Route::any('v1/update-password', ['as' => 'update-password','uses' => 'App\Http\Controllers\API\V1\UserController@changePassword']);
 Route::any('v1/testimonials', ['as' => 'testimonials','uses' => 'App\Http\Controllers\API\V1\UserController@testimonials']);
-
 Route::any('v1/top-companies', ['as' => 'top-companies','uses' => 'App\Http\Controllers\API\V1\UserController@top_companies']);
 
+Route::any('v1/remove-save-job', ['as' => 'remove-save-job','uses' => 'App\Http\Controllers\API\V1\JobController@remove_save_job']);
 
 // Employers API
 Route::any('v1/plans', ['as' => 'plans','uses' => 'App\Http\Controllers\API\V1\UserController@plans']);
@@ -50,7 +50,6 @@ Route::any('v1/candidate-filter', ['as' => 'candidate-filter','uses' => 'App\Htt
 
 Route::any('v1/education', ['as' => 'education','uses' => 'App\Http\Controllers\API\V1\UserController@education']);
 Route::any('v1/candidate-profile', ['as' => 'candidate-profile','uses' => 'App\Http\Controllers\API\V1\UserController@candidate_profile']);
-
 
 
 

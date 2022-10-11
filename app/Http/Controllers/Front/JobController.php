@@ -26,6 +26,7 @@ use App\Models\JobApplies;
 use App\Models\SaveJob;
 use App\Models\ProfileView;
 use App\Models\SaveCandidate;
+use App\Models\Slider;
 use App\Models\JobSeekersDetail;
 use Redirect;
 use DateTime;
@@ -40,11 +41,13 @@ class JobController extends Controller{
                 ->join('categories', 'categories.id', '=','jobs.category_id')
                 ->join('categories as c2', 'c2.id', '=','jobs.sub_category')
                 ->select('jobs.id', 'jobs.title', 'jobs.category_id', 'jobs.sub_category', 'jobs.salary', 'jobs.job_type', 'jobs.created_at', 'categories.name as cat', 'c2.name as sub_cat', 'jobs.status')
+                ->where('jobs.deleted_at', null)
                 ->where('jobs.employer_id', $user_id)
                 ->orderBy('jobs.id', 'DESC')
                 ->get();
             $countries = Country::all();
-        return view('frontend.pages.job', compact('plans', 'countries'));
+            $sliders = Slider::where('status', 1)->where('page', 'find_job')->where('deleted_at', NULL)->select('image', 'link', 'title')->get();
+        return view('frontend.pages.job', compact('plans', 'countries', 'sliders'));
 
         } else {
             \Auth::logout();
@@ -86,7 +89,7 @@ class JobController extends Controller{
             ->join('job_applies', 'job_applies.user_id', '=', 'users.id')
             ->join('categories', 'categories.id', '=', 'job_seekers_details.sub_category')
             ->join('cities', 'cities.id', '=', 'users.city')
-            ->select('categories.name as cat', 'users.id', 'users.name', 'users.profile_image', 'job_seekers_details.experience_years', 'job_seekers_details.experience_months', 'cities.name as city', 'job_applies.created_at')
+            ->select('categories.name as cat', 'users.id', 'users.name', 'users.profile_image', 'job_seekers_details.experience_years', 'job_seekers_details.experience_months', 'cities.name as city', 'job_applies.created_at', 'job_applies.status', 'job_applies.id as apl_id')
             ->where('users.user_type', 3)
             ->where('users.status', 1)
             ->where('job_applies.job_id', $id)->get();
@@ -94,7 +97,7 @@ class JobController extends Controller{
             $countries = Country::all();
             $job = Job::where('id', $id)->select('title', 'created_at')->first();
 
-            //dd($candidates);
+           // dd($candidates);
 
             return view('frontend.pages.appliers_list', compact('candidates', 'countries', 'job'));
 
@@ -108,13 +111,65 @@ class JobController extends Controller{
 
     }
 
+    public function applier_consider($id = null){
+        try{
+            $user_id = Auth::id();
+            $JobApplies = JobApplies::where('id', $id)->where('employer_id', $user_id)->first();
+            if($JobApplies){
+                JobApplies::where('id', $id)
+                ->update([
+                    'status' => 2,
+                ]);
+                return back()->with('applier_consider', 'applier_consider');
+            } else {
+                return back();
+            }
+        } catch (Exception $exception) {
+          //  dd($exception);
+            return back();
+        }
+    }
+
+    public function applier_reject($id = null){
+        try{
+            $user_id = Auth::id();
+            $JobApplies = JobApplies::where('id', $id)->where('employer_id', $user_id)->first();
+            if($JobApplies){
+                JobApplies::where('id', $id)
+                ->update([
+                    'status' => 3,
+                ]);
+                return back()->with('applier_reject', 'applier_reject');
+            } else {
+                return back();
+            }
+        } catch (Exception $exception) {
+          //  dd($exception);
+            return back();
+        }
+    }
+
+
+    public function delete_job($id = null){
+        $user_id = Auth::id();
+
+        $job = Job::where('id', $id)->where('employer_id', $user_id)->select('id')->first();
+
+        if($job){
+            Job::where('id', $id)->delete();
+
+            return redirect()->route('job-post')->with('job_delete', 'job_delete');
+        }
+
+    }
+
 
     public function saved_job_seekers(){
         try {
 
             $user_id = Auth::id();
-            if((\Auth::user()->user_type) == 2){
 
+            if((\Auth::user()->user_type) == 2){
                 $countries = Country::all();
 
                 $candidates = User::join('job_seekers_details', 'job_seekers_details.seeker_id', '=', 'users.id')
@@ -226,7 +281,7 @@ class JobController extends Controller{
             ->join('categories', 'categories.id', '=', 'jobs.category_id')
             ->join('educations', 'educations.id', '=', 'jobs.qualifications')
             ->join('categories as function_area', 'function_area.id', '=', 'jobs.sub_category')
-            ->select('jobs.id', 'jobs.title', 'jobs.salary', 'jobs.job_type', 'jobs.job_description', 'jobs.created_at', 'jobs.updated_at', 'users.profile_image', 'users.employer_name', 'users.id as company_id', 'cities.name as city', 'states.name as state', 'categories.name as cat', 'function_area.name as sub_cat', 'educations.name as education', 'jobs.number_of_positions')
+            ->select('jobs.id', 'jobs.title', 'jobs.salary', 'jobs.job_type', 'jobs.job_description', 'jobs.created_at', 'jobs.updated_at', 'users.profile_image', 'users.employer_name', 'users.id as company_id', 'cities.name as city', 'states.name as state', 'categories.name as cat', 'function_area.name as sub_cat', 'educations.name as education', 'jobs.number_of_positions', 'jobs.experience_to', 'jobs.experience_from')
             ->where('jobs.status', 1)
             ->where('jobs.id', $id)
             ->where('users.status', 1)  
@@ -374,6 +429,8 @@ class JobController extends Controller{
                 $job->state_id = $request->state_id;
                 $job->city_id = $request->city_id;
                 $job->salary = $request->salary;
+                $job->experience_from = $request->experience_from;
+                $job->experience_to = $request->experience_to;
                 $job->qualifications = $request->qualifications;
                 $job->job_description = $request->job_description;
                 $job->number_of_positions = $request->number_of_positions;
@@ -412,6 +469,8 @@ class JobController extends Controller{
                     'qualifications' => $request->qualifications,
                     'number_of_positions' => $request->number_of_positions,
                     'job_description' => $request->job_description,
+                    'experience_from' => $request->experience_from,
+                    'experience_to' => $request->experience_to,
                 ]);
           
             return redirect()->route('job-post')->with('job_updated', 'job_updated');
