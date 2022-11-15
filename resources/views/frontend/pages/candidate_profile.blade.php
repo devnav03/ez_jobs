@@ -20,7 +20,7 @@
 <div class="top-info">  
 <h3>{{ $profile->name }} <span><i class="fa-solid fa-location-dot"></i> {{ $profile->city }}</span></h3>
 <h6>{{ $profile->cat }}</h6>
-<a class="send_message" href="mailto:{{ $profile->email }}"><i class="fa-solid fa-message"></i> Send Message</a>
+<a class="send_message" href="{{ route('chat', $profile->id) }}"><i class="fa-solid fa-message"></i> Send Message</a>
 <a class="send_call" href="tel:{{ $profile->mobile }}"><i class="fa-solid fa-phone-volume"></i> Call</a>
 @if($profile->resume)
 <a class="send_resume" target="_blank" href="{{ route('home') }}{{ @$profile->resume }}"><i class="fa-solid fa-download"></i> Resume</a>

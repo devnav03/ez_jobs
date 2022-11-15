@@ -18,9 +18,7 @@
         <meta property="og:image:width" content="1000" />
         <meta property="og:image:height" content="1000" />
         @endif
-      
         @if(isset($keyword->keyword))
-
         <meta property="og:title" content="{{$keyword->keyword}}" />
         @else
         <meta property="og:title" content="{{$keyword->meta_tag}}" />
@@ -475,6 +473,8 @@ function getQuantity4(val) {
         }
     });
 }
+
+
 
 
 </script>

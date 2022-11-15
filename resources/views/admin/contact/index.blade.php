@@ -1,11 +1,7 @@
 @extends('admin.layouts.master')
 @section('css')
 <!-- tables -->
-<style>
-form{
-overflow: auto;
-}
-</style>
+
 <link rel="stylesheet" type="text/css" href="{!! asset('css/table-style.css') !!}" />
 <!-- //tables -->
 @endsection
@@ -14,7 +10,11 @@ overflow: auto;
 <div class="agile-grids">   
     <div class="grids">       
         <div class="row">
-            <div class="col-md-12">                
+            <div class="col-md-12"> 
+            @if(session()->has('reply_done'))
+                  <div class="alert alert-success" role="alert">Successfully replied to customer</div>
+            @endif 
+
                 <h1 class="page-header">{!! lang('contact.contact') !!} Enquiries <!-- <a class="btn btn-sm btn-primary pull-right" href="{!! route('export-enquiry') !!}" style="margin-left: 10px;"> <i class="fa fa-download fa-fw"></i> Export Excel </a> --> </h1>
 
                 <div class="agile-tables">

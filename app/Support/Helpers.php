@@ -136,7 +136,17 @@ function check_subcat_job($id){
     return App\Models\Job::where('sub_category', $id)->where('status', 1)->where('created_at', '>', now()->subDays(30)->endOfDay())->count();
 }
 
+function user_message_info($id){
+    return App\Models\User::where('id', $id)->select('name', 'id')->first();
+}
 
+function user_message($id){
+    return App\Models\Message::where('from_id', $id)->select('message', 'seen')->orderby('id', 'DESC')->first();
+}
+
+function emp_message($id){
+    return App\Models\Message::where('user_id', $id)->select('message', 'seen')->orderby('id', 'DESC')->first();
+}
 
 function get_applyed_job_count($id){
     return App\Models\JobApplies::where('job_id', $id)->count();

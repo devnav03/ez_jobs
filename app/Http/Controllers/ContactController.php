@@ -12,6 +12,8 @@ use Files;
 use Illuminate\Support\Facades\Storage;
 use App\Models\Contact;
 use Illuminate\Http\Request;
+use Redirect;
+use GuzzleHttp\Client;
 
 class ContactController  extends  Controller{
     /**
@@ -101,6 +103,41 @@ class ContactController  extends  Controller{
                 ->withInput()
                 ->with('error', lang('messages.server_error'));
         }
+    }
+
+    public function contact_reply(Request $request){
+        try {
+
+                $home = route('home');
+
+                $subject = $request->subject;
+                $message = $request->message;
+                $email = $request->email; 
+                $postdata = http_build_query(
+                    array(
+                    'home' => $home,
+                    'message' => $message,
+                    'subject' => $subject,
+                    'email' => $email,
+                    )
+                );
+                $opts = array('http' =>
+                    array(
+                        'method'  => 'POST',
+                        'header'  => 'Content-Type: application/x-www-form-urlencoded',
+                        'content' => $postdata
+                    )
+                );
+
+                $context  = stream_context_create($opts);
+                $result = file_get_contents('https://sspl20.com/email-api/api/contact-reply', false, $context);
+            return back()->with('reply_done', 'reply_done');
+        } catch (\Exception $exception) {
+           // dd($exception);
+            //\DB::rollBack();
+            return back();
+        }
+
     }
 
     /**

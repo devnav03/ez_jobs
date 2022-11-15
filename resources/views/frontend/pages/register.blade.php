@@ -11,7 +11,6 @@
                <div class="auth-box2">
                   <form class="rt-form" accept-charset="UTF-8" enctype="multipart/form-data" id="login_form" method="POST" action="{{ route('save-register') }}">
                    {{ csrf_field() }}
-
                      <div class="row">
                      <div class="col-lg-8 col-md-12">
                          <h4 class="rt-mb-20">Create Account</h4>
@@ -21,8 +20,6 @@
                                  <a href="{{ route('login') }}">Log In</a>
                              </span>
                           </span>
-
-
                           </div>
                                 <div class="col-lg-4 col-md-12 align-self-center rt-mb-lg-20">
                                 <select onChange="yesnoCheckEmployer(this);" name="role" class="rt-selectactive w-100-p select2-hidden-accessible">
@@ -46,17 +43,34 @@
                                 </div>
 
 
-                                <div class="col-xl-6 col-lg-6">
+                                <!-- <div class="col-xl-6 col-lg-6">
                                   <div class="fromGroup rt-mb-15">
                                   <input name="name" id="name" required="" value="{{ old('name') }}" class="field form-control " type="text" placeholder="Full Name*">
                                   @if($errors->has('name'))
                                   <span class="text-danger">{{$errors->first('name')}}</span>
                                   @endif
                                   </div>
+                                </div> -->
+                                <div class="col-xl-6 col-lg-6">
+                                  <div class="fromGroup rt-mb-15">
+                                  <input name="first_name" id="first_name" required="" value="{{ old('first_name') }}" class="field form-control " type="text" placeholder="First Name*">
+                                  @if($errors->has('first_name'))
+                                  <span class="text-danger">{{$errors->first('first_name')}}</span>
+                                  @endif
+                                  </div>
                                 </div>
                                 <div class="col-xl-6 col-lg-6">
                                   <div class="fromGroup rt-mb-15">
-                                  <input type="email" required="" id="email" value="{{ old('email') }}" name="email" class="field form-control " placeholder="Email Address*">
+                                  <input name="last_name" id="last_name" value="{{ old('last_name') }}" class="field form-control" type="text" placeholder="Last Name">
+                                  @if($errors->has('last_name'))
+                                  <span class="text-danger">{{$errors->first('last_name')}}</span>
+                                  @endif
+                                  </div>
+                                </div>
+
+                                <div class="col-xl-6 col-lg-6">
+                                  <div class="fromGroup rt-mb-15">
+                                  <input type="email" required="" id="email" value="{{ old('email') }}" name="email" class="field form-control" placeholder="Email Address*">
                                   @if($errors->has('email'))
                                   <span class="text-danger">{{$errors->first('email')}}</span>
                                   @endif

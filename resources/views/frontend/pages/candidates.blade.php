@@ -77,10 +77,13 @@
    <div class="tab-content" id="nav-tabContent">
       <div class="tab-pane show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
          <div class="row" id="candidate-list">
-
+@php
+$i = 0;
+@endphp
          @foreach($candidates as $candidate)
 @php
 $save_status = get_candidate_save_status($candidate->id);
+$i++;
 @endphp
 
          @if(((\Auth::user()->profile_view_limit)) == 0)
@@ -159,14 +162,18 @@ $save_status = get_candidate_save_status($candidate->id);
                </div>
             </div>
             @endif
-         @endforeach  
+         @endforeach 
+         @if($i == 0)
+            <h4 style="font-size: 23px;">No Candidates Found</h4>    
+         @endif 
+         <div class="pagination">
+         {{ $candidates->links() }}
+      </div>
          </div>
       </div>
       </div>
       </div>
-      <div class="pagination">
-         {{ $candidates->links() }}
-      </div>
+      
          </div>
 
       </div>

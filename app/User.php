@@ -11,12 +11,12 @@ class User extends Authenticatable
     use Notifiable;
 
     protected $fillable = [
-        'user_type', 'name', 'employer_name', 'profile_view_limit', 'job_post_limit', 'profile_completion', 'email', 'password', 'state', 'city', 'country', 'mobile' , 'profile_image', 'gender', 'date_of_birth', 'job_description', 'job_search', 'job_branding', 'city_plan', 'address', 'is_verify', 'status', 'updated_at', 'register_from', 'deleted_at', 'api_key', 'created_at'
+        'user_type', 'name', 'first_name', 'last_name', 'employer_name', 'profile_view_limit', 'job_post_limit', 'profile_completion', 'email', 'password', 'state', 'city', 'country', 'mobile' , 'profile_image', 'gender', 'date_of_birth', 'job_description', 'job_search', 'job_branding', 'city_plan', 'address', 'is_verify', 'status', 'updated_at', 'register_from', 'deleted_at', 'api_key', 'created_at'
     ];
 
   
     public function validate_front($inputs, $id = null) {
-        $rules['name'] = 'required|string|max:100|regex:/^[a-zA-Z ]+$/';
+        $rules['first_name'] = 'required|string|max:100|regex:/^[a-zA-Z ]+$/';
         $rules['email'] = 'required|email|max:100|unique:users';
         $rules['mobile'] = 'required|unique:users';
         $rules['role'] = 'required';

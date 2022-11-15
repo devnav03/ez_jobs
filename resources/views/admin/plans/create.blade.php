@@ -43,7 +43,6 @@
                                             </select>
                                         </div> 
                                     </div>
-
                                     <div class="col-md-6 mgn20">
                                          <div class="form-group"> 
                                             {!! Form::label('price', lang('Price'), array('class' => '')) !!}

@@ -336,6 +336,8 @@ Route::group(['middleware' => 'auth', 'after' => 'no-cache'], function () {
                 'uses' => 'App\Http\Controllers\ContactController@drop']);
 
             Route::any('export-enquiry', 'CustomerController@export_enquiry')->name('export-enquiry');
+
+            Route::POST('contact-reply', [App\Http\Controllers\ContactController::class, 'contact_reply'])->name('contact-reply');
             // Contact route end
 
             // Testimonials List route start
@@ -394,6 +396,8 @@ Route::get('getCity', [App\Http\Controllers\CategoryController::class, 'getCity'
 Route::get('live_search', [App\Http\Controllers\Front\HomeController::class, 'action'])->name('live_search');
 Route::any('/search-job/{search}/{country_id}', [App\Http\Controllers\Front\HomeController::class, 'search_job'])->name('search-job');
 
+Route::any('/search-candidates/{subcat}/{country_id}', [App\Http\Controllers\Front\HomeController::class, 'search_candidates'])->name('search-candidates');
+
 //Forgot Password
 Route::get('forgot-password', [App\Http\Controllers\Front\HomeController::class, 'forgotPassword'])->name('forgot.password');
 Route::post('forgot-password/check-email', [App\Http\Controllers\Front\HomeController::class, 'checkEmail'])->name('forgot_password.check_email');
@@ -423,6 +427,8 @@ Route::any('applied-job', [App\Http\Controllers\Front\JobController::class, 'app
 Route::any('saved-job-seekers', [App\Http\Controllers\Front\JobController::class, 'saved_job_seekers'])->name('saved-job-seekers');
 
 Route::any('update-profile', [App\Http\Controllers\Front\HomeController::class, 'update_profile'])->name('update-profile');
+Route::any('send-message/{id}', [App\Http\Controllers\Front\HomeController::class, 'send_message'])->name('send-message');
+
 
 Route::any('appliers-list/{id}', [App\Http\Controllers\Front\JobController::class, 'appliers_list'])->name('appliers-list');
 
@@ -452,7 +458,9 @@ Route::any('candidate-profile/{id}', [App\Http\Controllers\Front\HomeController:
 Route::get('/change-password', [App\Http\Controllers\Front\HomeController::class, 'changePassword'])->name('change-password');
 Route::post('/change-password', [App\Http\Controllers\Front\HomeController::class, 'changePasswordStore'])->name('change-password.store');
 
-
+Route::any('chat/{id}', [App\Http\Controllers\Front\HomeController::class, 'chat'])->name('chat');
+Route::any('chat-send', [App\Http\Controllers\Front\HomeController::class, 'chat_send'])->name('chat-send');
+Route::any('message', [App\Http\Controllers\Front\HomeController::class, 'message'])->name('message');
 
 });
 

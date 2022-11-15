@@ -16,6 +16,7 @@ use App\Models\City;
 use App\Models\Category;
 use App\Models\Blog;
 use App\Models\Contact;
+use App\Models\Message;
 use App\Models\Testimonial;
 use App\Models\ContentManagement;
 use Illuminate\Http\Request;
@@ -136,12 +137,103 @@ class HomeController extends Controller{
         return view('frontend.pages.forgot-password', compact('countries'));
     }
 
-    public function updatePassword($user_id)  {
+    public function approval_waiting($user_id){
+        try {
 
+            $user = User::where('id', $user_id)->select('name')->first();
+            $countries = Country::all(); 
+            return view('frontend.pages.approval_waiting', compact('user', 'countries'));
+
+        } catch (\Exception $exception) {
+            return back();
+        }
+    }
+
+    public function chat($id = null){
+        try {
+                $user_id = Auth::id();
+                $user_type = \Auth::user()->user_type;
+                $countries = Country::all(); 
+                if($user_type == 3){
+                    $user = User::where('status', 1)->where('user_type', 2)->where('id', $id)->select('name', 'id')->first();
+                    if($user){
+                        
+                        Message::where('user_id', $id)->where('from_id', $user_id)->update(['seen' => 1]);
+
+                        $messages = Message::where('user_id', $id)->where('from_id', $user_id)->select('from_id', 'message', 'created_at', 'sent')->get();
+                        return view('frontend.pages.chat', compact('user', 'messages', 'countries', 'user_id'));
+                    } else {
+                        return back();
+                    }
+            
+                } else {
+                    $user = User::where('status', 1)->where('user_type', 3)->where('id', $id)->select('name', 'id')->first();
+                    if($user){
+                        Message::where('from_id', $id)->where('user_id', $user_id)->update(['seen' => 1]);
+
+                        $messages = Message::where('from_id', $id)->where('user_id', $user_id)->select('from_id', 'message', 'created_at', 'sent')->get();
+                        return view('frontend.pages.chat', compact('user', 'messages', 'countries', 'user_id'));
+                    } else {
+                        return back();
+                    }
+                }
+
+        } catch (\Exception $exception) {
+            //dd($exception);
+            return back();
+        }
+    }
+
+    public function message(){
+
+        try {
+                $user_id = Auth::id();
+                $user_type = \Auth::user()->user_type;
+                if($user_type == 2){
+                    $messages = Message::where('user_id', $user_id)->select('from_id')->groupBy('from_id')->get();
+                } else {
+                    $messages = Message::where('from_id', $user_id)->select('user_id')->groupBy('user_id')->get();
+                }
+                $countries = Country::all();  
+        
+                return view('frontend.pages.message', compact('messages', 'countries', 'user_type'));
+
+        } catch (\Exception $exception) {
+           // dd($exception);
+            return back();
+        }
+
+    }
+
+    public function chat_send(Request $request){
+        try {
+            $my_id = Auth::id();
+            $user_type = \Auth::user()->user_type;
+            if($user_type == 3){
+                $user_id = $request->id;
+                $from_id = $my_id;
+            } else {
+                $user_id = $my_id;
+                $from_id = $request->id;
+            }
+            $Message = new Message();
+            $Message->user_id = $user_id;
+            $Message->from_id = $from_id;
+            $Message->message = $request->message;
+            $Message->seen = 0;
+            $Message->sent = Auth::id();
+            $Message->save();
+            return back();
+        } catch (\Exception $exception) {
+            //dd($exception);
+            return back();
+        }
+    }
+
+    public function updatePassword($user_id)  {
         $user_id = \decrypt($user_id);
         $user = User::where('id', $user_id)->first();
         $countries = Country::all();
-
         return view('frontend.pages.forgot_change_password', compact('user_id', 'user', 'countries'));
     }
     
@@ -158,6 +250,7 @@ class HomeController extends Controller{
           if( $validator->fails() ) {
             return back()->withErrors($validator)->withInput();
         }
+        
 
         $id =  Auth::id();
         $user = User::where('id', $id)->first();
@@ -457,24 +550,50 @@ class HomeController extends Controller{
     public function action(Request $request){
        
         $query = $request->get('query');
-        $jobs = \DB::table("jobs")
-            ->join('users', 'users.id', '=', 'jobs.employer_id')
-            ->select('jobs.title')
-            ->where('jobs.status', 1)
-            ->where('users.country', $request->country_id)
-            ->where('users.status', 1) 
-            ->where('jobs.title',  'like', '%'.$query.'%')  
-            ->where('jobs.created_at', '>', now()->subDays(30)->endOfDay())
-            ->groupBy('jobs.title')
-            ->inRandomOrder()->limit(10)->get();
-        $output = '';
-        foreach($jobs as $row){
-            $output .= '<li><a href="'.route('search-job', ['search' => ''.$row->title.'', 'country_id' => $request->country_id]).'">'.$row->title.'</a></li>';
+
+        $user_id = Auth::id();
+        $user_type = 3;
+        if($user_id){
+            $user_type = Auth::user()->user_type;
         }
+
+        if($query){
+
+        if($user_type == 2){
+
+            $jobs = \DB::table("categories")
+                ->select('name', 'url')
+                ->where('status', 1)
+                ->where('parent_id', '!=', null)
+                ->where('name',  'like', '%'.$query.'%')  
+                ->inRandomOrder()->limit(10)->get();
+                $output = '';
+                foreach($jobs as $row){
+                    $output .= '<li><a href="'.route('search-candidates', ['subcat' => ''.$row->url.'', 'country_id' => $request->country_id]).'">'.$row->name.'</a></li>';
+                }
+
+        } else {
+            $jobs = \DB::table("jobs")
+                ->join('users', 'users.id', '=', 'jobs.employer_id')
+                ->select('jobs.title')
+                ->where('jobs.status', 1)
+                ->where('users.country', $request->country_id)
+                ->where('users.status', 1) 
+                ->where('jobs.title',  'like', '%'.$query.'%')  
+                ->where('jobs.created_at', '>', now()->subDays(30)->endOfDay())
+                ->groupBy('jobs.title')
+                ->inRandomOrder()->limit(10)->get();
+                $output = '';
+                foreach($jobs as $row){
+                    $output .= '<li><a href="'.route('search-job', ['search' => ''.$row->title.'', 'country_id' => $request->country_id]).'">'.$row->title.'</a></li>';
+                }
+        }
+
           $data = array(
            'table_data'  => $output,
           );
           echo json_encode($data);
+      }
     }
 
     public function search_job($search = null, $country_id = null){
@@ -492,6 +611,26 @@ class HomeController extends Controller{
             $categories = Category::where('status', 1)->where('parent_id', NULL)->select('name', 'id')->get();
             $countries = Country::all();
             return view('frontend.pages.jobs', compact('countries', 'jobs', 'categories'));
+        } catch (Exception $exception) {
+            return back();
+        }
+    }
+
+    public function search_candidates($subcat = null, $country_id = null){
+        try {
+            
+            $cat = Category::where('url', $subcat)->select('id')->first();
+            $candidates = User::join('job_seekers_details', 'job_seekers_details.seeker_id', '=', 'users.id')
+            ->join('categories', 'categories.id', '=', 'job_seekers_details.sub_category')
+            ->join('cities', 'cities.id', '=', 'users.city')
+            ->select('categories.name as cat', 'users.id', 'users.name', 'users.profile_image', 'job_seekers_details.experience_years', 'job_seekers_details.experience_months', 'cities.name as city')
+            ->where('users.user_type', 3)->where('users.status', 1)->where('categories.status', 1)->where('job_seekers_details.sub_category', $cat->id)->where('users.country', $country_id)->paginate(30);
+
+            $countries = Country::all();
+            $categories = Category::where('status', 1)->where('parent_id', NULL)->select('name', 'id')->get();
+
+            return view('frontend.pages.candidates', compact('countries', 'candidates', 'categories'));
+
         } catch (Exception $exception) {
             return back();
         }
@@ -601,6 +740,11 @@ class HomeController extends Controller{
     }
     
     public function register() {
+//       if( ini_get('allow_url_fopen') ) {
+//     die('allow_url_fopen is enabled. file_get_contents should work well');
+//     } else {
+//       die('allow_url_fopen is disabled. file_get_contents would not work');
+//   }
         $countries = Country::all();
         return view('frontend.pages.register', compact('countries'));
     }
@@ -998,35 +1142,120 @@ class HomeController extends Controller{
             $home = route('home');
             $link = route('emailverify', $user_id);
             $name = $name;
-            $responce = $this->send_email($home, $link, $name, $email);
-            //dd($responce);
+          //  $responce = $this->send_email($home, $link, $name, $email);
+          
+          $url   = 'https://sspl20.com/jyoti/uttuapp/api/send-email-ez';
+          
+            $post_fields = Array(
+                  'home' => $home, 'link' => $link, 'name' => $name, 'email' => $email
+            );
+
+$ch = curl_init($url);
+curl_setopt($ch, CURLOPT_URL, $url);
+curl_setopt($ch,CURLOPT_RETURNTRANSFER,true);
+curl_setopt($ch,CURLOPT_HEADER, false); 
+curl_setopt($ch, CURLOPT_POST, 1);
+curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+    'Content-Type: application/x-www-form-urlencoded'));
+curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($post_fields));     
+
+$result = curl_exec($ch);
+         
+        //dd($result);   
+            
+           // $one_array = array('home' => $home, 'link' => $link, 'name' => $name, 'email' => $email);
+           // $one_url   = 'https://sspl22.in/email-api/api/send-email-ez';
+            
+           // $response = $this->post_to_url($one_url, $one_array, 'application/json');
+            
+           // dd($response);
            return redirect()->back()->with('message_reg', 'Register Done!');
             
         } catch (Exception $e) {
+           // dd($e);
             return back();
         }
     }
+    
+   public function post_to_url($url, $array, $content_type) 
+{
+  $fields = '';
+  foreach($array as $key => $value) 
+  { 
+    $fields .= $key . '=' . $value . '&'; 
+  }
+
+  $fields = rtrim($fields, '&');
+
+  $ch = curl_init();
+  $httpheader = array(
+    'Content-Type: ' . $content_type,
+    'Accept: ' . $content_type
+  );
+  
+  //dd($fields);
+
+  curl_setopt($ch, CURLOPT_URL, $url);
+  curl_setopt($ch, CURLOPT_POST, 1);
+  curl_setopt($ch, CURLOPT_POSTFIELDS, $fields);
+  curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+  curl_setopt($ch, CURLOPT_HTTPHEADER, $httpheader);
+
+  $result = curl_exec($ch);
+
+  curl_close($ch);
+
+  return $result;
+}
 
 
     public function send_email($home, $link, $name, $email){
-        $postdata = http_build_query(
-        array(
-        'home' => $home,
-        'link' => $link,
-        'name' => $name,
-        'email' => $email,
-        )
-        );
-        $opts = array('http' =>
-        array(
-        'method'  => 'POST',
-        'header'  => 'Content-Type: application/x-www-form-urlencoded',
-        'content' => $postdata
-        )
-        );
-        $context  = stream_context_create($opts);
-        $result = file_get_contents('https://sspl20.com/jyoti/uttuapp/api/send-email-ez', false, $context);
-        return $result;
+        
+      //  ini_set("allow_url_fopen", "On");
+        
+         $curl = curl_init();
+    curl_setopt_array($curl, array(
+      CURLOPT_URL => 'https://sspl22.in/email-api/api/send-email-ez',
+      CURLOPT_RETURNTRANSFER => true,
+      CURLOPT_ENCODING => '',
+      CURLOPT_MAXREDIRS => 10,
+      CURLOPT_TIMEOUT => 0,
+      CURLOPT_FOLLOWLOCATION => true,
+      CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+      CURLOPT_CUSTOMREQUEST => 'POST',
+      CURLOPT_POSTFIELDS => '{
+          "home": "'.$home.'",
+          "link": "' . $link . '",
+          "name": "' . $name . '",
+          "email": "' . $email . '",
+        
+        }'
+    ));
+    $response = curl_exec($curl);
+    dd($response);
+    curl_close($curl);
+        
+         
+        // $postdata = http_build_query(
+        // array(
+        // 'home' => $home,
+        // 'link' => $link,
+        // 'name' => $name,
+        // 'email' => $email,
+        // )
+        // );
+        // $opts = array('http' =>
+        // array(
+        // 'method'  => 'POST',
+        // 'header'  => 'Content-Type: application/x-www-form-urlencoded',
+        // 'content' => $postdata
+        // )
+        // );
+        // $context  = stream_context_create($opts);
+        
+        // $result = file_get_contents('https://sspl22.in/email-api/api/send-email-ez', false, $context);
+        return $response;
+        
     }
 
 
@@ -1035,7 +1264,7 @@ class HomeController extends Controller{
         try{
             if($user_id){
                 $user = User::where('id', $user_id)->select('user_type')->first();
-                // if($user->user_type == 3){
+                if($user->user_type == 3){
 
                     User::where('id', $user_id)->update(['status' => '1', 'is_verify' => '1']);
                     $user_data = User::where('id', $user_id)->first();
@@ -1043,10 +1272,10 @@ class HomeController extends Controller{
 
                     return redirect()->route('home')->with('account_confirm', 'account_confirm');
 
-                // } else {
-                //     User::where('id', $user_id)->update(['is_verify' => '1']);
-                //     return redirect()->route('approval-waiting', $user_id);
-                // }
+                } else {
+                    User::where('id', $user_id)->update(['is_verify' => '1']);
+                    return redirect()->route('approval-waiting', $user_id);
+                }
             }
         }
         catch(\Exception $e){
